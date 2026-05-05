@@ -234,18 +234,18 @@
     .hero-section {
       min-height: calc(100vh - 70px);
       background: var(--white);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; justify-content: center;
       padding: 50px 40px 50px 44px;
-      gap: 20px; overflow: hidden;
+      gap: 40px; overflow: hidden;
       position: relative;
     }
-    /* Subtle background accent */
+    /* Background accent removed — full white for image blending */
     .hero-section::before {
       content: '';
       position: absolute;
       top: 0; right: 0; bottom: 0;
       width: 52%;
-      background: linear-gradient(135deg, #FDF8F4 0%, #FFF3E8 100%);
+      background: #ffffff;
       z-index: 0;
       border-radius: 60px 0 0 60px;
     }
@@ -264,7 +264,7 @@
     .h1-line1 {
       display: block;
       font-size: clamp(48px, 6.2vw, 88px);
-      color: var(--blue);
+      color: #34a0c6;
       opacity: 0; transform: translateY(30px);
     }
     .h1-line2 {
@@ -275,7 +275,7 @@
     }
     .hero-sub {
       font-size: clamp(15px, 1.4vw, 20px);
-      color: var(--muted); margin-bottom: 32px; opacity: 0;
+      color: #fff; margin-bottom: 32px; opacity: 0;
       font-weight: 500;
     }
     .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; opacity: 0; }
@@ -289,18 +289,18 @@
     }
     .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 36px rgba(244,123,32,0.5); }
     .btn-outline {
-      background: transparent; color: var(--blue);
+      background: #34a0c6; color: #fff;
       font-family: var(--font-head); font-weight: 700; font-size: 13px;
       padding: 13px 32px; border-radius: 40px;
-      border: 2px solid var(--blue); letter-spacing: 1px;
+      border: 2px solid #34a0c6; letter-spacing: 1px;
       transition: background 0.2s, color 0.2s;
     }
-    .btn-outline:hover { background: var(--blue); color: #fff; }
+    .btn-outline:hover { background: #2589ab; border-color: #2589ab; color: #fff; }
 
     .hero-stats { display: flex; align-items: center; gap: 20px; opacity: 0; }
     .stat { text-align: center; }
     .stat-n { display: block; font-family: var(--font-head); font-weight: 900; font-size: 26px; color: var(--orange); }
-    .stat-l { display: block; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+    .stat-l { display: block; font-size: 9px; color: #ffffff; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
     .stat-sep { width: 1px; height: 40px; background: var(--border); }
 
     /* ════════════════════════════════
@@ -340,6 +340,53 @@
     @keyframes spinOrbit {
       from { transform: rotateX(14deg) rotateY(0deg); }
       to   { transform: rotateX(14deg) rotateY(360deg); }
+    }
+
+    /* Hero right wrapper — column: images row + bid-win text */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .hero-right-images {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-bid-win {
+      font-family: var(--font-head);
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 900;
+      color: var(--orange);
+      letter-spacing: -1px;
+      text-align: center;
+      line-height: 1;
+    }
+    .cheer-girl-img {
+      width: 240px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 0;
+      flex-shrink: 0;
+      mix-blend-mode: multiply;
+    }
+
+    /* Family cheer image — fills the left hero panel */
+    .cheer-img {
+      position: absolute;
+      left: 0; top: 0;
+      width: 46%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 0;
+      opacity: 0.88;
+      z-index: 0;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 60%, transparent 100%);
+      mask-image: linear-gradient(to right, black 0%, black 60%, transparent 100%);
     }
 
     /* Phone centered in orbit */
@@ -528,8 +575,11 @@
       padding: 5px 16px; border-radius: 20px; letter-spacing: 1px;
     }
     .deal-img-real {
-      width: 100%; height: 120px;
-      object-fit: cover; border-radius: 12px;
+      width: 100%; height: auto;
+      max-height: 230px;
+      object-fit: contain;
+      background: var(--light);
+      border-radius: 12px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     }
     .deal-name   { font-weight: 700; font-size: 14px; color: var(--blue); }
@@ -611,6 +661,44 @@
     .app-live-time    { font-family: var(--font-head); font-size: 16px; font-weight: 800; color: var(--red); text-align: center; letter-spacing: 2px; }
     .app-live-bidders { font-size: 8px; color: #888; text-align: center; }
     .app-bid-btn { background: var(--orange); color: #fff; font-weight: 800; font-size: 10px; padding: 7px; border-radius: 18px; width: 100%; margin-top: 3px; }
+
+    /* ════════════════════════════════
+       BID & WIN BANNER
+    ════════════════════════════════ */
+    .bid-win-banner {
+      background: linear-gradient(120deg, #0d2347 0%, var(--blue) 60%, #1a4a8a 100%);
+      padding: 36px 40px;
+      text-align: center;
+    }
+    .bid-win-text {
+      font-family: var(--font-head);
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 900;
+      color: var(--orange);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .bid-win-sub-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 14px;
+    }
+    .bid-win-phone-img {
+      height: 90px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+      filter: drop-shadow(0 4px 14px rgba(0,0,0,0.35));
+    }
+    .bid-win-sub {
+      font-family: var(--font-head);
+      font-size: clamp(16px, 2.2vw, 28px);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+    }
 
     /* ════════════════════════════════
        CLOSING CTA
@@ -709,7 +797,11 @@
         <div class="bb-who-name">World Health<br>Organization</div>
       </div>
     </div>
-    <div class="bb-icons">🚿 🤲 🤧 🚫 💻 😷 🧴</div>
+
+    <div style="text-align:center; padding: 18px 0 6px;">
+      <button style="background:#E53E3E; color:#fff; font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; letter-spacing:2px; padding:12px 48px; border-radius:40px; border:none; cursor:default; pointer-events:none;">BEFORE</button>
+    </div>
+
     <div class="bb-welcome">
       <h2>WELCOME TO MASSY STORES</h2>
       <p>In July 2014 Massy Stores was launched in Barbados. Massy Stores (Barbados) Ltd now offers 5 supermarkets, the Warrens SuperCentre, 2 Home locations, 8 Pharmacies and 2 Express locations.</p>
@@ -768,8 +860,11 @@
     <!-- ── HERO ── -->
     <section class="hero-section" id="heroSection">
 
+      <!-- Family cheering fills left panel -->
+      <img class="cheer-img" src="Family%20cheering.jpg" alt="Customers celebrating">
+
       <!-- Left: headline + CTAs -->
-      <div class="hero-content">
+      <div class="hero-content" style="position:relative;z-index:2;">
         <div class="hero-eyebrow">Barbados' #1 Retail Destination</div>
         <h1 class="hero-h1">
           <span class="h1-line1">The Future of</span>
@@ -799,6 +894,9 @@
       </div>
 
       <!-- Right: 3D orbit + phone -->
+      <div class="hero-right">
+
+      <div class="hero-right-images">
       <div class="orbit-scene" id="orbitScene">
 
         <!-- Orbiting real product images -->
@@ -902,6 +1000,14 @@
         </div><!-- /phone-center -->
 
       </div><!-- /orbit-scene -->
+
+      <img class="cheer-girl-img" src="Girl%20CheeringPNG_2.png" alt="Customer celebrating win">
+
+      </div><!-- /hero-right-images -->
+
+      <div class="hero-bid-win">Bid &amp; Win !</div>
+
+      </div><!-- /hero-right -->
     </section>
 
     <!-- ── DEALS ── -->
@@ -913,8 +1019,8 @@
       <div class="deals-grid">
         <div class="deal-card" id="dealWeek">
           <div class="deal-badge">🔥 DEAL OF THE WEEK</div>
-          <img class="deal-img-real" src="https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400&h=200&fit=crop&q=80" alt="Samsung Fridge">
-          <div class="deal-name">Samsung Side-by-Side Fridge</div>
+          <img class="deal-img-real" src="Smart_tv.jpg" alt="Samsung Smart TV">
+          <div class="deal-name">Samsung Smart TV</div>
           <div class="deal-prices">
             <span class="deal-was">$2,499</span>
             <span class="deal-now">$1,799</span>
@@ -925,8 +1031,8 @@
         </div>
         <div class="deal-card" id="dealMonth">
           <div class="deal-badge" style="background:var(--blue)">⭐ DEAL OF THE MONTH</div>
-          <img class="deal-img-real" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=200&fit=crop&q=80" alt="Living Room Set">
-          <div class="deal-name">3-Piece Living Room Set</div>
+          <img class="deal-img-real" src="Livingroomsuite.jpg" alt="Living Room Suite">
+          <div class="deal-name">Living Room Suite</div>
           <div class="deal-prices">
             <span class="deal-was">$5,200</span>
             <span class="deal-now">$3,499</span>
@@ -997,6 +1103,15 @@
       </div>
     </section>
 
+    <!-- ── BID & WIN BANNER ── -->
+    <div class="bid-win-banner" id="bidWinBanner">
+      <div class="bid-win-text">Bid &amp; Win !</div>
+      <div class="bid-win-sub-row">
+        <img src="smartphone.jpg" alt="Massy App" class="bid-win-phone-img">
+        <span class="bid-win-sub">Download the App from Google Play Store — What are you waiting for?</span>
+      </div>
+    </div>
+
     <!-- ── CLOSING CTA ── -->
     <section class="closing-section" id="closingSection">
       <div class="closing-inner" id="closingInner">
@@ -1005,8 +1120,8 @@
         <p class="closing-sub">Let's build the future of Massy Stores together. Full stack web, mobile app, live auctions — delivered by INTERXDB.</p>
         <button class="closing-btn">Start the Conversation</button>
         <div class="closing-contact">
-          <span>✉ hello@interxdb.com</span>
-          <span>📞 +1 (246) 000-0000</span>
+          <span>✉ contact@INTERXDB.com</span>
+          <span>📞 Tel 1(246) 241-3771</span>
         </div>
         <div class="closing-stack">
           <div class="stack-item">Next.js 14</div>
@@ -1094,6 +1209,115 @@
     gsap.from('#appPhone1', { scrollTrigger: { trigger: '#appSection', scroller: '#afterPanel', start: 'top 82%' }, y: 60, opacity: 0, duration: 0.8, ease: 'power3.out' });
     gsap.from('#appPhone2', { scrollTrigger: { trigger: '#appSection', scroller: '#afterPanel', start: 'top 82%' }, y: 60, opacity: 0, duration: 0.9, delay: 0.2, ease: 'power3.out' });
     gsap.from('#closingInner', { scrollTrigger: { trigger: '#closingSection', scroller: '#afterPanel', start: 'top 82%' }, y: 40, opacity: 0, duration: 0.8, ease: 'power3.out' });
+
+    // Crowd cheer fires when Bid & Win banner enters view
+    const bidBanner = document.getElementById('bidWinBanner');
+    if (bidBanner) {
+      const cheerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { cheerObserver.disconnect(); playCrowdCheer(); }
+        });
+      }, { root: document.getElementById('afterPanel'), threshold: 0.3 });
+      cheerObserver.observe(bidBanner);
+    }
+  }
+
+  // ════════════════════════
+  // CROWD CHEER AUDIO
+  // ════════════════════════
+  function playCrowdCheer() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const totalDur = 3.8;
+      const sr = ctx.sampleRate;
+
+      // — Applause noise layer —
+      const buf = ctx.createBuffer(2, sr * totalDur, sr);
+      for (let c = 0; c < 2; c++) {
+        const d = buf.getChannelData(c);
+        // rhythmic clap bursts every ~0.18s
+        for (let i = 0; i < d.length; i++) {
+          const t = i / sr;
+          const burstCycle = t % 0.18;
+          const burstEnv = burstCycle < 0.06 ? Math.sin((burstCycle / 0.06) * Math.PI) : 0;
+          d[i] = (Math.random() * 2 - 1) * burstEnv;
+        }
+      }
+      const noiseSrc = ctx.createBufferSource();
+      noiseSrc.buffer = buf;
+
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.value = 1600;
+      bp.Q.value = 0.7;
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0, ctx.currentTime);
+      noiseGain.gain.linearRampToValueAtTime(1.6, ctx.currentTime + 0.15);
+      noiseGain.gain.linearRampToValueAtTime(1.2, ctx.currentTime + 1.0);
+      noiseGain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + totalDur - 0.4);
+      noiseGain.gain.linearRampToValueAtTime(0, ctx.currentTime + totalDur);
+
+      noiseSrc.connect(bp);
+      bp.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+      noiseSrc.start();
+
+      // — Crowd voice sweeps — "yeahhh!" rises then falls —
+      const voiceConfigs = [
+        { startFreq: 180, peakFreq: 380, delay: 0.05, vol: 0.07 },
+        { startFreq: 220, peakFreq: 460, delay: 0.08, vol: 0.06 },
+        { startFreq: 160, peakFreq: 340, delay: 0.12, vol: 0.08 },
+        { startFreq: 200, peakFreq: 500, delay: 0.03, vol: 0.05 },
+        { startFreq: 240, peakFreq: 420, delay: 0.10, vol: 0.07 },
+        { startFreq: 170, peakFreq: 360, delay: 0.15, vol: 0.06 },
+        { startFreq: 210, peakFreq: 480, delay: 0.07, vol: 0.05 },
+        { startFreq: 190, peakFreq: 400, delay: 0.00, vol: 0.08 },
+      ];
+
+      voiceConfigs.forEach(({ startFreq, peakFreq, delay, vol }) => {
+        const osc = ctx.createOscillator();
+        const g   = ctx.createGain();
+        const t0  = ctx.currentTime + delay;
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(startFreq, t0);
+        osc.frequency.linearRampToValueAtTime(peakFreq,          t0 + 0.25);
+        osc.frequency.linearRampToValueAtTime(startFreq * 0.65,  t0 + 0.9);
+
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(vol, t0 + 0.12);
+        g.gain.linearRampToValueAtTime(vol * 0.6, t0 + 0.7);
+        g.gain.linearRampToValueAtTime(0, t0 + 1.1);
+
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(t0);
+        osc.stop(t0 + 1.2);
+      });
+
+      // — Whistle peaks —
+      [0.05, 0.3, 0.55].forEach((delay, i) => {
+        const osc = ctx.createOscillator();
+        const g   = ctx.createGain();
+        const t0  = ctx.currentTime + delay;
+        const baseF = 1800 + i * 250;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(baseF, t0);
+        osc.frequency.linearRampToValueAtTime(baseF * 1.15, t0 + 0.15);
+        osc.frequency.linearRampToValueAtTime(baseF * 0.9,  t0 + 0.4);
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(0.04, t0 + 0.05);
+        g.gain.linearRampToValueAtTime(0, t0 + 0.45);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(t0);
+        osc.stop(t0 + 0.5);
+      });
+
+    } catch (e) { /* audio blocked — silent fallback */ }
   }
 
   // ════════════════════════

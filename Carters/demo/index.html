@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carter's — The Future of Hardware in Barbados</title>
+
+  <!--
+  ============================================================
+  CARTER & CO LTD — CLIENT PITCH DEMO
+  Designed by INTERXDB
+  Concept, Architecture & Development — Full Stack Web, Mobile & AI Integration
+
+  PHASE 2 & 3 FULL STACK (post client sign-off):
+  Frontend:  Next.js 14 (React, App Router) · Tailwind CSS · GSAP · Framer Motion
+  Mobile:    React Native (Expo) · Expo Router · Firebase Cloud Messaging · Socket.IO
+  Backend:   Node.js · Express · Socket.IO (live auction engine) · JWT Auth
+  Database:  PostgreSQL · Prisma ORM · Redis · AWS S3/Cloudflare R2
+  DevOps:    Docker · GitHub Actions · Cloudflare CDN · Vercel/AWS
+  ============================================================
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ── Design Tokens — Carter's Brand ── */
+    :root {
+      --green:      #124A1F;
+      --green-mid:  #1a6b2e;
+      --green-lite: #2d9e47;
+      --red:        #ee2a24;
+      --orange:     #f5973e;
+      --gold:       #f5c842;
+      --dark:       #2f3540;
+      --white:      #FFFFFF;
+      --light:      #F4F6F4;
+      --light-warm: #F2F5F0;
+      --text:       #2f3540;
+      --muted:      #6B7280;
+      --border:     #D8E4D8;
+      --font-head:  'Montserrat', sans-serif;
+      --font-body:  'Roboto', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+    }
+    button { cursor: pointer; border: none; outline: none; font-family: var(--font-body); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+
+    /* ════════════════════════════════
+       SPLIT SCREEN
+    ════════════════════════════════ */
+    .split-wrapper {
+      position: relative;
+      width: 100vw; height: 100vh;
+      display: flex; overflow: hidden;
+    }
+
+    .before-panel {
+      width: 50%; height: 100%;
+      background: #fff;
+      overflow-y: auto; position: relative;
+      flex-shrink: 0;
+    }
+    .after-panel {
+      width: 50%; height: 100%;
+      background: var(--white);
+      overflow-y: auto; position: relative;
+      flex-shrink: 0;
+    }
+
+    /* Divider */
+    .divider {
+      position: absolute; top: 0; bottom: 0;
+      width: 4px; background: var(--green);
+      cursor: col-resize; z-index: 100;
+      left: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .divider::after {
+      content: '◀ ▶';
+      background: var(--green);
+      color: #fff; font-size: 10px; font-weight: 700;
+      padding: 8px 6px; border-radius: 20px;
+      white-space: nowrap; writing-mode: vertical-rl;
+      letter-spacing: 3px;
+    }
+
+    /* Panel labels */
+    .panel-label {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      font-family: var(--font-head); font-size: 11px; font-weight: 800;
+      letter-spacing: 3px; text-transform: uppercase;
+      padding: 8px 18px; border-radius: 20px; z-index: 10;
+    }
+    .label-before { left: 16px; background: #eee; color: #666; }
+    .label-after  { right: 16px; background: var(--green); color: #fff; }
+
+    .drag-label {
+      position: absolute; bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px; color: rgba(0,0,0,0.4); letter-spacing: 2px;
+      text-transform: uppercase; z-index: 99; white-space: nowrap;
+    }
+
+    /* ════════════════════════════════
+       BEFORE PANEL — CARTER'S CURRENT SITE
+    ════════════════════════════════ */
+    .cb-top-bar { background: var(--green); padding: 5px 16px; display: flex; justify-content: flex-end; gap: 16px; }
+    .cb-top-link { color: rgba(255,255,255,0.7); font-size: 9px; font-weight: 500; letter-spacing: 0.5px; }
+
+    .cb-header {
+      background: #fff; padding: 10px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 3px solid var(--red);
+    }
+    .cb-logo { display: flex; flex-direction: column; }
+    .cb-logo-main { font-family: var(--font-head); font-size: 18px; font-weight: 900; color: var(--green); letter-spacing: -1px; }
+    .cb-logo-sub { font-size: 7px; color: var(--red); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+    .cb-search { flex: 1; margin: 0 14px; }
+    .cb-search input {
+      width: 100%; padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px;
+      font-size: 9px; color: #999;
+    }
+    .cb-header-right { display: flex; gap: 10px; align-items: center; }
+    .cb-signin { font-size: 9px; color: var(--green); font-weight: 700; }
+    .cb-cart { font-size: 9px; background: var(--red); color: #fff; padding: 4px 10px; border-radius: 4px; font-weight: 700; }
+
+    .cb-nav {
+      background: #f5f5f5; padding: 0 16px;
+      display: flex; gap: 0; border-bottom: 2px solid #ddd;
+    }
+    .cb-nav a {
+      font-size: 9px; font-weight: 600; color: var(--dark);
+      padding: 8px 12px; letter-spacing: 0.5px; text-transform: uppercase;
+      border-right: 1px solid #ddd;
+    }
+    .cb-nav a.active { color: var(--red); border-bottom: 2px solid var(--red); }
+
+    .cb-banner {
+      background: linear-gradient(135deg, #1a3a20, #2d5e38);
+      padding: 22px 18px; margin: 12px; border-radius: 6px;
+      display: flex; align-items: center; gap: 14px;
+      position: relative; overflow: hidden;
+    }
+    .cb-banner-text { flex: 1; }
+    .cb-banner-brand { font-size: 9px; font-weight: 800; color: var(--orange); letter-spacing: 3px; text-transform: uppercase; }
+    .cb-banner-title { font-family: var(--font-head); font-size: 18px; font-weight: 900; color: #fff; line-height: 1.1; margin: 4px 0; }
+    .cb-banner-sub { font-size: 9px; color: rgba(255,255,255,0.7); margin-bottom: 10px; }
+    .cb-banner-btn { background: var(--red); color: #fff; font-size: 8px; font-weight: 800; padding: 6px 14px; border-radius: 3px; letter-spacing: 1px; text-transform: uppercase; display: inline-block; }
+    .cb-banner-icon { font-size: 52px; }
+
+    .cb-dept-label { text-align: center; font-size: 11px; font-weight: 800; letter-spacing: 3px; color: var(--dark); margin: 14px 0 10px; text-transform: uppercase; }
+    .cb-depts { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; padding: 0 12px; }
+    .cb-dept { background: var(--red); border-radius: 8px; padding: 12px 6px; text-align: center; }
+    .cb-dept-icon { font-size: 20px; }
+    .cb-dept-name { font-size: 7px; color: #fff; font-weight: 700; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .cb-promo { padding: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cb-promo-card { border: 1px solid #eee; border-radius: 6px; overflow: hidden; }
+    .cb-promo-img { background: #f0f0f0; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+    .cb-promo-body { padding: 8px; }
+    .cb-promo-title { font-size: 9px; font-weight: 700; color: var(--dark); }
+    .cb-promo-price { font-size: 11px; font-weight: 900; color: var(--red); margin-top: 2px; }
+
+    .cb-before-btn { text-align: center; padding: 14px 0 8px; }
+
+    /* ════════════════════════════════
+       AFTER PANEL — NAV
+    ════════════════════════════════ */
+    .after-nav {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--green); padding: 0 32px;
+      display: flex; align-items: center; gap: 32px;
+      height: 58px; transition: box-shadow 0.3s;
+    }
+    .after-nav.scrolled { box-shadow: 0 4px 24px rgba(18,74,31,0.4); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo-c {
+      width: 34px; height: 34px; background: var(--red);
+      color: #fff; font-family: var(--font-head);
+      font-weight: 900; font-size: 16px; display: flex;
+      align-items: center; justify-content: center; border-radius: 6px;
+    }
+    .nav-brand { font-family: var(--font-head); font-weight: 900; font-size: 14px; color: #fff; }
+    .nav-brand span { display: block; font-size: 7px; letter-spacing: 3px; color: rgba(255,255,255,0.6); font-weight: 500; font-family: var(--font-body); text-transform: uppercase; }
+    .nav-links { list-style: none; display: flex; gap: 22px; flex: 1; justify-content: center; }
+    .nav-links a { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8); letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta { background: var(--red); color: #fff; font-family: var(--font-head); font-weight: 700; font-size: 11px; padding: 9px 22px; border-radius: 30px; letter-spacing: 1px; transition: background 0.2s; }
+    .nav-cta:hover { background: #c41e19; }
+
+    /* ════════════════════════════════
+       GREEN COLOUR BAR
+    ════════════════════════════════ */
+    .carters-colorbar { height: 5px; background: linear-gradient(to right, var(--green), var(--green-lite), var(--gold), var(--red)); }
+
+    /* ════════════════════════════════
+       HERO SECTION
+    ════════════════════════════════ */
+    .hero-section {
+      min-height: calc(100vh - 63px);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      padding: 50px 40px 50px 44px;
+      gap: 40px; overflow: hidden;
+      position: relative;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 52%;
+      background: #ffffff;
+      z-index: 0;
+    }
+
+    .hero-content { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--green-lite);
+      margin-bottom: 14px; opacity: 0;
+    }
+    .hero-h1 { font-family: var(--font-head); font-weight: 900; line-height: 1.0; margin-bottom: 20px; }
+    .h1-line1 {
+      display: block;
+      font-size: clamp(42px, 5.5vw, 82px);
+      color: var(--green);
+      opacity: 0; transform: translateY(30px);
+    }
+    .h1-line2 {
+      display: block;
+      font-size: clamp(48px, 6.5vw, 94px);
+      color: var(--red);
+      opacity: 0; transform: translateY(30px);
+    }
+    .hero-sub {
+      font-size: clamp(14px, 1.3vw, 18px);
+      color: #fff; margin-bottom: 32px; opacity: 0;
+      font-weight: 500;
+    }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; opacity: 0; }
+    .btn-primary {
+      background: var(--green); color: #fff;
+      font-family: var(--font-head); font-weight: 700; font-size: 13px;
+      padding: 15px 32px; border-radius: 40px; letter-spacing: 1px;
+      box-shadow: 0 6px 24px rgba(18,74,31,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 36px rgba(18,74,31,0.5); }
+    .btn-outline {
+      background: var(--red); color: #fff;
+      font-family: var(--font-head); font-weight: 700; font-size: 13px;
+      padding: 13px 32px; border-radius: 40px;
+      border: 2px solid var(--red); letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+    .btn-outline:hover { background: #c41e19; border-color: #c41e19; }
+
+    .hero-stats { display: flex; align-items: center; gap: 20px; opacity: 0; }
+    .stat { text-align: center; }
+    .stat-n { display: block; font-family: var(--font-head); font-weight: 900; font-size: 26px; color: var(--red); }
+    .stat-l { display: block; font-size: 9px; color: #ffffff; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+    .stat-sep { width: 1px; height: 40px; background: var(--border); }
+
+    /* ════════════════════════════════
+       CSS 3D ORBIT + PHONE
+    ════════════════════════════════ */
+    .orbit-scene {
+      position: relative; z-index: 10;
+      width: 380px; height: 460px;
+      flex-shrink: 0;
+      perspective: 1000px;
+      perspective-origin: 50% 45%;
+    }
+    .orbit-track {
+      position: absolute;
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      animation: orbit 14s linear infinite;
+    }
+    .orbit-item {
+      position: absolute;
+      width: 90px; height: 90px;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+      top: 50%; left: 50%;
+    }
+    .orbit-item:nth-child(1) { transform: translate(-50%,-50%) rotateY(0deg)   translateZ(175px); }
+    .orbit-item:nth-child(2) { transform: translate(-50%,-50%) rotateY(51deg)  translateZ(175px); }
+    .orbit-item:nth-child(3) { transform: translate(-50%,-50%) rotateY(102deg) translateZ(175px); }
+    .orbit-item:nth-child(4) { transform: translate(-50%,-50%) rotateY(153deg) translateZ(175px); }
+    .orbit-item:nth-child(5) { transform: translate(-50%,-50%) rotateY(204deg) translateZ(175px); }
+    .orbit-item:nth-child(6) { transform: translate(-50%,-50%) rotateY(255deg) translateZ(175px); }
+    .orbit-item:nth-child(7) { transform: translate(-50%,-50%) rotateY(306deg) translateZ(175px); }
+    @keyframes orbit {
+      from { transform: rotateX(14deg) rotateY(0deg); }
+      to   { transform: rotateX(14deg) rotateY(360deg); }
+    }
+    .phone-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+    }
+    .phone-frame {
+      width: 185px; height: 370px;
+      background: #111; border-radius: 36px;
+      border: 3px solid #2a2a2a;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45), 0 0 0 1px #333,
+        0 0 40px rgba(18,74,31,0.2);
+      position: relative; overflow: hidden;
+    }
+    .phone-notch {
+      width: 56px; height: 11px; background: #111;
+      border-radius: 0 0 10px 10px; margin: 0 auto; position: relative; z-index: 5;
+    }
+    .phone-screen {
+      position: absolute; inset: 0; border-radius: 34px;
+      overflow: hidden; background: #f8f9fa;
+      display: flex; flex-direction: column;
+    }
+    .phone-carters-bar {
+      background: var(--green);
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 10px; flex-shrink: 0; z-index: 10;
+    }
+    .pcb-logo { width: 22px; height: 22px; background: var(--red); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-weight: 900; font-size: 10px; color: #fff; }
+    .pcb-brand { font-family: var(--font-head); font-size: 9px; font-weight: 800; color: #fff; letter-spacing: 1px; flex: 1; }
+    .pcb-live { font-size: 7px; font-weight: 700; color: var(--gold); letter-spacing: 1px; }
+
+    .auction-product-img-real {
+      width: 100%; height: 90px;
+      object-fit: cover; border-radius: 10px;
+      margin-bottom: 6px;
+    }
+    .auction-states-wrap { flex: 1; overflow: hidden; position: relative; }
+    .auction-state { padding: 8px 10px; animation: fadeIn 0.4s ease; }
+    .auction-state.hidden { display: none; }
+    @keyframes fadeIn { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+
+    /* Phone auction states */
+    .as-label { font-size: 8px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .as-product-name { font-family: var(--font-head); font-size: 11px; font-weight: 800; color: var(--green); margin-bottom: 4px; }
+    .as-start-bid { font-size: 9px; color: var(--muted); }
+    .as-start-price { font-size: 20px; font-weight: 900; color: var(--green); font-family: var(--font-head); }
+    .as-btn { background: var(--green); color: #fff; font-size: 10px; font-weight: 800; padding: 8px; border-radius: 16px; width: 100%; margin-top: 6px; text-align: center; }
+    .as-btn.red { background: var(--red); }
+    .as-bidders { font-family: var(--font-head); font-size: 22px; font-weight: 900; color: var(--green); text-align: center; margin: 4px 0; }
+    .as-bidders-lbl { font-size: 8px; color: var(--muted); text-align: center; }
+    .as-war-price { font-family: var(--font-head); font-size: 28px; font-weight: 900; color: var(--red); text-align: center; }
+    .as-war-lbl { font-size: 8px; letter-spacing: 2px; color: var(--green); font-weight: 800; text-align: center; }
+    .as-outbid { background: #fff3cd; border-radius: 8px; padding: 8px; text-align: center; }
+    .as-outbid-title { font-size: 10px; font-weight: 800; color: #856404; }
+    .as-outbid-sub { font-size: 8px; color: #856404; margin-top: 2px; }
+    .as-countdown { font-family: var(--font-head); font-size: 32px; font-weight: 900; color: var(--red); text-align: center; letter-spacing: 2px; }
+    .as-final-lbl { font-size: 8px; font-weight: 800; color: var(--red); text-align: center; letter-spacing: 2px; margin-bottom: 4px; }
+    .as-won-wrap { text-align: center; padding: 6px 0; position: relative; }
+    .as-won-title { font-family: var(--font-head); font-size: 20px; font-weight: 900; color: var(--green); }
+    .as-won-item { font-size: 9px; color: var(--muted); margin-top: 2px; }
+    .as-won-price { font-family: var(--font-head); font-size: 16px; font-weight: 900; color: var(--red); }
+    .as-won-congrats { font-size: 9px; color: var(--green-lite); font-weight: 700; margin-top: 4px; }
+    .as-won-trophy { font-size: 28px; }
+    canvas.confetti-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+
+    /* Hero right */
+    .hero-right { display: flex; flex-direction: column; align-items: center; gap: 16px; flex-shrink: 0; }
+    .hero-right-images { display: flex; align-items: center; gap: 40px; }
+    .cheer-side-img {
+      height: 400px; width: auto;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+      flex-shrink: 0;
+    }
+    .hero-bid-win {
+      font-family: var(--font-head);
+      font-size: clamp(32px, 4.5vw, 66px);
+      font-weight: 900;
+      color: var(--red);
+      letter-spacing: -1px;
+      text-align: center;
+      line-height: 1;
+    }
+    .cheer-img {
+      position: absolute; left: 0; top: 0;
+      width: 46%; height: 100%;
+      object-fit: cover; object-position: center top;
+      border-radius: 0; opacity: 0.88; z-index: 0;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 60%, transparent 100%);
+      mask-image: linear-gradient(to right, black 0%, black 60%, transparent 100%);
+    }
+
+    /* See Vision button */
+    .see-vision-btn {
+      position: absolute; bottom: 38px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--green); color: #fff;
+      font-family: var(--font-head); font-weight: 800; font-size: 12px;
+      padding: 14px 36px; border-radius: 40px; z-index: 200;
+      letter-spacing: 1px; box-shadow: 0 8px 32px rgba(18,74,31,0.4);
+      white-space: nowrap;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .see-vision-btn:hover { transform: translateX(-50%) scale(1.05); }
+
+    /* ════════════════════════════════
+       SECTION COMMON
+    ════════════════════════════════ */
+    .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--green-lite); margin-bottom: 10px; }
+    .section-title { font-family: var(--font-head); font-size: clamp(26px, 3vw, 40px); font-weight: 900; color: var(--green); line-height: 1.1; margin-bottom: 6px; }
+    .section-header { text-align: center; margin-bottom: 36px; }
+
+    /* ════════════════════════════════
+       DEALS SECTION
+    ════════════════════════════════ */
+    .deals-section { padding: 80px 40px; background: var(--light-warm); }
+    .deals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .deal-card {
+      background: #fff; border-radius: 20px;
+      padding: 22px; box-shadow: 0 4px 24px rgba(18,74,31,0.08);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .deal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(18,74,31,0.14); }
+    .deal-badge {
+      display: inline-block; background: var(--green); color: #fff;
+      font-family: var(--font-head); font-size: 9px; font-weight: 800;
+      padding: 5px 16px; border-radius: 20px; letter-spacing: 1px; margin-bottom: 12px;
+    }
+    .deal-img-real {
+      width: 100%; height: auto;
+      max-height: 230px;
+      object-fit: contain;
+      background: var(--light);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    .deal-name { font-family: var(--font-head); font-size: 16px; font-weight: 800; color: var(--green); margin: 14px 0 8px; }
+    .deal-prices { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .deal-was { font-size: 13px; color: var(--muted); text-decoration: line-through; }
+    .deal-now { font-family: var(--font-head); font-size: 24px; font-weight: 900; color: var(--red); }
+    .deal-save { font-size: 11px; color: var(--green-lite); font-weight: 700; margin-bottom: 12px; }
+    .deal-timer { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
+    .deal-timer span { font-weight: 700; color: var(--red); font-family: var(--font-head); font-size: 14px; }
+    .deal-btn {
+      width: 100%; background: var(--green); color: #fff;
+      font-family: var(--font-head); font-size: 12px; font-weight: 700;
+      padding: 13px; border-radius: 12px; letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .deal-btn:hover { background: var(--green-mid); }
+
+    /* ════════════════════════════════
+       EMAIL OPTIN
+    ════════════════════════════════ */
+    .optin-strip {
+      background: var(--red); padding: 28px 40px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    }
+    .optin-copy { color: #fff; }
+    .optin-title { font-family: var(--font-head); font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+    .optin-sub { font-size: 12px; opacity: 0.85; }
+    .optin-form { display: flex; gap: 10px; }
+    .optin-input { padding: 12px 18px; border-radius: 30px; border: none; font-size: 12px; width: 240px; }
+    .optin-submit { background: var(--green); color: #fff; font-family: var(--font-head); font-weight: 700; font-size: 12px; padding: 12px 28px; border-radius: 30px; }
+
+    /* ════════════════════════════════
+       BID & WIN BANNER
+    ════════════════════════════════ */
+    .bid-win-banner {
+      background: linear-gradient(120deg, #0a2e10 0%, var(--green) 60%, #1e6b2e 100%);
+      padding: 36px 40px;
+      text-align: center;
+    }
+    .bid-win-text {
+      font-family: var(--font-head);
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .bid-win-sub-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 20px; margin-top: 14px;
+    }
+    .bid-win-phone-img { height: 90px; width: auto; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.35)); }
+    .bid-win-sub { font-family: var(--font-head); font-size: clamp(14px, 2vw, 24px); font-weight: 700; color: #fff; letter-spacing: 1px; }
+
+    /* ════════════════════════════════
+       APP SECTION
+    ════════════════════════════════ */
+    .app-section { padding: 80px 40px; background: var(--white); }
+    .app-inner   { display: flex; align-items: center; gap: 56px; }
+    .app-copy    { flex: 1; }
+    .app-desc    { color: var(--muted); font-size: 14px; line-height: 1.8; margin: 18px 0 28px; max-width: 380px; }
+    .app-features { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .app-feat     { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--green); font-weight: 500; }
+    .app-feat-icon { width: 32px; height: 32px; background: var(--light-warm); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .store-badges { display: flex; gap: 12px; }
+    .badge { background: var(--green); color: #fff; font-size: 11px; font-weight: 700; padding: 10px 20px; border-radius: 10px; letter-spacing: 0.5px; }
+
+    .app-phones { display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+    .app-phone-frame { width: 155px; height: 310px; background: #111; border: 2px solid #222; border-radius: 28px; overflow: hidden; box-shadow: 0 24px 64px rgba(18,74,31,0.25); }
+    .app-phone-notch { width: 46px; height: 9px; background: #111; border-radius: 0 0 7px 7px; margin: 0 auto; }
+    .app-phone-screen { padding: 8px 9px 12px; display: flex; flex-direction: column; gap: 5px; background: #f5f6f8; }
+    .app-phone-screen.dark { background: #0a1a0c; }
+    .app-screen-header { font-size: 8px; font-weight: 700; color: var(--green); }
+    .app-tabs { display: flex; gap: 5px; }
+    .app-tab { font-size: 7px; padding: 3px 7px; border-radius: 10px; color: #888; background: #e8e8e8; font-weight: 600; }
+    .app-tab.active { background: var(--green); color: #fff; }
+    .app-card-mini { background: #fff; border-radius: 5px; padding: 5px 7px; font-size: 7.5px; color: #333; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .app-card-mini.green { background: #e8f5ea; color: var(--green); font-weight: 600; }
+    .app-notif { background: var(--green); color: #fff; border-radius: 5px; padding: 5px 7px; font-size: 7.5px; }
+    .app-live-badge { font-size: 8px; font-weight: 800; color: var(--red); letter-spacing: 2px; text-align: center; }
+    .app-live-product { font-size: 28px; text-align: center; margin: 4px 0; }
+    .app-live-name { font-size: 8px; color: #aaa; text-align: center; }
+    .app-live-bid { font-family: var(--font-head); font-size: 22px; font-weight: 900; color: var(--gold); text-align: center; }
+    .app-live-time { font-family: var(--font-head); font-size: 16px; font-weight: 800; color: var(--red); text-align: center; letter-spacing: 2px; }
+    .app-live-bidders { font-size: 8px; color: #aaa; text-align: center; }
+    .app-bid-btn { background: var(--red); color: #fff; font-weight: 800; font-size: 10px; padding: 7px; border-radius: 18px; width: 100%; margin-top: 3px; }
+
+    /* ════════════════════════════════
+       CLOSING CTA
+    ════════════════════════════════ */
+    .closing-section {
+      background: linear-gradient(135deg, #0a2e10 0%, var(--green) 60%, #1e6b2e 100%);
+      padding: 80px 40px; text-align: center;
+    }
+    .closing-inner { max-width: 600px; margin: 0 auto; }
+    .closing-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .closing-title { font-family: var(--font-head); font-size: clamp(28px, 3.5vw, 48px); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 16px; }
+    .closing-sub { color: rgba(255,255,255,0.75); font-size: 14px; line-height: 1.8; margin-bottom: 32px; }
+    .closing-btn {
+      background: var(--red); color: #fff;
+      font-family: var(--font-head); font-weight: 800; font-size: 14px;
+      padding: 16px 50px; border-radius: 40px; letter-spacing: 1px;
+      box-shadow: 0 8px 36px rgba(238,42,36,0.5);
+      transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 28px;
+    }
+    .closing-btn:hover { transform: scale(1.05); box-shadow: 0 14px 54px rgba(238,42,36,0.7); }
+    .closing-contact { display: flex; gap: 32px; font-size: 13px; color: rgba(255,255,255,0.6); flex-wrap: wrap; justify-content: center; }
+    .closing-stack { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; }
+    .stack-item { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); font-size: 9px; font-weight: 600; padding: 5px 14px; border-radius: 20px; letter-spacing: 1px; }
+
+    .site-footer { text-align: center; padding: 22px; color: rgba(255,255,255,0.5); font-size: 11px; background: #061508; }
+    .site-footer strong { color: var(--gold); }
+
+    @media (max-width: 960px) {
+      .hero-section { flex-direction: column; padding: 40px 20px; }
+      .orbit-scene  { width: 300px; height: 360px; }
+      .deals-grid   { grid-template-columns: 1fr; }
+      .app-inner    { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- DRAG DIVIDER -->
+<div class="divider" id="divider"></div>
+<span class="panel-label label-before" id="panelLabelBefore">Before</span>
+<span class="panel-label label-after"  id="panelLabelAfter">After</span>
+<span class="drag-label" id="dragLabel">◀ DRAG TO COMPARE ▶</span>
+
+<button class="see-vision-btn" id="seeVisionBtn">See the Future of Carter's →</button>
+
+<div class="split-wrapper" id="splitWrapper">
+
+  <!-- ── BEFORE PANEL ── -->
+  <div class="before-panel" id="beforePanel">
+
+    <div class="cb-top-bar">
+      <span class="cb-top-link">Store Info</span>
+      <span class="cb-top-link">Blades & Williams</span>
+      <span class="cb-top-link">Careers</span>
+    </div>
+
+    <header class="cb-header">
+      <div class="cb-logo">
+        <span class="cb-logo-main">CARTER'S</span>
+        <span class="cb-logo-sub">Lumber · Hardware · Homeware</span>
+      </div>
+      <div class="cb-search">
+        <input type="text" placeholder="Enter What You're Looking For...">
+      </div>
+      <div class="cb-header-right">
+        <span class="cb-signin">SIGN IN</span>
+        <span class="cb-cart">🛒 Cart (0)</span>
+      </div>
+    </header>
+
+    <nav class="cb-nav">
+      <a href="#" class="active">Home</a>
+      <a href="#">Departments</a>
+      <a href="#">PitStop</a>
+      <a href="#">Fisherman's Corner</a>
+    </nav>
+
+    <!-- BEFORE button -->
+    <div class="cb-before-btn">
+      <button style="background:#ee2a24; color:#fff; font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; letter-spacing:2px; padding:12px 48px; border-radius:40px; border:none; cursor:default; pointer-events:none;">BEFORE</button>
+    </div>
+
+    <div class="cb-banner">
+      <div class="cb-banner-text">
+        <div class="cb-banner-brand">SENIX</div>
+        <div class="cb-banner-title">4QL 26.5cc<br>String Trimmers</div>
+        <div class="cb-banner-sub">Curved &amp; Straight Shafts</div>
+        <span class="cb-banner-btn">Now Available at Wildey &amp; Lower Estate</span>
+      </div>
+      <div class="cb-banner-icon">🌿</div>
+    </div>
+
+    <div class="cb-dept-label">Shop by Department</div>
+    <div class="cb-depts">
+      <div class="cb-dept"><div class="cb-dept-icon">🪵</div><div class="cb-dept-name">Lumber</div></div>
+      <div class="cb-dept"><div class="cb-dept-icon">🔧</div><div class="cb-dept-name">Tools</div></div>
+      <div class="cb-dept"><div class="cb-dept-icon">🏠</div><div class="cb-dept-name">Homeware</div></div>
+      <div class="cb-dept"><div class="cb-dept-icon">🪑</div><div class="cb-dept-name">Furniture</div></div>
+      <div class="cb-dept"><div class="cb-dept-icon">🔥</div><div class="cb-dept-name">BBQ</div></div>
+      <div class="cb-dept"><div class="cb-dept-icon">🐾</div><div class="cb-dept-name">Pet</div></div>
+    </div>
+
+    <div class="cb-promo">
+      <div class="cb-promo-card">
+        <div class="cb-promo-img">🔨</div>
+        <div class="cb-promo-body">
+          <div class="cb-promo-title">Makita Power Tools</div>
+          <div class="cb-promo-price">From $299</div>
+        </div>
+      </div>
+      <div class="cb-promo-card">
+        <div class="cb-promo-img">🔥</div>
+        <div class="cb-promo-body">
+          <div class="cb-promo-title">Weber BBQ Grills</div>
+          <div class="cb-promo-price">From $899</div>
+        </div>
+      </div>
+      <div class="cb-promo-card">
+        <div class="cb-promo-img">🪵</div>
+        <div class="cb-promo-body">
+          <div class="cb-promo-title">Treated Lumber</div>
+          <div class="cb-promo-price">From $45/board</div>
+        </div>
+      </div>
+      <div class="cb-promo-card">
+        <div class="cb-promo-img">🎨</div>
+        <div class="cb-promo-body">
+          <div class="cb-promo-title">Cabot Paint Range</div>
+          <div class="cb-promo-price">From $89/gallon</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /before-panel -->
+
+  <!-- ── AFTER PANEL ── -->
+  <div class="after-panel" id="afterPanel">
+
+    <div class="carters-colorbar"></div>
+
+    <nav class="after-nav" id="afterNav">
+      <div class="nav-logo">
+        <div class="nav-logo-c">C</div>
+        <div class="nav-brand">CARTER'S <span>Lumber · Hardware · Homeware</span></div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">Deals</a></li>
+        <li><a href="#">Auction</a></li>
+        <li><a href="#">App</a></li>
+        <li><a href="#">Departments</a></li>
+      </ul>
+      <button class="nav-cta">Join Auction</button>
+    </nav>
+
+    <!-- ── HERO ── -->
+    <section class="hero-section" id="heroSection">
+
+      <img class="cheer-img" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=900&q=80" alt="Builders at work">
+
+      <div class="hero-content" style="position:relative;z-index:2;">
+        <div class="hero-eyebrow">Barbados' Premier Hardware Store</div>
+        <h1 class="hero-h1">
+          <span class="h1-line1">The Future of</span>
+          <span class="h1-line2">Hardware.</span>
+        </h1>
+        <p class="hero-sub">Shop. Bid. Build. — All in one place.</p>
+        <div class="hero-ctas">
+          <button class="btn-primary">Shop Now</button>
+          <button class="btn-outline">Join Live Auction</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-n">50+</span><span class="stat-l">Years Trading</span></div>
+          <div class="stat-sep"></div>
+          <div class="stat"><span class="stat-n">500+</span><span class="stat-l">Products</span></div>
+          <div class="stat-sep"></div>
+          <div class="stat"><span class="stat-n">3</span><span class="stat-l">Store Locations</span></div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-right-images">
+          <div class="orbit-scene" id="orbitScene">
+            <div class="orbit-track" id="orbitTrack">
+              <img class="orbit-item" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=120&h=120&fit=crop&q=80" alt="Power Drill" loading="eager">
+              <img class="orbit-item" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=120&h=120&fit=crop&q=80" alt="Lumber" loading="eager">
+              <img class="orbit-item" src="BBqgrillPNG.png?w=120&h=120&fit=crop&q=80" alt="BBQ Grill" loading="eager">
+              <img class="orbit-item" src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=120&h=120&fit=crop&q=80" alt="Paint" loading="eager">
+              <img class="orbit-item" src="https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=120&h=120&fit=crop&q=80" alt="Tools" loading="eager">
+              <img class="orbit-item" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=120&h=120&fit=crop&q=80" alt="Outdoor Furniture" loading="eager">
+              <img class="orbit-item" src="https://images.unsplash.com/photo-1581905764498-f1b60bae941a?w=120&h=120&fit=crop&q=80" alt="Power Tools" loading="eager">
+            </div>
+
+            <!-- Phone -->
+            <div class="phone-center">
+              <div class="phone-frame">
+                <div class="phone-notch"></div>
+                <div class="phone-screen">
+                  <div class="phone-carters-bar">
+                    <div class="pcb-logo">C</div>
+                    <span class="pcb-brand">CARTER'S</span>
+                    <span class="pcb-live">● LIVE</span>
+                  </div>
+
+                  <div class="auction-states-wrap">
+
+                    <div class="auction-state" id="state-listing">
+                      <div class="as-label">🔨 Live Auction</div>
+                      <img class="auction-product-img-real" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=300&h=180&fit=crop&q=80" alt="Makita Drill">
+                      <div class="as-product-name">Makita 18V LXT Drill</div>
+                      <div class="as-start-bid">Starting Bid</div>
+                      <div class="as-start-price">$280</div>
+                      <div class="as-btn">Register to Bid</div>
+                    </div>
+
+                    <div class="auction-state hidden" id="state-login">
+                      <div class="as-label">Create Account</div>
+                      <div style="font-size:36px;text-align:center;margin:10px 0;">👤</div>
+                      <div style="font-size:10px;color:var(--green);font-weight:700;text-align:center;">Join Carter's App</div>
+                      <div style="font-size:8px;color:var(--muted);text-align:center;margin:4px 0;">Bid on tools, BBQs & more</div>
+                      <div class="as-btn">Sign Up Free</div>
+                    </div>
+
+                    <div class="auction-state hidden" id="state-bidders">
+                      <div class="as-label">🔥 Bid War Starting</div>
+                      <img class="auction-product-img-real" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=300&h=180&fit=crop&q=80" alt="Makita Drill">
+                      <div class="as-bidders-lbl">Bidders Watching</div>
+                      <div class="as-bidders" id="bidderCount">12</div>
+                      <div class="as-bidders-lbl">and counting...</div>
+                    </div>
+
+                    <div class="auction-state hidden" id="state-bidwar">
+                      <div class="as-war-lbl">⚡ BID WAR!</div>
+                      <img class="auction-product-img-real" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=300&h=180&fit=crop&q=80" alt="Makita Drill">
+                      <div style="font-size:8px;text-align:center;color:var(--muted);">Current Bid</div>
+                      <div class="as-war-price" id="bidWarPrice">$310</div>
+                      <div style="font-size:8px;text-align:center;color:var(--muted);">42 bids · 28 bidders</div>
+                    </div>
+
+                    <div class="auction-state hidden" id="state-outbid">
+                      <div style="margin-top:8px;">
+                        <div class="as-outbid">
+                          <div class="as-outbid-title">😤 You've Been Outbid!</div>
+                          <div class="as-outbid-sub">New bid: $371.00</div>
+                        </div>
+                        <div class="as-war-price" style="margin-top:8px;">$371</div>
+                        <div class="as-btn red">Bid Again!</div>
+                      </div>
+                    </div>
+
+                    <div class="auction-state hidden" id="state-countdown">
+                      <div class="as-final-lbl">⏱ FINAL SECONDS!</div>
+                      <img class="auction-product-img-real" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=300&h=180&fit=crop&q=80" alt="Makita Drill">
+                      <div style="font-size:9px;text-align:center;color:var(--muted);">Highest Bid: $385.00</div>
+                      <div class="as-countdown" id="countdownDisplay">00:00:03</div>
+                      <div style="font-size:8px;text-align:center;color:var(--muted);">28 bidders watching...</div>
+                    </div>
+
+                    <div class="auction-state hidden" id="state-won">
+                      <div class="as-won-wrap">
+                        <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+                        <div class="as-won-trophy">🏆</div>
+                        <div class="as-won-title">YOU WON!</div>
+                        <div class="as-won-item">Makita 18V LXT Drill</div>
+                        <div class="as-won-price">Final Bid: $385.00</div>
+                        <div class="as-won-congrats">Congratulations!</div>
+                      </div>
+                    </div>
+
+                    <div class="auction-state hidden" id="state-reset"></div>
+
+                  </div><!-- /auction-states-wrap -->
+                </div><!-- /phone-screen -->
+              </div><!-- /phone-frame -->
+            </div><!-- /phone-center -->
+
+          </div><!-- /orbit-scene -->
+
+          <img class="cheer-side-img" src="Girl Cheering.png" alt="Celebrating customer">
+
+        </div><!-- /hero-right-images -->
+
+        <div class="hero-bid-win">Bid &amp; Win !</div>
+
+      </div><!-- /hero-right -->
+    </section>
+
+    <!-- ── DEALS ── -->
+    <section class="deals-section" id="dealsSection">
+      <div class="section-header">
+        <div class="section-eyebrow">Limited Time Only</div>
+        <h2 class="section-title">Hot Deals</h2>
+      </div>
+      <div class="deals-grid">
+        <div class="deal-card" id="dealWeek">
+          <div class="deal-badge">🔥 DEAL OF THE WEEK</div>
+          <img class="deal-img-real" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&h=220&fit=crop&q=80" alt="Makita Drill Set">
+          <div class="deal-name">Makita 18V Power Drill Set</div>
+          <div class="deal-prices">
+            <span class="deal-was">$599</span>
+            <span class="deal-now">$399</span>
+          </div>
+          <div class="deal-save">Save $200</div>
+          <div class="deal-timer" id="timerWeek">Loading...</div>
+          <button class="deal-btn">Grab This Deal</button>
+        </div>
+        <div class="deal-card" id="dealMonth">
+          <div class="deal-badge" style="background:var(--red);">⭐ DEAL OF THE MONTH</div>
+          <img class="deal-img-real" src="BBqgrillPNG.png?w=400&h=220&fit=crop&q=80" alt="Weber BBQ Grill">
+          <div class="deal-name">Weber Master-Touch BBQ Grill</div>
+          <div class="deal-prices">
+            <span class="deal-was">$1,200</span>
+            <span class="deal-now">$849</span>
+          </div>
+          <div class="deal-save">Save $351</div>
+          <div class="deal-timer" id="timerMonth">Loading...</div>
+          <button class="deal-btn">Grab This Deal</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EMAIL OPTIN ── -->
+    <div class="optin-strip">
+      <div class="optin-copy">
+        <div class="optin-title">Get Exclusive Deals First</div>
+        <div class="optin-sub">Join thousands of Barbadians getting the best hardware deals &amp; auction alerts.</div>
+      </div>
+      <div class="optin-form">
+        <input class="optin-input" type="email" placeholder="Your email address">
+        <button class="optin-submit">Subscribe</button>
+      </div>
+    </div>
+
+    <!-- ── APP PREVIEW ── -->
+    <section class="app-section" id="appSection">
+      <div class="app-inner">
+        <div class="app-copy">
+          <div class="section-eyebrow">Available Soon</div>
+          <h2 class="section-title" style="text-align:left">The Carter's App.</h2>
+          <p class="app-desc">Your hardware store in your pocket. Shop, track sales, and join live tool auctions from anywhere — real-time push alerts keep you winning.</p>
+          <div class="app-features">
+            <div class="app-feat"><div class="app-feat-icon">🔨</div> New Tools &amp; Hardware — fresh stock daily</div>
+            <div class="app-feat"><div class="app-feat-icon">🔥</div> Live Sale Feed with countdown timers</div>
+            <div class="app-feat"><div class="app-feat-icon">⚡</div> Auction Bid Wars — win premium tools</div>
+            <div class="app-feat"><div class="app-feat-icon">🔔</div> Instant Outbid &amp; Win Notifications</div>
+          </div>
+          <div class="store-badges">
+            <div class="badge">🍎 App Store</div>
+            <div class="badge">▶ Google Play</div>
+          </div>
+        </div>
+        <div class="app-phones">
+          <div class="app-phone-frame" id="appPhone1">
+            <div class="app-phone-notch"></div>
+            <div class="app-phone-screen">
+              <div class="app-screen-header">Good morning, Jason 👋</div>
+              <div class="app-tabs">
+                <span class="app-tab active">What's New</span>
+                <span class="app-tab">Deals</span>
+                <span class="app-tab">Auctions</span>
+              </div>
+              <div class="app-card-mini">🔧 New power tools in store →</div>
+              <div class="app-card-mini green">🔥 Drill sale ends in 01:44:22</div>
+              <div class="app-card-mini">🪵 Treated lumber — bulk discount</div>
+              <div class="app-card-mini">🎨 Cabot Paint — buy 2 get 1 free</div>
+              <div class="app-notif">🔔 Auction starting in 5 minutes!</div>
+            </div>
+          </div>
+          <div class="app-phone-frame" id="appPhone2" style="margin-top:38px">
+            <div class="app-phone-notch"></div>
+            <div class="app-phone-screen dark">
+              <div class="app-live-badge">🔴 LIVE</div>
+              <div class="app-live-product">🔧</div>
+              <div class="app-live-name">Makita 18V LXT Drill</div>
+              <div class="app-live-bid">$385.00</div>
+              <div class="app-live-time">00:01:12</div>
+              <div class="app-live-bidders">28 active bidders</div>
+              <button class="app-bid-btn">BID NOW</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BID & WIN BANNER ── -->
+    <div class="bid-win-banner" id="bidWinBanner">
+      <div class="bid-win-text">Bid &amp; Win !</div>
+      <div class="bid-win-sub-row">
+        <span class="bid-win-sub">Download the App from Google Play Store — What are you waiting for?</span>
+      </div>
+    </div>
+
+    <!-- ── CLOSING CTA ── -->
+    <section class="closing-section" id="closingSection">
+      <div class="closing-inner" id="closingInner">
+        <div class="closing-eyebrow">Your Competitive Edge Awaits</div>
+        <h2 class="closing-title">Ready to transform<br>Carter's digital presence?</h2>
+        <p class="closing-sub">Full stack web, mobile auction &amp; sale app, live bidding engine — delivered by INTERXDB.</p>
+        <button class="closing-btn">Start the Conversation</button>
+        <div class="closing-contact">
+          <span>✉ contact@INTERXDB.com</span>
+          <span>📞 Tel 1(246) 241-3771</span>
+        </div>
+        <div class="closing-stack">
+          <div class="stack-item">Next.js 14</div>
+          <div class="stack-item">React Native</div>
+          <div class="stack-item">Node.js</div>
+          <div class="stack-item">PostgreSQL</div>
+          <div class="stack-item">Socket.IO</div>
+          <div class="stack-item">Redis</div>
+          <div class="stack-item">Cloudflare</div>
+          <div class="stack-item">AI Ready</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>Designed by <strong>INTERXDB</strong> — Full Stack Web, Mobile &amp; AI Integration</p>
+    </footer>
+
+  </div><!-- /after-panel -->
+</div><!-- /split-wrapper -->
+
+<script>
+  // ════════════════════════
+  // DRAG SLIDER
+  // ════════════════════════
+  const splitWrapper = document.getElementById('splitWrapper');
+  const beforePanel  = document.getElementById('beforePanel');
+  const afterPanel   = document.getElementById('afterPanel');
+  const divider      = document.getElementById('divider');
+  const seeVisionBtn = document.getElementById('seeVisionBtn');
+  const afterNav     = document.getElementById('afterNav');
+  const dragLabel    = document.getElementById('dragLabel');
+
+  let isDragging = false;
+  let fullVision = false;
+
+  divider.addEventListener('mousedown',  () => { isDragging = true; document.body.style.cursor = 'col-resize'; document.body.style.userSelect = 'none'; });
+  divider.addEventListener('touchstart', () => { isDragging = true; }, { passive: true });
+  document.addEventListener('mouseup',   () => { isDragging = false; document.body.style.cursor = ''; document.body.style.userSelect = ''; });
+  document.addEventListener('touchend',  () => { isDragging = false; });
+  document.addEventListener('mousemove', onDrag);
+  document.addEventListener('touchmove', e => onDrag(e.touches[0]), { passive: true });
+
+  function onDrag(e) {
+    if (!isDragging || fullVision) return;
+    const rect = splitWrapper.getBoundingClientRect();
+    let pct = ((e.clientX - rect.left) / rect.width) * 100;
+    pct = Math.min(Math.max(pct, 5), 95);
+    beforePanel.style.width = pct + '%';
+    afterPanel.style.width  = (100 - pct) + '%';
+  }
+
+  seeVisionBtn.addEventListener('click', () => {
+    fullVision = true;
+    beforePanel.style.width = '0%';
+    divider.style.opacity = '0';
+    divider.style.pointerEvents = 'none';
+    afterPanel.style.width = '100%';
+    dragLabel.style.opacity = '0';
+    seeVisionBtn.style.opacity = '0';
+    seeVisionBtn.style.pointerEvents = 'none';
+    document.querySelectorAll('.panel-label').forEach(el => el.style.opacity = '0');
+    setTimeout(triggerHeroEntrance, 850);
+  });
+
+  afterPanel.addEventListener('scroll', () => {
+    afterNav.classList.toggle('scrolled', afterPanel.scrollTop > 50);
+  });
+
+  // ════════════════════════
+  // GSAP HERO ENTRANCE
+  // ════════════════════════
+  function triggerHeroEntrance() {
+    gsap.registerPlugin(ScrollTrigger);
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.to('.hero-eyebrow', { opacity: 1, duration: 0.5 })
+      .to('.h1-line1',  { opacity: 1, y: 0, duration: 0.7 }, '-=0.2')
+      .to('.h1-line2',  { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+      .to('.hero-sub',  { opacity: 1, duration: 0.5 }, '-=0.25')
+      .to('.hero-ctas', { opacity: 1, duration: 0.5 }, '-=0.2')
+      .to('.hero-stats',{ opacity: 1, duration: 0.5 }, '-=0.2');
+
+    gsap.from('#dealWeek',  { scrollTrigger: { trigger: '#dealWeek',  scroller: '#afterPanel', start: 'top 88%' }, x: -60, opacity: 0, duration: 0.8, ease: 'power3.out' });
+    gsap.from('#dealMonth', { scrollTrigger: { trigger: '#dealMonth', scroller: '#afterPanel', start: 'top 88%' }, x:  60, opacity: 0, duration: 0.8, ease: 'power3.out' });
+    gsap.from('#appPhone1', { scrollTrigger: { trigger: '#appSection', scroller: '#afterPanel', start: 'top 82%' }, y: 60, opacity: 0, duration: 0.8, ease: 'power3.out' });
+    gsap.from('#appPhone2', { scrollTrigger: { trigger: '#appSection', scroller: '#afterPanel', start: 'top 82%' }, y: 60, opacity: 0, duration: 0.9, delay: 0.2, ease: 'power3.out' });
+    gsap.from('#closingInner', { scrollTrigger: { trigger: '#closingSection', scroller: '#afterPanel', start: 'top 82%' }, y: 40, opacity: 0, duration: 0.8, ease: 'power3.out' });
+
+    gsap.set('#bidWinBanner', { opacity: 0, y: 30 });
+    const bidObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          bidObserver.disconnect();
+          gsap.to('#bidWinBanner', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', onComplete: playCrowdCheer });
+        }
+      });
+    }, { root: afterPanel, threshold: 0.2 });
+    bidObserver.observe(document.getElementById('bidWinBanner'));
+  }
+
+  // ════════════════════════
+  // AUCTION STATE MACHINE
+  // ════════════════════════
+  const STATES = [
+    { id: 'listing',   duration: 2600 },
+    { id: 'login',     duration: 1600 },
+    { id: 'bidders',   duration: 2400 },
+    { id: 'bidwar',    duration: 3200 },
+    { id: 'outbid',    duration: 2200 },
+    { id: 'countdown', duration: 3400 },
+    { id: 'won',       duration: 2800 },
+    { id: 'reset',     duration: 800  },
+  ];
+
+  function showState(id) {
+    document.querySelectorAll('.auction-state').forEach(el => el.classList.add('hidden'));
+    const el = document.getElementById('state-' + id);
+    if (el) el.classList.remove('hidden');
+    if (id === 'won') launchConfetti();
+  }
+
+  function startAuctionLoop() {
+    let idx = 0;
+    showState(STATES[0].id);
+    function next() {
+      idx = (idx + 1) % STATES.length;
+      const s = STATES[idx];
+      showState(s.id);
+      if (s.id === 'bidders')   animateBidders();
+      if (s.id === 'bidwar')    animateBidWar();
+      if (s.id === 'countdown') animateCountdown();
+      setTimeout(next, s.duration);
+    }
+    setTimeout(next, STATES[0].duration);
+  }
+  startAuctionLoop();
+
+  function animateBidders() {
+    const el = document.getElementById('bidderCount');
+    if (!el) return;
+    let n = 12;
+    const step = () => { n = Math.min(n + Math.ceil(Math.random() * 7), 42); el.textContent = n; if (n < 42) setTimeout(step, 75); };
+    step();
+  }
+
+  function animateBidWar() {
+    const el = document.getElementById('bidWarPrice');
+    if (!el) return;
+    const prices = ['$310','$320','$331','$342','$355','$362','$370','$378','$385'];
+    let i = 0;
+    const step = () => { if (i < prices.length) { el.textContent = prices[i++]; setTimeout(step, 320); } };
+    step();
+  }
+
+  function animateCountdown() {
+    const el = document.getElementById('countdownDisplay');
+    if (!el) return;
+    const ticks = ['00:00:03','00:00:02','00:00:01','00:00:00'];
+    let i = 0;
+    const step = () => { if (i < ticks.length) { el.textContent = ticks[i++]; if (i < ticks.length) setTimeout(step, 950); } };
+    step();
+  }
+
+  function launchConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width  = canvas.offsetWidth  || 185;
+    canvas.height = canvas.offsetHeight || 370;
+    const COLORS = ['#124A1F','#f5c842','#ee2a24','#1a6b2e','#f5973e','#fff'];
+    const pieces = Array.from({ length: 60 }, () => ({
+      x: Math.random() * canvas.width, y: -10,
+      w: Math.random() * 8 + 3, h: Math.random() * 10 + 4,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      speed: Math.random() * 3 + 1.5,
+      angle: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.2,
+    }));
+    let frame = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.y += p.speed; p.angle += p.spin;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+      if (++frame < 90) requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    draw();
+  }
+
+  // ════════════════════════
+  // DEAL TIMERS
+  // ════════════════════════
+  function startTimer(endMs, elId) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    function tick() {
+      const diff = endMs - Date.now();
+      if (diff <= 0) { el.innerHTML = 'Deal expired'; return; }
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.innerHTML = `Ends in <span>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}</span>`;
+      setTimeout(tick, 1000);
+    }
+    tick();
+  }
+  startTimer(Date.now() + 2 * 86400000 + 7 * 3600000,  'timerWeek');
+  startTimer(Date.now() + 9 * 86400000 + 14 * 3600000, 'timerMonth');
+
+  // ════════════════════════
+  // CROWD CHEER AUDIO
+  // ════════════════════════
+  function playCrowdCheer() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const totalDur = 3.8;
+      const sr = ctx.sampleRate;
+      const buf = ctx.createBuffer(2, sr * totalDur, sr);
+      for (let c = 0; c < 2; c++) {
+        const d = buf.getChannelData(c);
+        for (let i = 0; i < d.length; i++) {
+          const t = i / sr;
+          const burstCycle = t % 0.18;
+          const burstEnv = burstCycle < 0.06 ? Math.sin((burstCycle / 0.06) * Math.PI) : 0;
+          d[i] = (Math.random() * 2 - 1) * burstEnv;
+        }
+      }
+      const noiseSrc = ctx.createBufferSource();
+      noiseSrc.buffer = buf;
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass'; bp.frequency.value = 1600; bp.Q.value = 0.7;
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0, ctx.currentTime);
+      noiseGain.gain.linearRampToValueAtTime(1.6, ctx.currentTime + 0.15);
+      noiseGain.gain.linearRampToValueAtTime(0, ctx.currentTime + totalDur);
+      noiseSrc.connect(bp); bp.connect(noiseGain); noiseGain.connect(ctx.destination);
+      noiseSrc.start();
+      [{ f:180,pf:380,d:0.05,v:0.07 },{ f:220,pf:460,d:0.08,v:0.06 },{ f:160,pf:340,d:0.12,v:0.08 },
+       { f:200,pf:500,d:0.03,v:0.05 },{ f:240,pf:420,d:0.10,v:0.07 },{ f:190,pf:400,d:0.00,v:0.08 }]
+      .forEach(({ f, pf, d, v }) => {
+        const osc = ctx.createOscillator();
+        const g   = ctx.createGain();
+        const t0  = ctx.currentTime + d;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, t0);
+        osc.frequency.linearRampToValueAtTime(pf, t0 + 0.25);
+        osc.frequency.linearRampToValueAtTime(f * 0.65, t0 + 0.9);
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(v, t0 + 0.12);
+        g.gain.linearRampToValueAtTime(0, t0 + 1.1);
+        osc.connect(g); g.connect(ctx.destination);
+        osc.start(t0); osc.stop(t0 + 1.2);
+      });
+    } catch(e) { /* silent fallback */ }
+  }
+</script>
+</body>
+</html>

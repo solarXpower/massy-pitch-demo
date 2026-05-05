@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INTERXDB — Partnership Letter — ACE H&amp;B Hardware</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#0B1F3A; --blue:#1A4A8A; --gold:#C9A84C; --light:#F7F9FC; --border:#D8E2EF; --text:#2C3E50; --muted:#6B7280; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Roboto',sans-serif; background:#E8EDF3; color:var(--text); }
+    .page { max-width:820px; margin:40px auto; background:#fff; box-shadow:0 4px 32px rgba(0,0,0,0.12); }
+
+    .letterhead { background:var(--navy); padding:36px 48px 28px; display:flex; align-items:center; justify-content:space-between; }
+    .lh-name { font-family:'Montserrat',sans-serif; font-size:32px; font-weight:900; color:#fff; letter-spacing:-1px; }
+    .lh-name span { color:var(--gold); }
+    .lh-tag  { font-size:11px; color:rgba(255,255,255,0.55); letter-spacing:3px; text-transform:uppercase; margin-top:4px; }
+    .lh-contact { text-align:right; }
+    .lh-contact p { font-size:11px; color:rgba(255,255,255,0.6); line-height:1.9; }
+    .lh-contact a { color:var(--gold); text-decoration:none; }
+    .gold-bar { height:5px; background:linear-gradient(to right,var(--gold),#e8c870,var(--gold)); }
+
+    .letter-body { padding:48px 56px 56px; }
+    .date-line  { font-size:13px; color:var(--muted); margin-bottom:28px; }
+    .recipient  { margin-bottom:28px; }
+    .recipient p { font-size:14px; line-height:1.8; }
+    .recipient strong { color:var(--navy); }
+
+    .subject-line { background:var(--light); border-left:4px solid var(--gold); padding:14px 20px; margin-bottom:32px; border-radius:0 6px 6px 0; }
+    .subject-line p { font-size:13px; color:var(--muted); font-weight:500; text-transform:uppercase; letter-spacing:1px; }
+    .subject-line h2 { font-family:'Montserrat',sans-serif; font-size:18px; font-weight:800; color:var(--navy); margin-top:4px; }
+
+    .body-text { font-size:14px; line-height:1.9; color:var(--text); margin-bottom:22px; }
+
+    .section-block { margin:32px 0; }
+    .section-block h3 { font-family:'Montserrat',sans-serif; font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--blue); margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+
+    .how-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .how-card { background:var(--light); border-radius:8px; padding:18px; border:1px solid var(--border); }
+    .how-card-num   { font-family:'Montserrat',sans-serif; font-size:28px; font-weight:900; color:var(--gold); line-height:1; margin-bottom:8px; }
+    .how-card-title { font-weight:700; font-size:13px; color:var(--navy); margin-bottom:6px; }
+    .how-card-body  { font-size:12px; color:var(--muted); line-height:1.7; }
+
+    .pricing-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .pricing-table thead tr { background:var(--navy); color:#fff; }
+    .pricing-table thead th { padding:12px 16px; text-align:left; font-weight:700; letter-spacing:0.5px; font-size:12px; }
+    .pricing-table tbody tr { border-bottom:1px solid var(--border); }
+    .pricing-table tbody tr:nth-child(even) { background:var(--light); }
+    .pricing-table tbody td { padding:12px 16px; color:var(--text); }
+    .pricing-table tbody td:last-child { font-weight:700; color:var(--navy); }
+    .pricing-table tfoot tr { background:#F0F4F0; }
+    .pricing-table tfoot td { padding:12px 16px; font-size:12px; color:var(--muted); font-style:italic; }
+
+    .free-offer { background:linear-gradient(135deg,#0B1F3A 0%,#1A4A8A 100%); border-radius:10px; padding:28px 32px; margin:28px 0; display:flex; align-items:center; gap:24px; }
+    .free-offer-badge { background:var(--gold); color:var(--navy); font-family:'Montserrat',sans-serif; font-weight:900; font-size:13px; padding:10px 18px; border-radius:6px; text-align:center; white-space:nowrap; flex-shrink:0; }
+    .free-offer-badge span { display:block; font-size:28px; font-weight:900; line-height:1.1; }
+    .free-offer-text h4 { font-family:'Montserrat',sans-serif; font-size:16px; font-weight:800; color:#fff; margin-bottom:6px; }
+    .free-offer-text p  { font-size:12px; color:rgba(255,255,255,0.75); line-height:1.7; }
+
+    .pitch-links { display:flex; flex-direction:column; gap:12px; margin-top:16px; }
+    .pitch-link-card { display:flex; align-items:center; justify-content:space-between; border:1px solid var(--border); border-radius:8px; padding:14px 18px; background:var(--light); text-decoration:none; }
+    .plc-left { display:flex; align-items:center; gap:14px; }
+    .plc-dot  { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .plc-dot.hb { background:#CC2222; }
+    .plc-name  { font-weight:700; font-size:13px; color:var(--navy); }
+    .plc-url   { font-size:11px; color:var(--muted); margin-top:2px; }
+    .plc-arrow { font-size:18px; color:var(--gold); }
+
+    .obligations { border:1px solid #E8D5D5; background:#FFF8F8; border-radius:8px; padding:20px 22px; }
+    .obligations h4 { font-weight:700; font-size:13px; color:#8B1A1A; margin-bottom:10px; }
+    .obligations ul { padding-left:18px; }
+    .obligations li { font-size:13px; color:var(--text); line-height:1.9; }
+
+    .signature { margin-top:40px; padding-top:28px; border-top:1px solid var(--border); }
+    .signature p { font-size:14px; line-height:1.9; margin-bottom:6px; }
+    .sig-name    { font-family:'Montserrat',sans-serif; font-size:18px; font-weight:800; color:var(--navy); margin-top:16px; }
+    .sig-title   { font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:3px; }
+    .sig-contact { margin-top:12px; font-size:13px; color:var(--muted); line-height:1.9; }
+    .sig-contact a { color:var(--blue); text-decoration:none; }
+
+    .letter-footer { background:var(--navy); padding:18px 48px; display:flex; align-items:center; justify-content:space-between; }
+    .lf-left  { font-family:'Montserrat',sans-serif; font-size:13px; font-weight:800; color:#fff; }
+    .lf-left span { color:var(--gold); }
+    .lf-right { font-size:11px; color:rgba(255,255,255,0.45); }
+    @media print { body{background:#fff;} .page{box-shadow:none;margin:0;} }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="letterhead">
+    <div>
+      <div class="lh-name">INTER<span>XDB</span></div>
+      <div class="lh-tag">Digital Retail &amp; Auction Platform — Barbados</div>
+    </div>
+    <div class="lh-contact">
+      <p><a href="mailto:contact@INTERXDB.com">contact@INTERXDB.com</a><br>Tel: 1(246) 241-3771<br>www.interxdb.com</p>
+    </div>
+  </div>
+  <div class="gold-bar"></div>
+
+  <div class="letter-body">
+    <p class="date-line">May 2026</p>
+
+    <div class="recipient">
+      <p><strong>The Management Team</strong><br>ACE H&amp;B Hardware &amp; Lumber Inc.<br>Barbados</p>
+    </div>
+
+    <div class="subject-line">
+      <p>Partnership Invitation</p>
+      <h2>Introducing INTERXDB — Barbados' First Exclusive Retail Auction &amp; Deals App</h2>
+    </div>
+
+    <p class="body-text">Dear H&amp;B Hardware Management Team,</p>
+
+    <p class="body-text">On behalf of INTERXDB, we are pleased to extend this exclusive invitation to ACE H&amp;B Hardware &amp; Lumber Inc. to become one of the founding retail partners on the island's first dedicated business-to-consumer auction and deals platform.</p>
+
+    <p class="body-text">INTERXDB owns and operates the complete digital infrastructure — the platform, the mobile application, all hosting, and all technical services. H&amp;B does not manage any technology. You simply list products — we handle the rest.</p>
+
+    <p class="body-text">The platform is designed with one purpose: <strong>to keep H&amp;B Hardware as the buzz word in every Barbadian household, 24 hours a day, 7 days a week</strong> — whether your doors are open or not. Customers compete for your tools, generators, lumber, and hardware through live auctions, driving excitement, urgency, and loyalty to your brand.</p>
+
+    <div class="section-block">
+      <h3>How the Platform Works</h3>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-card-num">01</div>
+          <div class="how-card-title">App-Only Marketplace</div>
+          <div class="how-card-body">All auctions, Deals of the Week, and Deals of the Month are conducted exclusively through the INTERXDB mobile app. No auctions appear on the public website.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-card-num">02</div>
+          <div class="how-card-title">Registered Businesses Only</div>
+          <div class="how-card-body">Only verified, registered retail businesses may list products. No individual or private sellers are permitted — ensuring a professional marketplace.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-card-num">03</div>
+          <div class="how-card-title">25-Item Weekly Limit</div>
+          <div class="how-card-body">Each store is allocated up to 25 items per week. This controlled supply creates scarcity, drives urgency, and maximises competitive bidding among your customers.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-card-num">04</div>
+          <div class="how-card-title">Free Customer Registration</div>
+          <div class="how-card-body">End-users register on the app at no cost. Stores promote the app in-store and across their social media and marketing channels to drive downloads.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="free-offer">
+      <div class="free-offer-badge"><span>60</span>DAYS FREE</div>
+      <div class="free-offer-text">
+        <h4>Introductory Offer — No Monthly Cost for 60 Days</h4>
+        <p>Full use of the platform at zero monthly cost for the first 60 days. A <strong style="color:var(--gold);">$500.00 deposit</strong> is required to secure primary advertisement placement within the app. This guarantees H&amp;B Hardware is featured prominently to all registered users from day one.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <h3>Platform Pricing — After 60-Day Introductory Period (BBD)</h3>
+      <table class="pricing-table">
+        <thead><tr><th>Service</th><th>Description</th><th>Rate</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Base Listing Package</strong></td><td>Up to 25 items listed per week on the app</td><td>$450.00 / month</td></tr>
+          <tr><td><strong>Additional Items</strong></td><td>Per additional 10 items above the 25-item base</td><td>$150.00 / month</td></tr>
+          <tr><td><strong>Deal of the Week</strong></td><td>Featured deal highlighted to all app users for 7 days</td><td>$150.00 / week</td></tr>
+          <tr><td><strong>Deal of the Month</strong></td><td>Premium featured deal — top placement for the full month</td><td>$200.00 / month</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="3">All pricing in Barbados Dollars (BBD). Rates fixed for the first 12 months for founding partners.</td></tr></tfoot>
+      </table>
+    </div>
+
+    <div class="section-block">
+      <h3>See the Vision — Your Interactive Demo</h3>
+      <p class="body-text" style="margin-bottom:16px;">We have prepared a personalised before-and-after demonstration of the INTERXDB platform experience for H&amp;B Hardware. Click below to view your interactive pitch:</p>
+      <div class="pitch-links">
+        <a class="pitch-link-card" href="https://interxdb.com/WebSites/hbhardware-pitch/" target="_blank">
+          <div class="plc-left">
+            <div class="plc-dot hb">🏠</div>
+            <div>
+              <div class="plc-name">ACE H&amp;B Hardware &amp; Lumber Inc. — Live Demo</div>
+              <div class="plc-url">interxdb.com/WebSites/hbhardware-pitch/</div>
+            </div>
+          </div>
+          <div class="plc-arrow">→</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <h3>Partner Obligations &amp; Platform Conduct</h3>
+      <div class="obligations">
+        <h4>Store Partner Responsibilities</h4>
+        <ul>
+          <li>Actively promote the INTERXDB app in-store and across all social media and marketing channels.</li>
+          <li>Ensure all listed products are accurately described, available, and fulfilled upon auction completion.</li>
+          <li>Honour all winning auction bids — failure to fulfil confirmed orders may result in suspension from the platform.</li>
+          <li>Maintain professional standards of communication with winning customers via the platform.</li>
+        </ul>
+      </div>
+      <p class="body-text" style="margin-top:16px;"><strong>User Conduct:</strong> Registered customers who fail to honour confirmed auction wins will be banned from the platform. Disputes are subject to review, with reasonable evidence from both parties considered before any action is taken.</p>
+    </div>
+
+    <p class="body-text">We believe this partnership represents a significant and low-risk opportunity for H&amp;B Hardware to extend its digital reach, engage a new generation of customers, and reinforce its well-earned reputation as "the helpful place" across Barbados.</p>
+    <p class="body-text">We welcome the opportunity to schedule a presentation at your convenience.</p>
+
+    <div class="signature">
+      <p>Yours sincerely,</p>
+      <div class="sig-name">INTERXDB</div>
+      <div class="sig-title">Digital Retail &amp; Auction Platform</div>
+      <div class="sig-contact">✉ <a href="mailto:contact@INTERXDB.com">contact@INTERXDB.com</a> &nbsp;|&nbsp; 📞 Tel 1(246) 241-3771 &nbsp;|&nbsp; 🌐 <a href="https://www.interxdb.com">www.interxdb.com</a></div>
+    </div>
+  </div>
+
+  <div class="letter-footer">
+    <div class="lf-left">INTER<span>XDB</span> — Auction &amp; Get Buzz</div>
+    <div class="lf-right">Confidential — For Addressee Only</div>
+  </div>
+</div>
+</body>
+</html>
