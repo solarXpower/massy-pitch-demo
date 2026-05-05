@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Massy Stores — The Future of Shopping in Barbados</title>
+
+  <!--
+  ============================================================
+  MASSY STORES BARBADOS — CLIENT PITCH DEMO
+  Designed by INTERXDB
+  Concept, Architecture & Development — Full Stack Web, Mobile & AI Integration
+
+  PHASE 2 & 3 FULL STACK (post client sign-off):
+  Frontend:  Next.js 14 (React, App Router) · Tailwind CSS · Three.js · GSAP · Framer Motion
+  Mobile:    React Native (Expo) · Expo Router · Firebase Cloud Messaging · Socket.IO client
+  Backend:   Node.js · Express/Fastify · Socket.IO server (live auction engine) · JWT Auth
+             SendGrid (email) · Bull + Redis (job queues)
+  Database:  PostgreSQL · Prisma ORM · Redis (cache) · AWS S3/Cloudflare R2 (media)
+             Meilisearch (product search)
+  DevOps:    Docker · GitHub Actions · Cloudflare CDN · Vercel/AWS · Sentry · Uptime Kuma
+  CRM/AI:    Customer profiles · bid/purchase history · targeted email engine
+             Local AI Server [optional]: private on-premise AI for product descriptions,
+             personalised recommendations, support chatbot, CRM segmentation —
+             zero customer data leaves client infrastructure.
+  ============================================================
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ── Design Tokens — Massy Brand ── */
+    :root {
+      --orange:   #F47B20;
+      --blue:     #1B3A6B;
+      --cyan:     #00AEEF;
+      --gold:     #F4C430;
+      --white:    #FFFFFF;
+      --light:    #F8F9FB;
+      --light-warm: #FDF8F4;
+      --text:     #1B3A6B;
+      --muted:    #6B7280;
+      --red:      #E53E3E;
+      --green:    #38A169;
+      --border:   #E8EDF5;
+      --font-head: 'Montserrat', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+    }
+    button { cursor: pointer; border: none; outline: none; font-family: var(--font-body); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+
+    /* ════════════════════════════════
+       SPLIT SCREEN
+    ════════════════════════════════ */
+    .split-wrapper {
+      position: relative;
+      width: 100vw; height: 100vh;
+      display: flex; overflow: hidden;
+    }
+
+    /* Before panel */
+    .before-panel {
+      width: 50%; height: 100%;
+      background: #fff;
+      overflow-y: auto; position: relative;
+      flex-shrink: 0;
+      transition: width 0.9s cubic-bezier(0.77,0,0.175,1);
+    }
+
+    /* Divider */
+    .divider {
+      width: 5px; height: 100%;
+      background: var(--orange);
+      position: relative; z-index: 50;
+      cursor: col-resize; flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(244,123,32,0.7);
+      transition: opacity 0.5s;
+    }
+    .divider-handle {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--orange); color: #fff;
+      padding: 12px 10px; border-radius: 24px;
+      font-size: 13px; font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 0 20px rgba(244,123,32,0.8);
+      user-select: none; font-family: var(--font-head);
+    }
+
+    /* After panel */
+    .after-panel {
+      width: 50%; height: 100%;
+      background: var(--white);
+      overflow-y: auto; position: relative;
+      flex-shrink: 0;
+      transition: width 0.9s cubic-bezier(0.77,0,0.175,1);
+    }
+
+    /* Panel labels */
+    .panel-label {
+      position: fixed; bottom: 90px;
+      font-family: var(--font-head); font-size: 10px; font-weight: 800;
+      letter-spacing: 4px; padding: 6px 18px; border-radius: 20px;
+      z-index: 80; pointer-events: none; transition: opacity 0.5s;
+    }
+    .before-label { background: #ddd; color: #333; left: 24px; }
+    .after-label  { background: var(--orange); color: #fff; right: 24px; }
+
+    /* Drag label */
+    .drag-label {
+      position: fixed; top: 14px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(27,58,107,0.9); color: #fff;
+      font-family: var(--font-head); font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; padding: 8px 22px; border-radius: 20px;
+      z-index: 100; pointer-events: none;
+      border: 1px solid var(--orange); transition: opacity 0.5s;
+    }
+
+    /* See Full Vision button */
+    .see-vision-btn {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--orange); color: #fff;
+      font-family: var(--font-head); font-size: 14px; font-weight: 700;
+      padding: 14px 38px; border-radius: 40px; z-index: 100;
+      box-shadow: 0 8px 32px rgba(244,123,32,0.45);
+      letter-spacing: 1px; transition: transform 0.2s, box-shadow 0.2s, opacity 0.5s;
+    }
+    .see-vision-btn:hover {
+      transform: translateX(-50%) scale(1.06);
+      box-shadow: 0 12px 48px rgba(244,123,32,0.65);
+    }
+
+    /* ════════════════════════════════
+       BEFORE PANEL — Current Site
+    ════════════════════════════════ */
+    .bb-social {
+      background: #fff; border-bottom: 1px solid #eee;
+      padding: 5px 14px; display: flex; gap: 10px;
+      font-size: 13px; justify-content: flex-end; color: #555;
+    }
+    .bb-header {
+      background: #fff; padding: 10px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 2px solid #eee;
+    }
+    .bb-logo { display: flex; align-items: center; gap: 6px; }
+    .bb-logo-icon {
+      width: 38px; height: 38px; background: var(--orange); color: #fff;
+      font-weight: 900; font-size: 20px;
+      display: flex; align-items: center; justify-content: center; border-radius: 4px;
+    }
+    .bb-logo-text .bb-massy  { font-weight: 800; font-size: 15px; color: var(--orange); display: block; }
+    .bb-logo-text .bb-stores { font-size: 9px; color: #555; letter-spacing: 3px; display: block; }
+    .bb-nav { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .bb-nav a { font-size: 8px; color: #333; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; padding: 2px 4px; }
+    .bb-nav a:hover { color: var(--orange); }
+    .bb-colorbar { display: flex; height: 7px; }
+    .bb-covid-banner {
+      background: var(--orange); padding: 14px 16px;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .bb-covid-left { display: flex; align-items: center; gap: 12px; }
+    .bb-covid-logo {
+      background: rgba(255,255,255,0.2); color: #fff; font-weight: 900; font-size: 16px;
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 3px;
+    }
+    .bb-covid-msg { color: #fff; font-size: 11px; line-height: 1.5; font-weight: 600; }
+    .bb-covid-right { text-align: center; color: #fff; }
+    .bb-who-label { font-size: 8px; }
+    .bb-who-circle { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; margin: 4px auto; }
+    .bb-who-name { font-size: 8px; line-height: 1.3; }
+    .bb-icons { padding: 18px 12px; display: flex; justify-content: space-around; font-size: 22px; border-bottom: 1px solid #eee; }
+    .bb-welcome { padding: 18px 16px; text-align: center; border-bottom: 1px solid #eee; }
+    .bb-welcome h2 { font-size: 13px; color: #1B3A6B; margin-bottom: 10px; font-family: var(--font-head); font-weight: 700; }
+    .bb-welcome p { font-size: 9.5px; color: #666; line-height: 1.7; }
+    .bb-cards { display: flex; gap: 8px; padding: 12px; }
+    .bb-card { flex: 1; border: 1px solid #eee; overflow: hidden; border-radius: 2px; }
+    .bb-card-img { font-size: 32px; padding: 12px; background: #f5f5f5; text-align: center; }
+    .bb-card-body { padding: 8px; }
+    .bb-card-body h4 { font-size: 8px; font-weight: 700; margin-bottom: 4px; color: #333; }
+    .bb-card-body p  { font-size: 8px; color: #777; line-height: 1.5; }
+    .bb-read { font-size: 9px; color: var(--orange); font-weight: 700; display: block; margin-top: 6px; }
+
+    /* ════════════════════════════════
+       AFTER PANEL — Massy Color Bar
+    ════════════════════════════════ */
+    .massy-colorbar { display: flex; height: 6px; }
+
+    /* ── Navigation ── */
+    .after-nav {
+      position: sticky; top: 0; z-index: 40;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px; background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+    .after-nav.scrolled { box-shadow: 0 2px 20px rgba(27,58,107,0.1); }
+    .nav-logo { display: flex; align-items: center; gap: 8px; }
+    .nav-logo-m {
+      width: 36px; height: 36px; background: var(--orange); color: #fff;
+      font-weight: 900; font-size: 18px; display: flex; align-items: center; justify-content: center; border-radius: 6px;
+    }
+    .nav-massy  { font-family: var(--font-head); font-weight: 800; font-size: 13px; color: var(--orange); display: block; }
+    .nav-stores { font-size: 7px; letter-spacing: 3px; color: var(--muted); display: block; }
+    .nav-links  { list-style: none; display: flex; gap: 24px; }
+    .nav-links a { font-size: 11px; font-weight: 600; color: var(--blue); letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--orange); }
+    .nav-cta {
+      background: var(--orange); color: #fff;
+      font-family: var(--font-head); font-weight: 700; font-size: 11px;
+      padding: 9px 22px; border-radius: 30px; letter-spacing: 1px;
+    }
+
+    /* ════════════════════════════════
+       HERO SECTION
+    ════════════════════════════════ */
+    .hero-section {
+      min-height: calc(100vh - 70px);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 50px 40px 50px 44px;
+      gap: 20px; overflow: hidden;
+      position: relative;
+    }
+    /* Subtle background accent */
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 52%;
+      background: linear-gradient(135deg, #FDF8F4 0%, #FFF3E8 100%);
+      z-index: 0;
+      border-radius: 60px 0 0 60px;
+    }
+
+    /* Hero text */
+    .hero-content {
+      position: relative; z-index: 10;
+      flex: 1; max-width: 50%;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-head); font-size: 12px; font-weight: 700;
+      letter-spacing: 5px; text-transform: uppercase; color: var(--orange);
+      margin-bottom: 16px; opacity: 0;
+    }
+    .hero-h1 { font-family: var(--font-head); font-weight: 900; line-height: 1.0; margin-bottom: 20px; }
+    .h1-line1 {
+      display: block;
+      font-size: clamp(48px, 6.2vw, 88px);
+      color: var(--blue);
+      opacity: 0; transform: translateY(30px);
+    }
+    .h1-line2 {
+      display: block;
+      font-size: clamp(56px, 7.2vw, 100px);
+      color: var(--orange);
+      opacity: 0; transform: translateY(30px);
+    }
+    .hero-sub {
+      font-size: clamp(15px, 1.4vw, 20px);
+      color: var(--muted); margin-bottom: 32px; opacity: 0;
+      font-weight: 500;
+    }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; opacity: 0; }
+
+    .btn-primary {
+      background: var(--orange); color: #fff;
+      font-family: var(--font-head); font-weight: 700; font-size: 13px;
+      padding: 15px 32px; border-radius: 40px; letter-spacing: 1px;
+      box-shadow: 0 6px 24px rgba(244,123,32,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 36px rgba(244,123,32,0.5); }
+    .btn-outline {
+      background: transparent; color: var(--blue);
+      font-family: var(--font-head); font-weight: 700; font-size: 13px;
+      padding: 13px 32px; border-radius: 40px;
+      border: 2px solid var(--blue); letter-spacing: 1px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { background: var(--blue); color: #fff; }
+
+    .hero-stats { display: flex; align-items: center; gap: 20px; opacity: 0; }
+    .stat { text-align: center; }
+    .stat-n { display: block; font-family: var(--font-head); font-weight: 900; font-size: 26px; color: var(--orange); }
+    .stat-l { display: block; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+    .stat-sep { width: 1px; height: 40px; background: var(--border); }
+
+    /* ════════════════════════════════
+       CSS 3D ORBIT + PHONE
+    ════════════════════════════════ */
+    .orbit-scene {
+      position: relative; z-index: 10;
+      width: 380px; height: 460px;
+      flex-shrink: 0;
+      perspective: 1000px;
+      perspective-origin: 50% 45%;
+    }
+    .orbit-track {
+      position: absolute; inset: 0;
+      transform-style: preserve-3d;
+      animation: spinOrbit 22s linear infinite;
+    }
+    .orbit-item {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 80px; height: 80px;
+      margin: -40px;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 10px 30px rgba(27,58,107,0.2);
+      border: 3px solid #fff;
+      transition: transform 0.3s;
+    }
+    /* 7 items — 360 / 7 = 51.43° each */
+    .orbit-item:nth-child(1) { transform: rotateY(0deg)      translateZ(168px); }
+    .orbit-item:nth-child(2) { transform: rotateY(51.4deg)   translateZ(168px); }
+    .orbit-item:nth-child(3) { transform: rotateY(102.9deg)  translateZ(168px); }
+    .orbit-item:nth-child(4) { transform: rotateY(154.3deg)  translateZ(168px); }
+    .orbit-item:nth-child(5) { transform: rotateY(205.7deg)  translateZ(168px); }
+    .orbit-item:nth-child(6) { transform: rotateY(257.1deg)  translateZ(168px); }
+    .orbit-item:nth-child(7) { transform: rotateY(308.6deg)  translateZ(168px); }
+    @keyframes spinOrbit {
+      from { transform: rotateX(14deg) rotateY(0deg); }
+      to   { transform: rotateX(14deg) rotateY(360deg); }
+    }
+
+    /* Phone centered in orbit */
+    .phone-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+    }
+
+    /* ── Phone Frame ── */
+    .phone-frame {
+      width: 185px; height: 370px;
+      background: #111; border-radius: 36px;
+      border: 3px solid #2a2a2a;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.1),
+        0 30px 80px rgba(27,58,107,0.35),
+        0 0 40px rgba(244,123,32,0.2);
+      position: relative; overflow: hidden;
+    }
+    .phone-notch {
+      width: 56px; height: 11px; background: #111;
+      border-radius: 0 0 10px 10px; margin: 0 auto; position: relative; z-index: 5;
+    }
+    .phone-screen {
+      position: absolute; inset: 0; border-radius: 34px;
+      overflow: hidden; background: #f8f9fa;
+      display: flex; flex-direction: column;
+    }
+
+    /* Massy header inside phone — always visible */
+    .phone-massy-bar {
+      background: var(--orange);
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 10px; flex-shrink: 0; z-index: 10;
+    }
+    .pmb-logo {
+      width: 22px; height: 22px; background: #fff; color: var(--orange);
+      border-radius: 4px; font-weight: 900; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head);
+    }
+    .pmb-brand { font-family: var(--font-head); font-size: 10px; font-weight: 800; color: #fff; flex: 1; letter-spacing: 1px; }
+    .pmb-live  { font-size: 8px; color: #fff; font-weight: 700; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px; }
+
+    /* States container */
+    .auction-states-wrap { flex: 1; position: relative; overflow: hidden; }
+
+    /* Auction states */
+    .auction-state {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 10px 12px 12px; gap: 5px; text-align: center;
+      background: #fff;
+      animation: fadeIn 0.4s ease;
+    }
+    .auction-state.hidden { display: none; }
+    @keyframes fadeIn { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+
+    /* Product image in phone */
+    .auction-product-img-real {
+      width: 100%; height: 90px;
+      object-fit: cover; border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .auction-header {
+      font-family: var(--font-head); font-size: 8px; font-weight: 800;
+      letter-spacing: 2px; color: var(--orange);
+    }
+    .auction-product-name { font-size: 10px; font-weight: 700; color: var(--blue); line-height: 1.3; }
+    .auction-starting     { font-size: 8px; color: var(--muted); }
+    .auction-price        { font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--orange); }
+    .auction-timer-row    { font-size: 8px; color: var(--muted); }
+    .auction-time         { color: var(--orange); font-weight: 700; }
+
+    /* Login state */
+    .login-field {
+      background: #f0f4ff; border: 1px solid var(--border); border-radius: 8px;
+      padding: 7px 10px; font-size: 9px; color: var(--muted); width: 100%; text-align: left;
+    }
+    .login-btn {
+      background: var(--orange); color: #fff; border-radius: 20px;
+      padding: 8px 20px; font-weight: 700; font-size: 10px; width: 100%; margin-top: 4px;
+    }
+
+    /* Bidders state */
+    .bidder-count-label { font-size: 8px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+    .bidder-count { font-family: var(--font-head); font-size: 48px; font-weight: 900; color: var(--red); line-height: 1; }
+    .bidder-sub   { font-size: 9px; color: var(--muted); }
+    .bidder-bar   { width: 100%; height: 4px; background: #eee; border-radius: 2px; overflow: hidden; }
+    .bidder-bar::after {
+      content:''; display: block; height: 100%; width: 16%;
+      background: linear-gradient(90deg, var(--orange), var(--red));
+      animation: barGrow 2s ease-in-out forwards;
+    }
+    @keyframes barGrow { from { width:16%; } to { width:85%; } }
+    .bidder-names { font-size: 8px; color: var(--muted); line-height: 1.4; }
+
+    /* Bid war state */
+    .bidwar-label { font-size: 8px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+    .bidwar-price {
+      font-family: var(--font-head); font-size: 34px; font-weight: 900; color: var(--orange);
+      animation: priceFlash 0.35s ease infinite alternate;
+    }
+    @keyframes priceFlash { from { color: var(--orange); } to { color: var(--red); } }
+    .bidwar-bids  { font-size: 8px; color: var(--muted); }
+    .bidnow-btn {
+      background: var(--orange); color: #fff; border-radius: 20px;
+      padding: 8px 22px; font-weight: 800; font-size: 11px;
+      animation: btnPulse 1s infinite;
+    }
+    @keyframes btnPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(244,123,32,0.4); }
+      50%      { box-shadow: 0 0 0 8px rgba(244,123,32,0); }
+    }
+
+    /* Outbid state */
+    .outbid-popup {
+      background: #fff5f5; border: 2px solid var(--red);
+      border-radius: 14px; padding: 14px; width: 100%;
+    }
+    .outbid-icon  { font-size: 28px; }
+    .outbid-title { font-family: var(--font-head); font-size: 13px; font-weight: 800; color: var(--red); }
+    .outbid-msg   { font-size: 9px; color: var(--muted); line-height: 1.5; margin: 4px 0; }
+    .bidagain-btn {
+      background: var(--red); color: #fff; border-radius: 20px;
+      padding: 8px 14px; font-weight: 800; font-size: 10px;
+      width: 100%; margin-top: 6px; animation: btnPulse 0.8s infinite;
+    }
+
+    /* Countdown state */
+    .countdown-price   { font-family: var(--font-head); font-size: 20px; font-weight: 800; color: var(--orange); }
+    .countdown-display {
+      font-family: var(--font-head); font-size: 32px; font-weight: 900;
+      color: var(--red); letter-spacing: 3px;
+      animation: countPulse 1s ease infinite;
+    }
+    @keyframes countPulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
+    .countdown-bidders { font-size: 8px; color: var(--muted); }
+
+    /* Won state */
+    .won-content { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .won-trophy  { font-size: 44px; animation: trophyBounce 0.5s ease infinite alternate; }
+    @keyframes trophyBounce { from { transform:scale(1); } to { transform:scale(1.18); } }
+    .won-title   { font-family: var(--font-head); font-size: 22px; font-weight: 900; color: var(--orange); }
+    .won-item    { font-size: 9px; color: var(--muted); }
+    .won-price   { font-size: 11px; color: var(--blue); }
+    .won-price span { color: var(--green); font-weight: 700; }
+    .won-congrats { font-family: var(--font-head); font-size: 11px; font-weight: 800; color: var(--green); }
+
+    /* ════════════════════════════════
+       SECTION SHARED
+    ════════════════════════════════ */
+    .section-header  { text-align: center; margin-bottom: 48px; }
+    .section-eyebrow {
+      font-family: var(--font-head); font-size: 10px; font-weight: 700;
+      letter-spacing: 5px; color: var(--orange); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: var(--font-head); font-size: clamp(28px, 3vw, 42px);
+      font-weight: 800; color: var(--blue);
+    }
+
+    /* ════════════════════════════════
+       DEALS SECTION
+    ════════════════════════════════ */
+    .deals-section { padding: 80px 40px; background: var(--light-warm); }
+    .deals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 56px; }
+    .deal-card {
+      background: #fff; border: 2px solid var(--border);
+      border-radius: 20px; padding: 28px 22px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .deal-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 16px 48px rgba(244,123,32,0.15);
+      transform: translateY(-4px);
+    }
+    .deal-badge {
+      background: var(--orange); color: #fff;
+      font-family: var(--font-head); font-size: 9px; font-weight: 800;
+      padding: 5px 16px; border-radius: 20px; letter-spacing: 1px;
+    }
+    .deal-img-real {
+      width: 100%; height: 120px;
+      object-fit: cover; border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    .deal-name   { font-weight: 700; font-size: 14px; color: var(--blue); }
+    .deal-prices { display: flex; align-items: baseline; gap: 12px; }
+    .deal-was    { font-size: 13px; color: var(--muted); text-decoration: line-through; }
+    .deal-now    { font-family: var(--font-head); font-size: 30px; font-weight: 900; color: var(--orange); }
+    .deal-save   { font-size: 11px; color: var(--green); font-weight: 700; background: #f0fff4; padding: 3px 10px; border-radius: 20px; }
+    .deal-timer  {
+      font-family: var(--font-head); font-size: 12px; font-weight: 700;
+      color: var(--blue); background: var(--light); padding: 6px 16px; border-radius: 20px; letter-spacing: 2px;
+      border: 1px solid var(--border);
+    }
+    .deal-btn {
+      background: var(--orange); color: #fff;
+      font-family: var(--font-head); font-weight: 700; font-size: 12px;
+      padding: 11px 22px; border-radius: 30px; width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .deal-btn:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(244,123,32,0.4); }
+
+    /* Opt-in */
+    .optin-strip {
+      background: linear-gradient(135deg, var(--blue) 0%, #2d5aa0 100%);
+      border-radius: 20px; padding: 32px 40px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;
+    }
+    .optin-text  { font-size: 16px; color: #fff; }
+    .optin-form  { display: flex; gap: 10px; }
+    .optin-input {
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 30px; padding: 11px 22px; color: #fff; font-size: 13px; width: 220px;
+    }
+    .optin-input::placeholder { color: rgba(255,255,255,0.65); }
+    .optin-btn {
+      background: var(--orange); color: #fff;
+      font-family: var(--font-head); font-weight: 800; font-size: 12px;
+      padding: 11px 22px; border-radius: 30px;
+    }
+    .optin-micro { font-size: 10px; color: rgba(255,255,255,0.65); }
+
+    /* ════════════════════════════════
+       APP SECTION
+    ════════════════════════════════ */
+    .app-section { padding: 80px 40px; background: var(--white); }
+    .app-inner   { display: flex; align-items: center; gap: 56px; }
+    .app-copy    { flex: 1; }
+    .app-desc    { color: var(--muted); font-size: 14px; line-height: 1.8; margin: 18px 0 28px; max-width: 380px; }
+    .app-features { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .app-feat     { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--blue); font-weight: 500; }
+    .app-feat-icon { width: 32px; height: 32px; background: var(--light-warm); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .store-badges { display: flex; gap: 12px; }
+    .badge {
+      background: var(--blue); color: #fff; font-size: 11px; font-weight: 700;
+      padding: 10px 20px; border-radius: 10px; letter-spacing: 0.5px;
+    }
+
+    /* App phone mockups */
+    .app-phones { display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+    .app-phone-frame {
+      width: 155px; height: 310px;
+      background: #111; border: 2px solid #222;
+      border-radius: 28px; overflow: hidden;
+      box-shadow: 0 24px 64px rgba(27,58,107,0.25);
+    }
+    .app-phone-notch { width: 46px; height: 9px; background: #111; border-radius: 0 0 7px 7px; margin: 0 auto; }
+    .app-phone-screen { padding: 8px 9px 12px; display: flex; flex-direction: column; gap: 5px; background: #f5f6f8; }
+    .app-phone-screen.dark { background: #0a0a0a; }
+    .app-screen-header { font-size: 8px; font-weight: 700; color: var(--blue); }
+    .app-tabs { display: flex; gap: 5px; }
+    .app-tab { font-size: 7px; padding: 3px 7px; border-radius: 10px; color: #888; background: #e8e8e8; font-weight: 600; }
+    .app-tab.active { background: var(--orange); color: #fff; }
+    .app-card-mini { background: #fff; border-radius: 5px; padding: 5px 7px; font-size: 7.5px; color: #333; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .app-card-mini.orange { background: #fff3ec; color: var(--orange); font-weight: 600; }
+    .app-notif { background: var(--blue); color: #fff; border-radius: 5px; padding: 5px 7px; font-size: 7.5px; }
+    .app-live-badge   { font-size: 8px; font-weight: 800; color: var(--red); letter-spacing: 2px; text-align: center; }
+    .app-live-product { font-size: 30px; text-align: center; margin: 4px 0; }
+    .app-live-name    { font-size: 8px; color: #aaa; text-align: center; }
+    .app-live-bid     { font-family: var(--font-head); font-size: 24px; font-weight: 900; color: var(--orange); text-align: center; }
+    .app-live-time    { font-family: var(--font-head); font-size: 16px; font-weight: 800; color: var(--red); text-align: center; letter-spacing: 2px; }
+    .app-live-bidders { font-size: 8px; color: #888; text-align: center; }
+    .app-bid-btn { background: var(--orange); color: #fff; font-weight: 800; font-size: 10px; padding: 7px; border-radius: 18px; width: 100%; margin-top: 3px; }
+
+    /* ════════════════════════════════
+       CLOSING CTA
+    ════════════════════════════════ */
+    .closing-section {
+      padding: 100px 40px;
+      background: linear-gradient(160deg, var(--blue) 0%, #0f2548 100%);
+      text-align: center;
+    }
+    .closing-inner {
+      max-width: 640px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .closing-eyebrow { font-family: var(--font-head); font-size: 10px; font-weight: 700; letter-spacing: 5px; color: var(--orange); text-transform: uppercase; }
+    .closing-title { font-family: var(--font-head); font-size: clamp(28px, 3.5vw, 50px); font-weight: 900; color: #fff; line-height: 1.1; }
+    .closing-sub  { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.75; max-width: 480px; }
+    .closing-btn  {
+      background: var(--orange); color: #fff;
+      font-family: var(--font-head); font-weight: 800; font-size: 15px;
+      padding: 16px 50px; border-radius: 40px; letter-spacing: 1px;
+      box-shadow: 0 8px 36px rgba(244,123,32,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .closing-btn:hover { transform: scale(1.05); box-shadow: 0 14px 54px rgba(244,123,32,0.7); }
+    .closing-contact { display: flex; gap: 32px; font-size: 13px; color: rgba(255,255,255,0.6); flex-wrap: wrap; justify-content: center; }
+    .closing-stack { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; }
+    .stack-item {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7); font-size: 9px; font-weight: 600;
+      padding: 5px 14px; border-radius: 20px; letter-spacing: 1px;
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center; padding: 22px;
+      color: rgba(255,255,255,0.5); font-size: 11px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      background: #0f2548;
+    }
+    .site-footer strong { color: var(--orange); }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-section { flex-direction: column; padding: 40px 20px; }
+      .hero-content { max-width: 100%; }
+      .orbit-scene  { width: 300px; height: 360px; }
+      .deals-grid   { grid-template-columns: 1fr; }
+      .app-inner    { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Fixed UI chrome -->
+<div class="drag-label" id="dragLabel">◀&nbsp;&nbsp;DRAG TO SEE THE DIFFERENCE&nbsp;&nbsp;▶</div>
+<button class="see-vision-btn" id="seeVisionBtn">See the Full Vision →</button>
+<div class="panel-label before-label">BEFORE</div>
+<div class="panel-label after-label">AFTER</div>
+
+<!-- ═══════════════════════════
+     SPLIT SCREEN
+═══════════════════════════ -->
+<div class="split-wrapper" id="splitWrapper">
+
+  <!-- ── BEFORE PANEL ── -->
+  <div class="before-panel" id="beforePanel">
+    <div class="bb-social"><span>&#x66;</span><span>&#9679;</span></div>
+    <header class="bb-header">
+      <div class="bb-logo">
+        <div class="bb-logo-icon">M</div>
+        <div class="bb-logo-text">
+          <span class="bb-massy">MASSY</span>
+          <span class="bb-stores">STORES</span>
+        </div>
+      </div>
+      <nav class="bb-nav">
+        <a href="#">ABOUT</a><a href="#">SAVINGS ▾</a><a href="#">SHOP NOW</a>
+        <a href="#">FOOD &amp; DRINK</a><a href="#">VILLAGE DELI</a>
+        <a href="#">LOCATIONS</a><a href="#">CONTACT US</a>
+      </nav>
+    </header>
+    <div class="bb-colorbar">
+      <div style="background:#1B3A6B;flex:2"></div>
+      <div style="background:#F4C430;flex:1"></div>
+      <div style="background:#F47B20;flex:2"></div>
+      <div style="background:#00AEEF;flex:3"></div>
+    </div>
+    <div class="bb-covid-banner">
+      <div class="bb-covid-left">
+        <div class="bb-covid-logo">M</div>
+        <div class="bb-covid-msg"><strong>Follow Proper Hygiene Practices</strong><br>to Reduce the Risk of Infection</div>
+      </div>
+      <div class="bb-covid-right">
+        <div class="bb-who-label">Guidelines from the:</div>
+        <div class="bb-who-circle">WHO</div>
+        <div class="bb-who-name">World Health<br>Organization</div>
+      </div>
+    </div>
+    <div class="bb-icons">🚿 🤲 🤧 🚫 💻 😷 🧴</div>
+    <div class="bb-welcome">
+      <h2>WELCOME TO MASSY STORES</h2>
+      <p>In July 2014 Massy Stores was launched in Barbados. Massy Stores (Barbados) Ltd now offers 5 supermarkets, the Warrens SuperCentre, 2 Home locations, 8 Pharmacies and 2 Express locations.</p>
+    </div>
+    <div class="bb-cards">
+      <div class="bb-card">
+        <div class="bb-card-img">🏪</div>
+        <div class="bb-card-body"><h4>ABOUT MASSY STORES</h4><p>Launched in Barbados in July 2014.</p><a href="#" class="bb-read">READ MORE</a></div>
+      </div>
+      <div class="bb-card">
+        <div class="bb-card-img">💳</div>
+        <div class="bb-card-body"><h4>SERVICES</h4><p>Easier access to the services you use most.</p><a href="#" class="bb-read">READ MORE</a></div>
+      </div>
+      <div class="bb-card">
+        <div class="bb-card-img">📍</div>
+        <div class="bb-card-body"><h4>MASSY LOCATIONS</h4><p>Find a store near you.</p><a href="#" class="bb-read">READ MORE</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DIVIDER ── -->
+  <div class="divider" id="divider">
+    <div class="divider-handle">◀ ▶</div>
+  </div>
+
+  <!-- ── AFTER PANEL ── -->
+  <div class="after-panel" id="afterPanel">
+
+    <!-- Massy brand colorbar at top -->
+    <div class="massy-colorbar">
+      <div style="background:#1B3A6B;flex:2"></div>
+      <div style="background:#F4C430;flex:1"></div>
+      <div style="background:#F47B20;flex:2"></div>
+      <div style="background:#00AEEF;flex:3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="after-nav" id="afterNav">
+      <div class="nav-logo">
+        <div class="nav-logo-m">M</div>
+        <div>
+          <span class="nav-massy">MASSY</span>
+          <span class="nav-stores">STORES</span>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">Deals</a></li>
+        <li><a href="#">Auction</a></li>
+        <li><a href="#">App</a></li>
+        <li><a href="#">Locations</a></li>
+      </ul>
+      <button class="nav-cta">Join Auction</button>
+    </nav>
+
+    <!-- ── HERO ── -->
+    <section class="hero-section" id="heroSection">
+
+      <!-- Left: headline + CTAs -->
+      <div class="hero-content">
+        <div class="hero-eyebrow">Barbados' #1 Retail Destination</div>
+        <h1 class="hero-h1">
+          <span class="h1-line1">The Future of</span>
+          <span class="h1-line2">Shopping.</span>
+        </h1>
+        <p class="hero-sub">Shop. Bid. Win. — All in one place.</p>
+        <div class="hero-ctas">
+          <button class="btn-primary">Shop Now</button>
+          <button class="btn-outline">Join Live Auction</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-n">75+</span>
+            <span class="stat-l">Live Bidders</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat">
+            <span class="stat-n">200+</span>
+            <span class="stat-l">Weekly Deals</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat">
+            <span class="stat-n">18</span>
+            <span class="stat-l">Store Locations</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: 3D orbit + phone -->
+      <div class="orbit-scene" id="orbitScene">
+
+        <!-- Orbiting real product images -->
+        <div class="orbit-track" id="orbitTrack">
+          <img class="orbit-item" src="https://images.unsplash.com/photo-1593784991095-a205069470b6?w=120&h=120&fit=crop&q=80" alt="Television" loading="eager">
+          <img class="orbit-item" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=120&h=120&fit=crop&q=80" alt="Sofa" loading="eager">
+          <img class="orbit-item" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=120&h=120&fit=crop&q=80" alt="Groceries" loading="eager">
+          <img class="orbit-item" src="https://images.unsplash.com/photo-1512054502232-10a0a035d672?w=120&h=120&fit=crop&q=80" alt="Smartphone" loading="eager">
+          <img class="orbit-item" src="https://images.unsplash.com/photo-1585515320310-259814833e62?w=120&h=120&fit=crop&q=80" alt="Appliance" loading="eager">
+          <img class="orbit-item" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=120&h=120&fit=crop&q=80" alt="Camera" loading="eager">
+          <img class="orbit-item" src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=120&h=120&fit=crop&q=80" alt="Shopping" loading="eager">
+        </div>
+
+        <!-- Phone centered in orbit -->
+        <div class="phone-center">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+
+              <!-- Massy bar — always visible at top of phone screen -->
+              <div class="phone-massy-bar">
+                <div class="pmb-logo">M</div>
+                <span class="pmb-brand">MASSY STORES</span>
+                <span class="pmb-live">● LIVE</span>
+              </div>
+
+              <!-- Auction states -->
+              <div class="auction-states-wrap">
+
+                <!-- State 1: Listing -->
+                <div class="auction-state" id="state-listing">
+                  <div class="auction-header">🔴 LIVE AUCTION</div>
+                  <img class="auction-product-img-real" src="https://images.unsplash.com/photo-1593784991095-a205069470b6?w=170&h=90&fit=crop&q=80" alt="Samsung TV">
+                  <div class="auction-product-name">Samsung 65" QLED 4K TV</div>
+                  <div class="auction-starting">Starting Bid</div>
+                  <div class="auction-price">$299.00</div>
+                  <div class="auction-timer-row">⏱ Ends in: <span class="auction-time">00:08:42</span></div>
+                </div>
+
+                <!-- State 2: Login -->
+                <div class="auction-state hidden" id="state-login">
+                  <div class="auction-header" style="color:var(--blue)">🔐 LOGIN TO BID</div>
+                  <div class="login-field">📧 &nbsp;user@massy.com</div>
+                  <div class="login-field">🔑 &nbsp;••••••••</div>
+                  <button class="login-btn">Login &amp; Bid</button>
+                </div>
+
+                <!-- State 3: Bidders Joining -->
+                <div class="auction-state hidden" id="state-bidders">
+                  <div class="auction-header">🔴 LIVE AUCTION</div>
+                  <div class="bidder-count-label">BIDDERS LIVE</div>
+                  <div class="bidder-count" id="bidderCount">12</div>
+                  <div class="bidder-sub">and climbing fast...</div>
+                  <div class="bidder-bar"></div>
+                  <div class="bidder-names">👤 James · 👤 Keisha · 👤 Marco · 👤 Tara</div>
+                </div>
+
+                <!-- State 4: Bid War -->
+                <div class="auction-state hidden" id="state-bidwar">
+                  <div class="auction-header">⚡ BID WAR!</div>
+                  <img class="auction-product-img-real" src="https://images.unsplash.com/photo-1593784991095-a205069470b6?w=170&h=70&fit=crop&q=80" alt="TV">
+                  <div class="bidwar-label">Current Bid</div>
+                  <div class="bidwar-price" id="bidWarPrice">$310</div>
+                  <div class="bidwar-bids">75 bids · 23 bidders</div>
+                  <button class="bidnow-btn">BID NOW</button>
+                </div>
+
+                <!-- State 5: Outbid -->
+                <div class="auction-state hidden" id="state-outbid">
+                  <div class="outbid-popup">
+                    <div class="outbid-icon">😱</div>
+                    <div class="outbid-title">You've Been Outbid!</div>
+                    <div class="outbid-msg">Someone just topped your bid.<br>Don't let them win!</div>
+                    <button class="bidagain-btn">🔥 BID AGAIN TO WIN!</button>
+                  </div>
+                </div>
+
+                <!-- State 6: Countdown -->
+                <div class="auction-state hidden" id="state-countdown">
+                  <div class="auction-header" style="color:var(--red)">⏰ FINAL SECONDS!</div>
+                  <div class="countdown-price">$412.00</div>
+                  <div class="countdown-display" id="countdownDisplay">00:00:03</div>
+                  <div class="countdown-bidders">75 bidders watching...</div>
+                </div>
+
+                <!-- State 7: Won -->
+                <div class="auction-state hidden" id="state-won" style="background:#f0fff4">
+                  <canvas id="confettiCanvas" style="position:absolute;inset:0;pointer-events:none;width:100%;height:100%"></canvas>
+                  <div class="won-content">
+                    <div class="won-trophy">🏆</div>
+                    <div class="won-title">YOU WON!</div>
+                    <div class="won-item">Samsung 65" QLED 4K TV</div>
+                    <div class="won-price">Final Bid: <span>$412.00</span></div>
+                    <div class="won-congrats">Congratulations!</div>
+                  </div>
+                </div>
+
+              </div><!-- /auction-states-wrap -->
+            </div><!-- /phone-screen -->
+          </div><!-- /phone-frame -->
+        </div><!-- /phone-center -->
+
+      </div><!-- /orbit-scene -->
+    </section>
+
+    <!-- ── DEALS ── -->
+    <section class="deals-section" id="dealsSection">
+      <div class="section-header">
+        <div class="section-eyebrow">Limited Time Only</div>
+        <h2 class="section-title">Hot Deals</h2>
+      </div>
+      <div class="deals-grid">
+        <div class="deal-card" id="dealWeek">
+          <div class="deal-badge">🔥 DEAL OF THE WEEK</div>
+          <img class="deal-img-real" src="https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400&h=200&fit=crop&q=80" alt="Samsung Fridge">
+          <div class="deal-name">Samsung Side-by-Side Fridge</div>
+          <div class="deal-prices">
+            <span class="deal-was">$2,499</span>
+            <span class="deal-now">$1,799</span>
+          </div>
+          <div class="deal-save">Save $700</div>
+          <div class="deal-timer" id="timerWeek">Loading...</div>
+          <button class="deal-btn">Grab This Deal</button>
+        </div>
+        <div class="deal-card" id="dealMonth">
+          <div class="deal-badge" style="background:var(--blue)">⭐ DEAL OF THE MONTH</div>
+          <img class="deal-img-real" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=200&fit=crop&q=80" alt="Living Room Set">
+          <div class="deal-name">3-Piece Living Room Set</div>
+          <div class="deal-prices">
+            <span class="deal-was">$5,200</span>
+            <span class="deal-now">$3,499</span>
+          </div>
+          <div class="deal-save">Save $1,701</div>
+          <div class="deal-timer" id="timerMonth">Loading...</div>
+          <button class="deal-btn">Grab This Deal</button>
+        </div>
+      </div>
+      <div class="optin-strip">
+        <div class="optin-text"><strong>Be first.</strong> Get exclusive deals, new arrivals &amp; auction alerts.</div>
+        <div class="optin-form">
+          <input class="optin-input" type="email" placeholder="your@email.com">
+          <button class="optin-btn">Notify Me</button>
+        </div>
+        <div class="optin-micro">No spam. Unsubscribe anytime.</div>
+      </div>
+    </section>
+
+    <!-- ── APP PREVIEW ── -->
+    <section class="app-section" id="appSection">
+      <div class="app-inner">
+        <div class="app-copy">
+          <div class="section-eyebrow">Available Soon</div>
+          <h2 class="section-title" style="text-align:left">The Massy App.</h2>
+          <p class="app-desc">The store in your pocket. Shop, track deals, and join live auctions from anywhere — instant push notifications keep you always in the game.</p>
+          <div class="app-features">
+            <div class="app-feat"><div class="app-feat-icon">📦</div> What's New — fresh arrivals daily</div>
+            <div class="app-feat"><div class="app-feat-icon">🔥</div> Live Deals Feed with countdown timers</div>
+            <div class="app-feat"><div class="app-feat-icon">⚡</div> Auction Bid Wars — real-time bidding</div>
+            <div class="app-feat"><div class="app-feat-icon">🔔</div> Instant Outbid &amp; Win Notifications</div>
+          </div>
+          <div class="store-badges">
+            <div class="badge">🍎 App Store</div>
+            <div class="badge">▶ Google Play</div>
+          </div>
+        </div>
+        <div class="app-phones">
+          <div class="app-phone-frame" id="appPhone1">
+            <div class="app-phone-notch"></div>
+            <div class="app-phone-screen">
+              <div class="app-screen-header">Good morning, James 👋</div>
+              <div class="app-tabs">
+                <span class="app-tab active">What's New</span>
+                <span class="app-tab">Deals</span>
+                <span class="app-tab">Auctions</span>
+              </div>
+              <div class="app-card-mini">📺 New arrivals in Electronics →</div>
+              <div class="app-card-mini orange">🔥 Deal ends in 02:14:33</div>
+              <div class="app-card-mini">🛋️ Furniture sale — up to 40% off</div>
+              <div class="app-card-mini">📱 iPhone 15 — now in stock</div>
+              <div class="app-notif">🔔 Auction starting in 5 minutes!</div>
+            </div>
+          </div>
+          <div class="app-phone-frame" id="appPhone2" style="margin-top:38px">
+            <div class="app-phone-notch"></div>
+            <div class="app-phone-screen dark">
+              <div class="app-live-badge">🔴 LIVE</div>
+              <div class="app-live-product">📺</div>
+              <div class="app-live-name">Samsung 65" QLED TV</div>
+              <div class="app-live-bid">$412.00</div>
+              <div class="app-live-time">00:01:23</div>
+              <div class="app-live-bidders">75 active bidders</div>
+              <button class="app-bid-btn">BID NOW</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CLOSING CTA ── -->
+    <section class="closing-section" id="closingSection">
+      <div class="closing-inner" id="closingInner">
+        <div class="closing-eyebrow">Your Competitive Edge Awaits</div>
+        <h2 class="closing-title">Ready to transform<br>your business?</h2>
+        <p class="closing-sub">Let's build the future of Massy Stores together. Full stack web, mobile app, live auctions — delivered by INTERXDB.</p>
+        <button class="closing-btn">Start the Conversation</button>
+        <div class="closing-contact">
+          <span>✉ hello@interxdb.com</span>
+          <span>📞 +1 (246) 000-0000</span>
+        </div>
+        <div class="closing-stack">
+          <div class="stack-item">Next.js 14</div>
+          <div class="stack-item">React Native</div>
+          <div class="stack-item">Node.js</div>
+          <div class="stack-item">PostgreSQL</div>
+          <div class="stack-item">Socket.IO</div>
+          <div class="stack-item">Redis</div>
+          <div class="stack-item">Cloudflare</div>
+          <div class="stack-item">AI Ready</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>Designed by <strong>INTERXDB</strong> — Full Stack Web, Mobile &amp; AI Integration</p>
+    </footer>
+
+  </div><!-- /after-panel -->
+</div><!-- /split-wrapper -->
+
+<script>
+  // ════════════════════════
+  // DRAG SLIDER
+  // ════════════════════════
+  const splitWrapper = document.getElementById('splitWrapper');
+  const beforePanel  = document.getElementById('beforePanel');
+  const afterPanel   = document.getElementById('afterPanel');
+  const divider      = document.getElementById('divider');
+  const seeVisionBtn = document.getElementById('seeVisionBtn');
+  const afterNav     = document.getElementById('afterNav');
+  const dragLabel    = document.getElementById('dragLabel');
+
+  let isDragging = false;
+  let fullVision = false;
+
+  divider.addEventListener('mousedown',  () => { isDragging = true; document.body.style.cursor = 'col-resize'; document.body.style.userSelect = 'none'; });
+  divider.addEventListener('touchstart', () => { isDragging = true; }, { passive: true });
+  document.addEventListener('mouseup',  () => { isDragging = false; document.body.style.cursor = ''; document.body.style.userSelect = ''; });
+  document.addEventListener('touchend', () => { isDragging = false; });
+
+  document.addEventListener('mousemove', onDrag);
+  document.addEventListener('touchmove', e => onDrag(e.touches[0]), { passive: true });
+  function onDrag(e) {
+    if (!isDragging || fullVision) return;
+    const rect = splitWrapper.getBoundingClientRect();
+    let pct = ((e.clientX - rect.left) / rect.width) * 100;
+    pct = Math.min(Math.max(pct, 5), 95);
+    beforePanel.style.width = pct + '%';
+    afterPanel.style.width  = (100 - pct) + '%';
+  }
+
+  seeVisionBtn.addEventListener('click', () => {
+    fullVision = true;
+    beforePanel.style.width = '0%';
+    divider.style.opacity = '0';
+    divider.style.pointerEvents = 'none';
+    afterPanel.style.width = '100%';
+    dragLabel.style.opacity = '0';
+    seeVisionBtn.style.opacity = '0';
+    seeVisionBtn.style.pointerEvents = 'none';
+    document.querySelectorAll('.panel-label').forEach(el => el.style.opacity = '0');
+    setTimeout(triggerHeroEntrance, 850);
+  });
+
+  afterPanel.addEventListener('scroll', () => {
+    afterNav.classList.toggle('scrolled', afterPanel.scrollTop > 50);
+  });
+
+  // ════════════════════════
+  // GSAP HERO ENTRANCE
+  // ════════════════════════
+  function triggerHeroEntrance() {
+    gsap.registerPlugin(ScrollTrigger);
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.to('.hero-eyebrow', { opacity: 1, duration: 0.5 })
+      .to('.h1-line1',  { opacity: 1, y: 0, duration: 0.7 }, '-=0.2')
+      .to('.h1-line2',  { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+      .to('.hero-sub',  { opacity: 1, duration: 0.5 }, '-=0.25')
+      .to('.hero-ctas', { opacity: 1, duration: 0.5 }, '-=0.2')
+      .to('.hero-stats',{ opacity: 1, duration: 0.5 }, '-=0.2');
+
+    gsap.from('#dealWeek',  { scrollTrigger: { trigger: '#dealWeek',  scroller: '#afterPanel', start: 'top 88%' }, x: -60, opacity: 0, duration: 0.8, ease: 'power3.out' });
+    gsap.from('#dealMonth', { scrollTrigger: { trigger: '#dealMonth', scroller: '#afterPanel', start: 'top 88%' }, x:  60, opacity: 0, duration: 0.8, ease: 'power3.out' });
+    gsap.from('#appPhone1', { scrollTrigger: { trigger: '#appSection', scroller: '#afterPanel', start: 'top 82%' }, y: 60, opacity: 0, duration: 0.8, ease: 'power3.out' });
+    gsap.from('#appPhone2', { scrollTrigger: { trigger: '#appSection', scroller: '#afterPanel', start: 'top 82%' }, y: 60, opacity: 0, duration: 0.9, delay: 0.2, ease: 'power3.out' });
+    gsap.from('#closingInner', { scrollTrigger: { trigger: '#closingSection', scroller: '#afterPanel', start: 'top 82%' }, y: 40, opacity: 0, duration: 0.8, ease: 'power3.out' });
+  }
+
+  // ════════════════════════
+  // AUCTION STATE MACHINE
+  // ════════════════════════
+  const STATES = [
+    { id: 'listing',   duration: 2600 },
+    { id: 'login',     duration: 1600 },
+    { id: 'bidders',   duration: 2400 },
+    { id: 'bidwar',    duration: 3200 },
+    { id: 'outbid',    duration: 2200 },
+    { id: 'countdown', duration: 3400 },
+    { id: 'won',       duration: 2800 },
+    { id: 'reset',     duration: 800  },
+  ];
+
+  function showState(id) {
+    document.querySelectorAll('.auction-state').forEach(el => el.classList.add('hidden'));
+    const el = document.getElementById('state-' + id);
+    if (el) el.classList.remove('hidden');
+    if (id === 'won') launchConfetti();
+  }
+
+  function startAuctionLoop() {
+    let idx = 0;
+    showState(STATES[0].id);
+    function next() {
+      idx = (idx + 1) % STATES.length;
+      const s = STATES[idx];
+      showState(s.id);
+      if (s.id === 'bidders')   animateBidders();
+      if (s.id === 'bidwar')    animateBidWar();
+      if (s.id === 'countdown') animateCountdown();
+      setTimeout(next, s.duration);
+    }
+    setTimeout(next, STATES[0].duration);
+  }
+
+  function animateBidders() {
+    const el = document.getElementById('bidderCount');
+    if (!el) return;
+    let n = 12;
+    const step = () => { n = Math.min(n + Math.ceil(Math.random() * 7), 75); el.textContent = n; if (n < 75) setTimeout(step, 75); };
+    step();
+  }
+
+  function animateBidWar() {
+    const el = document.getElementById('bidWarPrice');
+    if (!el) return;
+    const prices = ['$310','$322','$335','$341','$358','$367','$380','$389','$398','$404','$412'];
+    let i = 0;
+    const step = () => { if (i < prices.length) { el.textContent = prices[i++]; setTimeout(step, 270); } };
+    step();
+  }
+
+  function animateCountdown() {
+    const el = document.getElementById('countdownDisplay');
+    if (!el) return;
+    const ticks = ['00:00:03','00:00:02','00:00:01','00:00:00'];
+    let i = 0;
+    const step = () => { if (i < ticks.length) { el.textContent = ticks[i++]; if (i < ticks.length) setTimeout(step, 950); } };
+    step();
+  }
+
+  function launchConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width  = canvas.offsetWidth  || 185;
+    canvas.height = canvas.offsetHeight || 370;
+    const COLORS = ['#F47B20','#F4C430','#1B3A6B','#38A169','#E53E3E','#00AEEF'];
+    const bits = Array.from({ length: 130 }, () => ({
+      x:  Math.random() * canvas.width, y: -12,
+      vx: (Math.random() - 0.5) * 5, vy: Math.random() * 3 + 1.5,
+      w:  Math.random() * 9 + 3,     h:  Math.random() * 4 + 2,
+      rot: Math.random() * Math.PI * 2, rs: (Math.random() - 0.5) * 0.16,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    }));
+    let frame = 0;
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      bits.forEach(b => {
+        b.x += b.vx; b.y += b.vy; b.vy += 0.09; b.rot += b.rs;
+        ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.rot);
+        ctx.fillStyle = b.color; ctx.fillRect(-b.w/2, -b.h/2, b.w, b.h);
+        ctx.restore();
+      });
+      if (++frame < 110) requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    })();
+  }
+
+  // ════════════════════════
+  // DEAL COUNTDOWN TIMERS
+  // ════════════════════════
+  function startDealTimers() {
+    const weekEnd  = new Date(Date.now() + 3  * 24 * 60 * 60 * 1000);
+    const monthEnd = new Date(Date.now() + 18 * 24 * 60 * 60 * 1000);
+    function fmt(ms) {
+      if (ms <= 0) return '00d 00h 00m 00s';
+      const d = Math.floor(ms / 86400000);
+      const h = Math.floor((ms % 86400000) / 3600000);
+      const m = Math.floor((ms % 3600000) / 60000);
+      const s = Math.floor((ms % 60000) / 1000);
+      return `${String(d).padStart(2,'0')}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+    }
+    setInterval(() => {
+      const tw = document.getElementById('timerWeek');
+      const tm = document.getElementById('timerMonth');
+      if (tw) tw.textContent = fmt(weekEnd  - Date.now());
+      if (tm) tm.textContent = fmt(monthEnd - Date.now());
+    }, 1000);
+  }
+
+  // ════════════════════════
+  // BOOT
+  // ════════════════════════
+  window.addEventListener('DOMContentLoaded', () => {
+    startAuctionLoop();
+    startDealTimers();
+  });
+</script>
+</body>
+</html>
