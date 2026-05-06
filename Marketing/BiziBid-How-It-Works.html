@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BiziBid — How It Works</title>
+<style>
+:root {
+  --gold: #C9A84C;
+  --black: #000;
+  --near-black: #0A0A0A;
+  --white: #fff;
+  --grey: #9CA3AF;
+  --red: #DC2626;
+  --blue: #1D4ED8;
+  --orange: #EA580C;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#000; color:#fff; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; overflow-x:hidden; }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:rgba(0,0,0,0.92); border-bottom:1px solid #C9A84C33;
+  padding:10px 24px; display:flex; align-items:center; justify-content:space-between;
+  backdrop-filter:blur(10px);
+}
+.nav-logo { font-size:20px; font-weight:900; }
+.nav-logo .bid { color:#C9A84C; }
+.nav-links { display:flex; gap:4px; }
+.nav-link {
+  padding:5px 12px; border-radius:20px; border:1px solid #C9A84C33;
+  color:#9CA3AF; font-size:11px; cursor:pointer; transition:all .2s; text-decoration:none;
+}
+.nav-link:hover,.nav-link.active { background:#C9A84C; color:#000; border-color:#C9A84C; }
+
+/* SECTIONS */
+section { min-height:100vh; padding:100px 40px 60px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.section-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#C9A84C; margin-bottom:10px; }
+h1 { font-size:54px; font-weight:900; line-height:1.1; text-align:center; margin-bottom:16px; }
+h2 { font-size:34px; font-weight:800; text-align:center; margin-bottom:10px; }
+.subtitle { font-size:16px; color:#9CA3AF; text-align:center; max-width:580px; line-height:1.6; }
+.gold { color:#C9A84C; }
+
+/* HERO */
+#hero { background:radial-gradient(ellipse at center,#1a1400 0%,#000 70%); position:relative; overflow:hidden; }
+#hero::before {
+  content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:600px; height:600px;
+  background:radial-gradient(circle,#C9A84C12 0%,transparent 70%);
+  border-radius:50%; animation:hglow 3s ease-in-out infinite alternate;
+}
+@keyframes hglow { from{transform:translate(-50%,-50%) scale(1);opacity:.5} to{transform:translate(-50%,-50%) scale(1.2);opacity:1} }
+.hero-badge { display:inline-block; padding:5px 14px; border:1px solid #C9A84C; border-radius:20px; font-size:11px; color:#C9A84C; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
+.hero-btns { display:flex; gap:14px; margin-top:28px; position:relative; z-index:1; }
+.btn-gold { padding:12px 28px; background:#C9A84C; color:#000; font-weight:700; font-size:14px; border:none; border-radius:8px; cursor:pointer; transition:all .2s; }
+.btn-gold:hover { background:#E8C86A; transform:translateY(-2px); }
+.btn-outline { padding:12px 28px; background:transparent; color:#C9A84C; font-weight:700; font-size:14px; border:1px solid #C9A84C; border-radius:8px; cursor:pointer; transition:all .2s; }
+.btn-outline:hover { background:#C9A84C15; }
+
+/* PLATFORM OVERVIEW */
+#overview { background:#050505; }
+.pcards { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:860px; width:100%; margin-top:40px; }
+.pcard { background:#0F0F0F; border:1px solid #C9A84C22; border-radius:14px; padding:28px 22px; text-align:center; transition:all .3s; }
+.pcard:hover { border-color:#C9A84C; transform:translateY(-4px); box-shadow:0 20px 40px #C9A84C12; }
+.pcard .icon { font-size:36px; margin-bottom:14px; }
+.pcard h3 { font-size:16px; font-weight:700; color:#C9A84C; margin-bottom:6px; }
+.pcard p { font-size:12px; color:#9CA3AF; line-height:1.6; }
+.pcard .tag { display:inline-block; margin-top:10px; padding:3px 10px; background:#C9A84C15; border:1px solid #C9A84C44; border-radius:20px; font-size:10px; color:#C9A84C; }
+.rule-box { margin-top:36px; padding:18px 28px; background:#0F0F0F; border:1px solid #C9A84C33; border-radius:10px; max-width:560px; text-align:center; }
+.rule-box .rule-title { font-size:11px; color:#C9A84C; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+.rule-box p { font-size:13px; color:#9CA3AF; line-height:1.6; }
+
+/* KEYPAD DEMO */
+#keypad-demo { background:#000; }
+.demo-wrap { display:flex; gap:56px; align-items:center; max-width:960px; width:100%; margin-top:36px; }
+
+/* PHONE */
+.phone { width:256px; min-width:256px; height:530px; background:#0A0A0A; border-radius:34px; border:2px solid #2a2a2a; overflow:hidden; position:relative; box-shadow:0 40px 80px rgba(0,0,0,.8),0 0 0 1px #1a1a1a; }
+.phone-notch { width:72px; height:20px; background:#000; border-radius:0 0 14px 14px; margin:0 auto; }
+.app-bar { background:#000; padding:5px 14px; display:flex; align-items:center; justify-content:space-between; }
+.app-bar .logo { font-size:16px; font-weight:900; } .app-bar .logo span { color:#C9A84C; }
+.app-bar .loc { font-size:8px; color:#9CA3AF; letter-spacing:1px; }
+.ad-banner { background:linear-gradient(90deg,#1a1000,#0a0800,#1a1000); padding:6px 14px; font-size:9px; color:#C9A84C; text-align:center; border-top:1px solid #C9A84C22; border-bottom:1px solid #C9A84C22; overflow:hidden; white-space:nowrap; }
+.pinned-zone { padding:8px 12px 4px; }
+.pinned-lbl { font-size:7px; color:#9CA3AF; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+.pinned-row { display:flex; align-items:center; gap:10px; }
+.p-logo { width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#003087,#0050CC); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; color:#fff; position:relative; animation:bglow 2s ease-in-out infinite alternate; }
+@keyframes bglow { from{box-shadow:0 0 8px #3B82F6,0 0 16px #3B82F633} to{box-shadow:0 0 20px #3B82F6,0 0 40px #3B82F655} }
+.badge { position:absolute; top:-3px; right:-3px; width:14px; height:14px; border-radius:50%; font-size:7px; display:flex; align-items:center; justify-content:center; font-weight:700; border:1px solid #000; }
+.bb { background:#1D4ED8; color:#fff; }
+.bo { background:#EA580C; color:#fff; }
+.br { background:#DC2626; color:#fff; animation:bflash .8s ease-in-out infinite; }
+@keyframes bflash { 0%,100%{opacity:1} 50%{opacity:.3} }
+.p-info h4 { font-size:10px; font-weight:700; } .p-info .sub { font-size:8px; color:#C9A84C; margin-top:1px; } .p-info .cnt { font-size:8px; color:#9CA3AF; }
+.kgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:6px 10px; }
+.sbtn { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.slogo { width:50px; height:50px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; position:relative; cursor:pointer; }
+.sname { font-size:7px; color:#9CA3AF; text-align:center; }
+.g-gold { animation:ggold 2.5s ease-in-out infinite alternate; }
+.g-blue { animation:gblue 1.5s ease-in-out infinite alternate; }
+.g-orange { box-shadow:0 0 10px #F97316,0 0 20px #F9731633; }
+.g-red { animation:gred .8s ease-in-out infinite; }
+@keyframes ggold { from{box-shadow:0 0 5px #C9A84C33} to{box-shadow:0 0 14px #C9A84C77} }
+@keyframes gblue { from{box-shadow:0 0 7px #3B82F6} to{box-shadow:0 0 18px #3B82F6} }
+@keyframes gred { 0%,100%{box-shadow:0 0 14px #EF4444} 50%{box-shadow:0 0 3px #EF444433} }
+.jreleased { padding:5px 10px; background:#050505; border-top:1px solid #C9A84C22; }
+.jr-lbl { font-size:7px; color:#C9A84C; letter-spacing:1px; text-transform:uppercase; }
+.jr-row { display:flex; align-items:center; gap:7px; margin-top:3px; }
+.jr-thumb { width:26px; height:26px; background:#1a1a1a; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; }
+.jr-info .n { font-size:8px; color:#fff; } .jr-info .s { font-size:7px; color:#9CA3AF; }
+.jr-price { margin-left:auto; text-align:right; }
+.jr-price .a { font-size:10px; font-weight:700; color:#fff; }
+.jr-price .t { font-size:7px; color:#DC2626; font-weight:600; }
+.tab-bar { position:absolute; bottom:0; left:0; right:0; background:#050505; border-top:1px solid #1a1a1a; display:flex; align-items:center; justify-content:space-around; padding:8px 0 14px; }
+.tab-item { display:flex; flex-direction:column; align-items:center; gap:2px; font-size:7px; color:#9CA3AF; }
+.tab-item.active { color:#C9A84C; }
+.tab-ico { font-size:16px; }
+.mybids { background:#C9A84C; border-radius:16px; padding:5px 12px; display:flex; align-items:center; gap:3px; position:relative; }
+.mybids span { font-size:10px; } .mybids .ml { font-size:8px; font-weight:700; color:#000; }
+.mbc { position:absolute; top:-4px; right:-4px; background:#DC2626; color:#fff; font-size:7px; font-weight:700; width:13px; height:13px; border-radius:50%; display:flex; align-items:center; justify-content:center; animation:bflash .8s ease-in-out infinite; }
+
+/* GLOW LEGEND */
+.glegend { flex:1; }
+.glegend h2 { text-align:left; font-size:28px; }
+.glegend .subtitle { text-align:left; margin:10px 0 20px; }
+.glist { display:flex; flex-direction:column; gap:10px; }
+.gitem { display:flex; align-items:center; gap:12px; }
+.gdot { width:26px; height:26px; border-radius:7px; flex-shrink:0; }
+.gdot.gold { background:#C9A84C; box-shadow:0 0 10px #C9A84C77; }
+.gdot.blue { background:#3B82F6; box-shadow:0 0 10px #3B82F677; }
+.gdot.orange { background:#F97316; box-shadow:0 0 10px #F9731677; }
+.gdot.red { background:#EF4444; box-shadow:0 0 10px #EF444477; animation:bflash .8s ease-in-out infinite; }
+.gtext h4 { font-size:13px; font-weight:600; } .gtext p { font-size:11px; color:#9CA3AF; }
+.priority-note { margin-top:16px; padding:10px 14px; background:#0F0F0F; border-left:3px solid #C9A84C; border-radius:4px; font-size:11px; color:#9CA3AF; }
+
+/* AUCTION STATE MACHINE */
+#auction-flow { background:#050505; }
+.sm-wrap { position:relative; width:560px; height:560px; margin:30px auto 0; }
+.snode {
+  position:absolute; width:84px; height:84px; border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .3s; border:2px solid #2a2a2a; background:#0A0A0A;
+  font-size:10px; text-align:center; padding:8px; color:#9CA3AF;
+}
+.snode .si { font-size:20px; margin-bottom:3px; }
+.snode .sl { font-size:8px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+.snode.active { border-color:#C9A84C; background:#1a1200; color:#fff; box-shadow:0 0 28px #C9A84C44; transform:scale(1.12); }
+.snode.active .sl { color:#C9A84C; }
+.sm-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; width:180px; pointer-events:none; }
+.sm-title { font-size:18px; font-weight:800; color:#C9A84C; margin-bottom:6px; }
+.sm-desc { font-size:11px; color:#9CA3AF; line-height:1.5; }
+.sm-controls { display:flex; gap:10px; margin-top:20px; justify-content:center; }
+
+/* RELEASE ENGINE */
+#release-engine { background:#000; }
+.esteps { display:flex; flex-direction:column; gap:0; max-width:660px; width:100%; margin-top:36px; }
+.estep { display:flex; gap:18px; align-items:flex-start; position:relative; }
+.estep:not(:last-child)::after { content:''; position:absolute; left:26px; top:54px; width:2px; height:calc(100% - 14px); background:linear-gradient(to bottom,#C9A84C,#C9A84C33); }
+.enum { width:52px; height:52px; border-radius:50%; background:#C9A84C; color:#000; font-weight:900; font-size:17px; display:flex; align-items:center; justify-content:center; flex-shrink:0; position:relative; z-index:1; }
+.econtent { padding:10px 0 28px; }
+.econtent h3 { font-size:15px; font-weight:700; margin-bottom:3px; }
+.econtent p { font-size:12px; color:#9CA3AF; line-height:1.5; }
+.etag { display:inline-block; margin-top:5px; padding:2px 9px; background:#C9A84C15; border:1px solid #C9A84C44; border-radius:20px; font-size:9px; color:#C9A84C; }
+
+/* WIN KEY */
+#win-key { background:#050505; }
+.wflow { display:flex; align-items:center; gap:0; max-width:900px; width:100%; margin-top:40px; flex-wrap:wrap; justify-content:center; }
+.wstep { display:flex; flex-direction:column; align-items:center; text-align:center; width:140px; }
+.wicon { width:64px; height:64px; border-radius:16px; background:#0F0F0F; border:1px solid #C9A84C33; display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:10px; }
+.wstep h4 { font-size:12px; font-weight:700; margin-bottom:3px; }
+.wstep p { font-size:10px; color:#9CA3AF; line-height:1.4; }
+.warr { font-size:18px; color:#C9A84C; padding:0 6px; padding-bottom:36px; }
+.wkey { display:inline-block; margin-top:6px; padding:5px 12px; background:#C9A84C; color:#000; font-weight:900; font-size:14px; border-radius:6px; letter-spacing:2px; font-family:monospace; animation:kpulse 2s ease-in-out infinite; }
+@keyframes kpulse { 0%,100%{box-shadow:0 0 8px #C9A84C55} 50%{box-shadow:0 0 24px #C9A84C} }
+
+/* SHARE LOOP */
+#share-loop { background:#000; }
+.viral { display:flex; flex-direction:column; align-items:center; gap:0; margin-top:36px; }
+.vrow { display:flex; align-items:center; gap:20px; }
+.vnode { display:flex; flex-direction:column; align-items:center; gap:7px; width:120px; text-align:center; }
+.vicon { width:56px; height:56px; border-radius:14px; background:#0F0F0F; border:1px solid #C9A84C22; display:flex; align-items:center; justify-content:center; font-size:22px; }
+.vnode h4 { font-size:11px; font-weight:700; }
+.vnode p { font-size:9px; color:#9CA3AF; line-height:1.4; }
+.varr-h { font-size:18px; color:#C9A84C; padding-bottom:26px; }
+.varr-v { font-size:18px; color:#C9A84C; margin:6px 0; }
+
+/* TECH STACK */
+#tech-stack { background:#050505; }
+.sgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; max-width:860px; width:100%; margin-top:36px; }
+.scard { background:#0A0A0A; border:1px solid #1a1a1a; border-radius:10px; padding:18px; }
+.scard h3 { font-size:11px; font-weight:700; color:#C9A84C; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+.si2 { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #111; }
+.si2:last-child { border-bottom:none; }
+.si2 .tech { font-size:11px; color:#fff; }
+.si2 .pur { font-size:10px; color:#9CA3AF; }
+
+/* BUILD PHASES */
+#build-phases { background:#000; }
+.pgrid { display:grid; grid-template-columns:repeat(5,1fr); gap:0; max-width:960px; width:100%; margin-top:44px; position:relative; }
+.pgrid::before { content:''; position:absolute; top:34px; left:10%; right:10%; height:2px; background:linear-gradient(90deg,#C9A84C,#C9A84C55,#C9A84C22); }
+.phase { display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 6px; }
+.pnum { width:68px; height:68px; border-radius:50%; background:#0A0A0A; border:2px solid #C9A84C; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#C9A84C; margin-bottom:14px; position:relative; z-index:1; }
+.phase:nth-child(1) .pnum { background:#C9A84C; color:#000; box-shadow:0 0 24px #C9A84C55; }
+.phase h3 { font-size:11px; font-weight:700; margin-bottom:3px; }
+.phase p { font-size:9px; color:#9CA3AF; line-height:1.4; }
+.phase .dur { margin-top:6px; font-size:9px; color:#C9A84C; font-weight:600; }
+
+/* PRICING */
+.ptable { max-width:660px; width:100%; margin-top:50px; border:1px solid #C9A84C33; border-radius:14px; overflow:hidden; }
+.prow { display:flex; justify-content:space-between; align-items:center; padding:14px 22px; border-bottom:1px solid #111; }
+.prow:last-child { border-bottom:none; }
+.prow.ph { background:#C9A84C; color:#000; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; }
+.prow.promo { background:#1a1200; }
+.prow .svc { font-size:12px; color:#fff; }
+.prow .rate { font-size:12px; font-weight:700; color:#C9A84C; }
+.prow.promo .svc,.prow.promo .rate { color:#C9A84C; }
+.prow.promo .rate { font-size:17px; }
+
+/* FADE IN */
+.fi { opacity:0; transform:translateY(24px); transition:opacity .6s ease,transform .6s ease; }
+.fi.vis { opacity:1; transform:none; }
+
+footer { text-align:center; padding:40px 20px 60px; border-top:1px solid #C9A84C22; }
+footer .flogo { font-size:22px; font-weight:900; margin-bottom:6px; }
+footer .flogo span { color:#C9A84C; }
+footer p { font-size:11px; color:#9CA3AF; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Bizi<span class="bid">Bid</span></div>
+  <div class="nav-links">
+    <a href="#hero" class="nav-link">Home</a>
+    <a href="#overview" class="nav-link">Platform</a>
+    <a href="#keypad-demo" class="nav-link">Keypad</a>
+    <a href="#auction-flow" class="nav-link">Auction</a>
+    <a href="#release-engine" class="nav-link">Release</a>
+    <a href="#win-key" class="nav-link">Win Key</a>
+    <a href="#share-loop" class="nav-link">Share</a>
+    <a href="#tech-stack" class="nav-link">Tech</a>
+    <a href="#build-phases" class="nav-link">Phases</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">INTERXDB · Barbados · 2026</div>
+  <h1>How <span class="gold">Bizi</span>Bid Works</h1>
+  <p class="subtitle">Barbados' first retail auction and deals mobile platform — a fully managed service powered by INTERXDB.</p>
+  <div class="hero-btns">
+    <button class="btn-gold" onclick="scroll('overview')">Explore Platform</button>
+    <button class="btn-outline" onclick="scroll('auction-flow')">See Auction Flow</button>
+  </div>
+</section>
+
+<!-- PLATFORM OVERVIEW -->
+<section id="overview">
+  <p class="section-label">The Platform</p>
+  <h2>Three Products. One Platform.</h2>
+  <p class="subtitle">INTERXDB owns all the technology. Stores list products — INTERXDB handles everything else.</p>
+  <div class="pcards fi">
+    <div class="pcard">
+      <div class="icon">📱</div>
+      <h3>BiziBid App</h3>
+      <p>Live auctions, deals, bidding, outbid alerts, and win key collection — the consumer's window into every auction.</p>
+      <span class="tag">iOS + Android · Consumers</span>
+    </div>
+    <div class="pcard">
+      <div class="icon">🏪</div>
+      <h3>BiziBid.com Portal</h3>
+      <p>Back-office for verified retail store owners. Upload products, view auction results, download invoices. No bidding here.</p>
+      <span class="tag">Web · Store Owners Only</span>
+    </div>
+    <div class="pcard">
+      <div class="icon">⚙️</div>
+      <h3>Admin Panel</h3>
+      <p>INTERXDB internal management — approvals, keypad placement, billing, user warnings, and analytics dashboard.</p>
+      <span class="tag">Web · INTERXDB Team</span>
+    </div>
+  </div>
+  <div class="rule-box fi">
+    <div class="rule-title">⚠ Critical Rule</div>
+    <p>All auctions and bidding happen <strong style="color:#fff">exclusively in the mobile app</strong>. BiziBid.com is a store back-office — no public bidding on the website.</p>
+  </div>
+</section>
+
+<!-- KEYPAD DEMO -->
+<section id="keypad-demo">
+  <p class="section-label">Home Screen</p>
+  <div class="demo-wrap fi">
+    <!-- Phone mockup -->
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="app-bar">
+          <div class="logo">Bizi<span>Bid</span></div>
+          <div class="loc">BARBADOS</div>
+        </div>
+        <div class="ad-banner" id="adBanner">🔥 Massy Stores · Samsung 65" QLED · Bid starts $499 BBD · 14h left</div>
+        <div class="pinned-zone">
+          <div class="pinned-lbl">📌 Pinned Store</div>
+          <div class="pinned-row">
+            <div class="p-logo">M<div class="badge bb">3</div></div>
+            <div class="p-info">
+              <h4>Massy Stores</h4>
+              <div class="sub">3 bids active · 2 watching</div>
+              <div class="cnt">12 items live now</div>
+            </div>
+          </div>
+        </div>
+        <div class="kgrid">
+          <div class="sbtn">
+            <div class="slogo g-blue" style="background:linear-gradient(135deg,#124A1F,#1E6B2E)">C<div class="badge bb">2</div></div>
+            <div class="sname">Carter's</div>
+          </div>
+          <div class="sbtn">
+            <div class="slogo g-red" style="background:linear-gradient(135deg,#CC2222,#992222)">H<div class="badge br">!</div></div>
+            <div class="sname">H&amp;B</div>
+          </div>
+          <div class="sbtn">
+            <div class="slogo g-gold" style="background:linear-gradient(135deg,#1a3a5c,#264d7a)">B</div>
+            <div class="sname">BlueStar</div>
+          </div>
+          <div class="sbtn">
+            <div class="slogo g-orange" style="background:linear-gradient(135deg,#4a1a6e,#6b2599)">R<div class="badge bo">5</div></div>
+            <div class="sname">RoyalMart</div>
+          </div>
+          <div class="sbtn">
+            <div class="slogo g-gold" style="background:linear-gradient(135deg,#5c1a1a,#7a2222)">S</div>
+            <div class="sname">SuperKing</div>
+          </div>
+          <div class="sbtn">
+            <div class="slogo g-gold" style="background:linear-gradient(135deg,#1a4a3a,#226b52)">F</div>
+            <div class="sname">FreshMart</div>
+          </div>
+        </div>
+        <div class="jreleased">
+          <div class="jr-lbl">⚡ Just Released</div>
+          <div class="jr-row">
+            <div class="jr-thumb">📺</div>
+            <div class="jr-info"><div class="n">55" Smart TV</div><div class="s">Carter's Hardware</div></div>
+            <div class="jr-price"><div class="a">$299</div><div class="t">2d 14h left</div></div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-ico">🏠</div><div>Home</div></div>
+          <div class="mybids"><span>⚡</span><span class="ml">My Bids</span><div class="mbc">1</div></div>
+          <div class="tab-item"><div class="tab-ico">👤</div><div>Profile</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Glow Legend -->
+    <div class="glegend">
+      <p class="section-label">Glow System</p>
+      <h2>The Keypad<br>Home Screen</h2>
+      <p class="subtitle" style="text-align:left;margin:10px 0 18px;">Store logo buttons glow to signal your notification state — no reading required.</p>
+      <div class="glist">
+        <div class="gitem"><div class="gdot gold"></div><div class="gtext"><h4>Gold — Idle</h4><p>No notifications. Slow breathing pulse (2.5s)</p></div></div>
+        <div class="gitem"><div class="gdot blue"></div><div class="gtext"><h4>Blue — Bids Active</h4><p>You have active bids at this store. Steady blue glow.</p></div></div>
+        <div class="gitem"><div class="gdot orange"></div><div class="gtext"><h4>Orange — Being Watched</h4><p>Other users watch items you're bidding on.</p></div></div>
+        <div class="gitem"><div class="gdot red"></div><div class="gtext"><h4>Red — Outbid!</h4><p>Fast flash. You've been outbid. Tap to counter-bid instantly.</p></div></div>
+      </div>
+      <div class="priority-note">Priority: <span style="color:#EF4444">Red</span> > <span style="color:#F97316">Orange</span> > <span style="color:#3B82F6">Blue</span>. Rim glows highest-priority colour.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUCTION STATE MACHINE -->
+<section id="auction-flow">
+  <p class="section-label">Auction Engine</p>
+  <h2>Live Auction — 8 States</h2>
+  <p class="subtitle">Every auction cycles through 8 states in real-time via Socket.IO. Click any node or use auto-play.</p>
+  <div class="sm-wrap fi" id="smWrap">
+    <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;" id="smSvg" viewBox="0 0 560 560"></svg>
+    <!-- Nodes positioned by JS -->
+    <div class="snode" onclick="selState(0)"><div class="si">📋</div><div class="sl">Listing</div></div>
+    <div class="snode" onclick="selState(1)"><div class="si">🔐</div><div class="sl">Login</div></div>
+    <div class="snode" onclick="selState(2)"><div class="si">👥</div><div class="sl">Bidders</div></div>
+    <div class="snode" onclick="selState(3)"><div class="si">⚔️</div><div class="sl">Bid War</div></div>
+    <div class="snode" onclick="selState(4)"><div class="si">📣</div><div class="sl">Outbid</div></div>
+    <div class="snode" onclick="selState(5)"><div class="si">⏱️</div><div class="sl">Countdown</div></div>
+    <div class="snode" onclick="selState(6)"><div class="si">🏆</div><div class="sl">Win</div></div>
+    <div class="snode" onclick="selState(7)"><div class="si">🔄</div><div class="sl">Reset</div></div>
+    <div class="sm-center">
+      <div class="sm-title" id="smTitle">Listing</div>
+      <div class="sm-desc" id="smDesc">Store uploads product to BiziBid.com. Item enters the pending pool awaiting the weekly selector.</div>
+    </div>
+  </div>
+  <div class="sm-controls">
+    <button class="btn-outline" onclick="prevSt()">← Prev</button>
+    <button class="btn-gold" id="apBtn" onclick="toggleAP()">▶ Auto Play</button>
+    <button class="btn-outline" onclick="nextSt()">Next →</button>
+  </div>
+</section>
+
+<!-- RELEASE ENGINE -->
+<section id="release-engine">
+  <p class="section-label">Item Release Engine</p>
+  <h2>From Upload to Live</h2>
+  <p class="subtitle">Automated engine controlling supply, scarcity, and timing for every store on the platform.</p>
+  <div class="esteps fi">
+    <div class="estep">
+      <div class="enum">1</div>
+      <div class="econtent">
+        <h3>Store Uploads Products</h3>
+        <p>Store owner logs into BiziBid.com and bulk-uploads products — images, descriptions, starting bid prices. No limit on uploads to the pool.</p>
+        <span class="etag">BiziBid.com Portal</span>
+      </div>
+    </div>
+    <div class="estep">
+      <div class="enum">2</div>
+      <div class="econtent">
+        <h3>Weekly Selector — Monday 00:00 AST</h3>
+        <p>BullMQ job randomly picks <strong style="color:#C9A84C">25 items</strong> from the store's pending pool. Unsold items from the previous week are mixed back in, creating unpredictability and value.</p>
+        <span class="etag">Automated · BullMQ · Every Monday</span>
+      </div>
+    </div>
+    <div class="estep">
+      <div class="enum">3</div>
+      <div class="econtent">
+        <h3>Daily Releaser — 05:15 AST</h3>
+        <p>Each day, <strong style="color:#C9A84C">5 items</strong> are scheduled at random times between 05:30–15:00 AST. By Day 5, up to 25 items are live simultaneously — controlled scarcity.</p>
+        <span class="etag">Automated · Daily</span>
+      </div>
+    </div>
+    <div class="estep">
+      <div class="enum">4</div>
+      <div class="econtent">
+        <h3>Push Notification → Item Goes Live</h3>
+        <p>Registered bidders get an FCM push notification when a new item drops. It appears in the store's keypad overlay and the Just Released strip on the home screen.</p>
+        <span class="etag">FCM Push · Socket.IO</span>
+      </div>
+    </div>
+    <div class="estep">
+      <div class="enum">5</div>
+      <div class="econtent">
+        <h3>Auction Runs 3 / 7 / 14 Days</h3>
+        <p>Bidders compete in real-time. Outbid events fire instantly via Socket.IO rooms — one room per auction. The highest bidder when the timer ends wins.</p>
+        <span class="etag">Real-time · Socket.IO</span>
+      </div>
+    </div>
+    <div class="estep">
+      <div class="enum">6</div>
+      <div class="econtent">
+        <h3>Auction Closes → Win Key Generated</h3>
+        <p>Server generates an 8-character alphanumeric code (e.g. <span style="color:#C9A84C;font-family:monospace;font-weight:700">HBD-X4K9</span>). Winner is notified. Code is revealed in-app only — never sent in the push notification text.</p>
+        <span class="etag">Secure · Bcrypt-hashed in DB</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WIN KEY -->
+<section id="win-key">
+  <p class="section-label">Collection System</p>
+  <h2>The Win Key</h2>
+  <p class="subtitle">An 8-character secure code that authenticates winners at the store. No online payment — cash in-store only.</p>
+  <div class="wflow fi">
+    <div class="wstep">
+      <div class="wicon">🏆</div>
+      <h4>Auction Closes</h4>
+      <p>Highest bidder when timer hits zero</p>
+    </div>
+    <div class="warr">→</div>
+    <div class="wstep">
+      <div class="wicon">🔑</div>
+      <h4>Key Generated</h4>
+      <div class="wkey">HBD-X4K9</div>
+      <p style="margin-top:4px">Stored bcrypt-hashed in DB</p>
+    </div>
+    <div class="warr">→</div>
+    <div class="wstep">
+      <div class="wicon">📲</div>
+      <h4>Push Notification</h4>
+      <p>"You won! Show code at cashier" — code NOT in push text</p>
+    </div>
+    <div class="warr">→</div>
+    <div class="wstep">
+      <div class="wicon">🔓</div>
+      <h4>In-App Code</h4>
+      <p>Authenticated API fetch reveals code in the app only</p>
+    </div>
+    <div class="warr">→</div>
+    <div class="wstep">
+      <div class="wicon">🏪</div>
+      <h4>Store Pickup</h4>
+      <p>Cashier matches code + selfie → item released. Cash paid in-store.</p>
+    </div>
+  </div>
+  <div style="display:flex;gap:18px;margin-top:40px;flex-wrap:wrap;justify-content:center;" class="fi">
+    <div style="padding:18px 24px;background:#0F0F0F;border:1px solid #DC262633;border-radius:10px;max-width:260px;text-align:center;">
+      <p style="font-size:20px;margin-bottom:7px">⚠️</p>
+      <p style="font-size:12px;font-weight:700;color:#DC2626;margin-bottom:5px">Fail to Collect?</p>
+      <p style="font-size:11px;color:#9CA3AF">3 warnings = automatic account ban. Enforces auction integrity and protects store partners.</p>
+    </div>
+    <div style="padding:18px 24px;background:#0F0F0F;border:1px solid #C9A84C33;border-radius:10px;max-width:260px;text-align:center;">
+      <p style="font-size:20px;margin-bottom:7px">🔒</p>
+      <p style="font-size:12px;font-weight:700;color:#C9A84C;margin-bottom:5px">Security First</p>
+      <p style="font-size:11px;color:#9CA3AF">Win key is bcrypt-hashed. Winner selfie shared with store owner to verify identity at collection.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SHARE VIRAL LOOP -->
+<section id="share-loop">
+  <p class="section-label">Viral Growth</p>
+  <h2>The Share System</h2>
+  <p class="subtitle">Every shared auction or deal is a free ad for BiziBid and the store — driving viral app downloads.</p>
+  <div class="viral fi">
+    <div class="vrow">
+      <div class="vnode"><div class="vicon">🏷️</div><h4>Live Auction</h4><p>Bidder taps Share on an item</p></div>
+      <div class="varr-h">→</div>
+      <div class="vnode"><div class="vicon">📲</div><h4>Native Share Sheet</h4><p>WhatsApp, Instagram, iMessage — OS handles it</p></div>
+      <div class="varr-h">→</div>
+      <div class="vnode"><div class="vicon">🌐</div><h4>Public Landing Page</h4><p>bizibid.com/auctions/[slug] — no login needed</p></div>
+      <div class="varr-h">→</div>
+      <div class="vnode"><div class="vicon">😮</div><h4>Contact Sees It</h4><p>Live bid + countdown creates FOMO instantly</p></div>
+    </div>
+    <div class="varr-v">↓</div>
+    <div class="vrow">
+      <div class="vnode"><div class="vicon">🔄</div><h4>Loop Continues</h4><p>New user shares too — viral growth, no ad spend</p></div>
+      <div class="varr-h">←</div>
+      <div class="vnode"><div class="vicon">⚡</div><h4>They Bid Too</h4><p>Joins auction, drives bid war, raises final price</p></div>
+      <div class="varr-h">←</div>
+      <div class="vnode"><div class="vicon">📥</div><h4>Downloads App</h4><p>App Store / Google Play — iOS + Android</p></div>
+      <div class="varr-h">←</div>
+      <div class="vnode"><div class="vicon">🏆</div><h4>Wants to Win</h4><p>FOMO converts viewer to registered bidder</p></div>
+    </div>
+  </div>
+  <div style="margin-top:28px;padding:14px 22px;background:#0F0F0F;border:1px solid #C9A84C33;border-radius:10px;text-align:center;max-width:580px;" class="fi">
+    <p style="font-size:12px;color:#C9A84C;font-weight:600;margin-bottom:4px">Open Graph Auto-Preview</p>
+    <p style="font-size:11px;color:#9CA3AF">Every shared link generates a rich preview card in WhatsApp/Instagram/Facebook — product image, current bid, store name, time remaining. Zero extra work.</p>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="tech-stack">
+  <p class="section-label">Technology</p>
+  <h2>The Stack</h2>
+  <p class="subtitle">Built for speed, real-time reliability, and Caribbean-edge delivery.</p>
+  <div class="sgrid fi">
+    <div class="scard">
+      <h3>📡 Backend API</h3>
+      <div class="si2"><span class="tech">Node.js + TypeScript</span><span class="pur">Runtime</span></div>
+      <div class="si2"><span class="tech">Fastify</span><span class="pur">HTTP (2× Express)</span></div>
+      <div class="si2"><span class="tech">Socket.IO</span><span class="pur">Real-time bids</span></div>
+      <div class="si2"><span class="tech">PostgreSQL</span><span class="pur">ACID transactions</span></div>
+      <div class="si2"><span class="tech">Redis</span><span class="pur">Auction state cache</span></div>
+      <div class="si2"><span class="tech">BullMQ</span><span class="pur">Job scheduling</span></div>
+    </div>
+    <div class="scard">
+      <h3>📱 Mobile App</h3>
+      <div class="si2"><span class="tech">React Native + Expo</span><span class="pur">iOS + Android</span></div>
+      <div class="si2"><span class="tech">Reanimated 3</span><span class="pur">Glow + animations</span></div>
+      <div class="si2"><span class="tech">MMKV</span><span class="pur">Local auction cache</span></div>
+      <div class="si2"><span class="tech">Socket.IO client</span><span class="pur">Live bid stream</span></div>
+      <div class="si2"><span class="tech">Firebase FCM</span><span class="pur">Push notifications</span></div>
+      <div class="si2"><span class="tech">react-native-fast-image</span><span class="pur">Image caching</span></div>
+    </div>
+    <div class="scard">
+      <h3>☁️ Infrastructure</h3>
+      <div class="si2"><span class="tech">Railway.app</span><span class="pur">API hosting</span></div>
+      <div class="si2"><span class="tech">Cloudflare R2</span><span class="pur">Images + PDFs</span></div>
+      <div class="si2"><span class="tech">Cloudflare Pages</span><span class="pur">Web portals (free)</span></div>
+      <div class="si2"><span class="tech">Sharp.js</span><span class="pur">PNG → WebP</span></div>
+      <div class="si2"><span class="tech">SendGrid</span><span class="pur">Email + invoices</span></div>
+      <div class="si2"><span class="tech">Docker Compose</span><span class="pur">Dev + production</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD PHASES + PRICING -->
+<section id="build-phases">
+  <p class="section-label">Roadmap</p>
+  <h2>Build Phases</h2>
+  <p class="subtitle">15–22 weeks from zero to launch. Phases 1–3 verified before mobile app begins.</p>
+  <div class="pgrid fi">
+    <div class="phase"><div class="pnum">1</div><h3>Backend API</h3><p>Fastify, PostgreSQL, Redis, Auth, Socket.IO, BullMQ, Docker</p><div class="dur">4–6 weeks</div></div>
+    <div class="phase"><div class="pnum">2</div><h3>Store Portal</h3><p>React + Vite, product upload, auction results, invoices</p><div class="dur">2–3 weeks</div></div>
+    <div class="phase"><div class="pnum">3</div><h3>Admin Panel</h3><p>Approvals, keypad placement, user management, billing</p><div class="dur">2–3 weeks</div></div>
+    <div class="phase"><div class="pnum">4</div><h3>Mobile App</h3><p>Keypad, glow, live bidding, win key, share, FCM push</p><div class="dur">6–8 weeks</div></div>
+    <div class="phase"><div class="pnum">5</div><h3>Billing</h3><p>Monthly cron, fee tiers, PDF invoices, SendGrid</p><div class="dur">1–2 weeks</div></div>
+  </div>
+  <p class="section-label" style="margin-top:52px">Pricing (BBD)</p>
+  <div class="ptable fi">
+    <div class="prow ph"><span>Service</span><span>Rate</span></div>
+    <div class="prow promo"><span class="svc">🎉 First 60 Days</span><span class="rate">FREE</span></div>
+    <div class="prow promo"><span class="svc">📍 Deposit — primary ad placement</span><span class="rate">$500 BBD</span></div>
+    <div class="prow"><span class="svc">Base Package — 25 items/week</span><span class="rate">$450 / month</span></div>
+    <div class="prow"><span class="svc">Additional items (per 10 above 25)</span><span class="rate">$150 / month</span></div>
+    <div class="prow"><span class="svc">Deal of the Week</span><span class="rate">$150 / week</span></div>
+    <div class="prow"><span class="svc">Deal of the Month</span><span class="rate">$200 / month</span></div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">Bizi<span>Bid</span></div>
+  <p>Operated by INTERXDB · Barbados · BiziBid.com</p>
+</footer>
+
+<script>
+// Smooth scroll helper
+function scroll(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+// ── State Machine ──────────────────────────────────────────────
+const STATES = [
+  { title:'Listing',      desc:'Store uploads product to BiziBid.com. Item enters the pending pool awaiting the weekly selector on Monday 00:00 AST.' },
+  { title:'Login',        desc:'User opens the BiziBid app and logs in. The auction appears in the store\'s keypad overlay ready for registered bidders.' },
+  { title:'Bidders Join', desc:'Multiple users view the auction. Watcher counts update in real-time via Socket.IO. Orange badges appear on the store logo.' },
+  { title:'Bid War',      desc:'Active bidding begins. Each bid is validated server-side, written to PostgreSQL, and broadcast instantly to all devices via Socket.IO.' },
+  { title:'Outbid!',      desc:'A user gets outbid. FCM push notification fires. The store logo flashes red. The My Bids panel pre-fills the counter-bid amount.' },
+  { title:'Countdown',    desc:'Final 2 hours — timers turn red across all connected devices. Last-second bids trigger real-time updates for all watchers.' },
+  { title:'Win!',         desc:'Auction closes. Server generates 8-char win key (HBD-X4K9). Winner notified. Code revealed in-app only via authenticated fetch.' },
+  { title:'Reset',        desc:'Push notification: "New items dropping tomorrow." Local MMKV cache cleared on all devices. Unsold items return to pending pool.' }
+];
+const ICONS = ['📋','🔐','👥','⚔️','📣','⏱️','🏆','🔄'];
+
+let curState = 0, apTimer = null;
+const R = 210, CX = 280, CY = 280, NR = 42; // radius, center x/y, node radius
+
+// Position nodes in a circle
+const nodes = document.querySelectorAll('.snode');
+nodes.forEach((n, i) => {
+  const angle = (i / 8) * Math.PI * 2 - Math.PI / 2;
+  const x = CX + R * Math.cos(angle);
+  const y = CY + R * Math.sin(angle);
+  n.style.left = (x - NR) + 'px';
+  n.style.top  = (y - NR) + 'px';
+});
+
+// Draw SVG arrows between consecutive nodes
+function drawArrows() {
+  const svg = document.getElementById('smSvg');
+  svg.innerHTML = '';
+  // defs for arrowhead
+  svg.innerHTML = `<defs><marker id="ah" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#C9A84C44"/></marker><marker id="aha" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#C9A84C"/></marker></defs>`;
+  for (let i = 0; i < 8; i++) {
+    const j = (i + 1) % 8;
+    const a1 = (i / 8) * Math.PI * 2 - Math.PI / 2;
+    const a2 = (j / 8) * Math.PI * 2 - Math.PI / 2;
+    const x1 = CX + R * Math.cos(a1);
+    const y1 = CY + R * Math.sin(a1);
+    const x2 = CX + R * Math.cos(a2);
+    const y2 = CY + R * Math.sin(a2);
+    // shorten line to not overlap node circles
+    const dx = x2 - x1, dy = y2 - y1, len = Math.sqrt(dx*dx+dy*dy);
+    const ux = dx/len, uy = dy/len;
+    const sx = x1 + ux * (NR+4), sy = y1 + uy * (NR+4);
+    const ex = x2 - ux * (NR+8), ey = y2 - uy * (NR+8);
+    const isActive = i === curState;
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', sx); line.setAttribute('y1', sy);
+    line.setAttribute('x2', ex); line.setAttribute('y2', ey);
+    line.setAttribute('stroke', isActive ? '#C9A84C' : '#C9A84C33');
+    line.setAttribute('stroke-width', isActive ? '2' : '1');
+    line.setAttribute('stroke-dasharray', isActive ? 'none' : '4 4');
+    line.setAttribute('marker-end', isActive ? 'url(#aha)' : 'url(#ah)');
+    svg.appendChild(line);
+  }
+}
+
+function selState(i) {
+  curState = i;
+  nodes.forEach((n, idx) => n.classList.toggle('active', idx === i));
+  document.getElementById('smTitle').textContent = STATES[i].title;
+  document.getElementById('smDesc').textContent  = STATES[i].desc;
+  drawArrows();
+}
+function nextSt() { selState((curState + 1) % 8); }
+function prevSt() { selState((curState + 7) % 8); }
+function toggleAP() {
+  const btn = document.getElementById('apBtn');
+  if (apTimer) { clearInterval(apTimer); apTimer = null; btn.textContent = '▶ Auto Play'; }
+  else { apTimer = setInterval(nextSt, 2200); btn.textContent = '⏸ Pause'; }
+}
+
+selState(0);
+setTimeout(toggleAP, 800);
+
+// ── Ad banner rotation ─────────────────────────────────────────
+const BANNERS = [
+  '🔥 Massy Stores · Samsung 65" QLED · Bid starts $499 BBD · 14h left',
+  '⚡ Carter\'s Hardware · Weber BBQ Grill · 3 bidders · 2d 6h left',
+  '🏷️ H&B Hardware · Dewalt Drill Set · Deal of the Week · Walk-in $189',
+  '🎯 New items drop every day from 5:30 AM · Download BiziBid now',
+];
+let bi = 0;
+const banner = document.getElementById('adBanner');
+banner.style.transition = 'opacity .4s';
+setInterval(() => {
+  banner.style.opacity = '0';
+  setTimeout(() => { bi = (bi+1)%BANNERS.length; banner.textContent = BANNERS[bi]; banner.style.opacity='1'; }, 420);
+}, 3800);
+
+// ── Fade-in on scroll ──────────────────────────────────────────
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); }), {threshold:.1});
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+// ── Active nav link ────────────────────────────────────────────
+const navLinks = document.querySelectorAll('.nav-link');
+const navObs = new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) {
+    const id = e.target.id;
+    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+id));
+  }
+}), {threshold:.35});
+document.querySelectorAll('section').forEach(s => navObs.observe(s));
+</script>
+</body>
+</html>

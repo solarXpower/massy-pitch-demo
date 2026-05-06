@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BiziBid — Button Samples</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background:#0a0a0a;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:56px;
+  padding:56px 32px;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+
+.page-title {
+  font-size:10px; color:#333;
+  letter-spacing:3px; text-transform:uppercase; text-align:center;
+}
+
+/* ─────────────────────────────────────────────────────────
+   WRAPPER — overflow:visible so badge never clips
+───────────────────────────────────────────────────────── */
+.btn-wrap {
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ─────────────────────────────────────────────────────────
+   NOTIFICATION BADGE — floats above the button corner
+───────────────────────────────────────────────────────── */
+.bdg {
+  position:absolute;
+  top:-7px; right:-7px;
+  min-width:20px; height:20px;
+  border-radius:10px;
+  font-size:9px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  border:2.5px solid #0a0a0a;
+  padding:0 4px;
+  z-index:50;
+  pointer-events:none;
+}
+.bdg-blue   { background:#1D4ED8; color:#fff; }
+.bdg-orange { background:#EA580C; color:#fff; }
+.bdg-red    { background:#DC2626; color:#fff; animation:flash .8s ease-in-out infinite; }
+@keyframes flash { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+/* ─────────────────────────────────────────────────────────
+   BUTTON SHELL — opaque brand colour, rounded square
+   Solid background so logo is ALWAYS visible on top
+───────────────────────────────────────────────────────── */
+.ios-btn {
+  position:relative;
+  border-radius:18px;
+  cursor:pointer;
+  overflow:hidden;
+  user-select:none;
+  transition:box-shadow .18s ease;
+  /* 3D raised shadow */
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.65),
+    0 3px 8px  rgba(0,0,0,.40),
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -3px 6px rgba(0,0,0,.30);
+}
+
+/* Top-gloss — the iOS raised glass shine */
+.ios-btn::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0; height:46%;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,255,255,.36) 0%,
+    rgba(255,255,255,.10) 55%,
+    transparent 100%
+  );
+  border-radius:18px 18px 50% 50%;
+  z-index:4; pointer-events:none;
+}
+
+/* Bottom depth shadow */
+.ios-btn::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0; height:26%;
+  background:linear-gradient(to top, rgba(0,0,0,.28), transparent);
+  border-radius:0 0 18px 18px;
+  z-index:4; pointer-events:none;
+}
+
+/* ─────────────────────────────────────────────────────────
+   LOGO CARD — elevated white surface the logo sits on
+   Clearly visible, brand-neutral white card with shadow
+───────────────────────────────────────────────────────── */
+.logo-card {
+  position:absolute;
+  top:50%; left:50%;
+  /* raised default: sits above button surface */
+  transform:translate(-50%, -54%);
+  width:78%; height:78%;
+  background:#fff;
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+  z-index:3;
+  /* elevation shadow — makes card look physically raised */
+  box-shadow:
+    0 6px 14px rgba(0,0,0,.55),
+    0 2px 5px  rgba(0,0,0,.35),
+    0 1px 2px  rgba(0,0,0,.20);
+  transition:
+    transform .15s cubic-bezier(.32,.72,0,1),
+    box-shadow .15s ease;
+  pointer-events:none;
+}
+.logo-card img {
+  width:88%; height:88%;
+  object-fit:contain;
+  display:block;
+}
+
+/* ─────────────────────────────────────────────────────────
+   PRESSED STATE — card sinks DOWN into the button
+   Shadow collapses, glow fires like a light switch
+───────────────────────────────────────────────────────── */
+.ios-btn.pressed {
+  box-shadow:
+    0 3px 8px  rgba(0,0,0,.50),
+    0 1px 3px  rgba(0,0,0,.30),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 3px 10px rgba(0,0,0,.40),
+    0 0 36px rgba(255,255,255,.18);
+}
+.ios-btn.pressed .logo-card {
+  /* sinks to button surface level */
+  transform:translate(-50%, -47%) scale(0.86);
+  /* shadow collapses — card is now flush with surface */
+  box-shadow:
+    0 1px 3px rgba(0,0,0,.25),
+    0 0 18px rgba(255,255,255,.70),   /* glow: light switch ON */
+    0 0 8px  rgba(201,168,76,.80);
+}
+
+/* ─────────────────────────────────────────────────────────
+   GLOW RINGS — notification state
+───────────────────────────────────────────────────────── */
+.glow-blue   {
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.65),
+    0 0 0 2.5px #3B82F6,
+    0 0 22px   #3B82F666 !important;
+}
+.glow-orange {
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.65),
+    0 0 0 2.5px #F97316,
+    0 0 22px   #F9731666 !important;
+}
+.glow-red  { animation:ringRed  .8s  ease-in-out infinite; }
+.glow-gold { animation:ringGold 2.5s ease-in-out infinite alternate; }
+
+@keyframes ringRed {
+  0%,100%{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #EF4444,0 0 26px #EF444477;}
+  50%    {box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #EF444433,0 0 5px #EF444433;}
+}
+@keyframes ringGold {
+  from{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2px #C9A84C44,0 0 10px #C9A84C22;}
+  to  {box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2px #C9A84CAA,0 0 24px #C9A84C55;}
+}
+
+/* ─────────────────────────────────────────────────────────
+   BRAND BACKGROUNDS — each store's colour
+───────────────────────────────────────────────────────── */
+.bg-massy   { background:linear-gradient(155deg,#1a55cc 0%,#003087 55%,#001444 100%); }
+.bg-hnb     { background:linear-gradient(155deg,#dd3333 0%,#991111 55%,#550808 100%); }
+.bg-courts  { background:linear-gradient(155deg,#2266cc 0%,#144499 55%,#082244 100%); }
+.bg-rbc     { background:linear-gradient(155deg,#cc2222 0%,#991111 55%,#550808 100%); }
+.bg-first   { background:linear-gradient(155deg,#229944 0%,#116622 55%,#083a12 100%); }
+.bg-royal   { background:linear-gradient(155deg,#7733cc 0%,#441188 55%,#1a0444 100%); }
+
+/* ─────────────────────────────────────────────────────────
+   CARTER'S — existing button.jpg (whole button designed)
+   Logo IS the button image — different handling
+───────────────────────────────────────────────────────── */
+.img-btn {
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  position:relative;
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.65),
+    0 3px 8px  rgba(0,0,0,.40);
+  transition:box-shadow .15s ease;
+}
+.img-btn img {
+  width:100%; height:100%;
+  object-fit:cover; display:block;
+  transition:transform .15s cubic-bezier(.32,.72,0,1), filter .15s ease;
+}
+.img-btn.pressed {
+  box-shadow:
+    0 3px 8px rgba(0,0,0,.5),
+    0 0 36px rgba(255,100,100,.30),
+    inset 0 3px 10px rgba(0,0,0,.4);
+}
+.img-btn.pressed img {
+  transform:scale(0.87);
+  filter:drop-shadow(0 0 20px rgba(255,255,255,.85)) drop-shadow(0 0 10px rgba(255,80,80,.80));
+}
+
+/* ─────────────────────────────────────────────────────────
+   SIZES
+───────────────────────────────────────────────────────── */
+.size-lg { width:160px; height:160px; }
+.size-sm { width:80px;  height:80px;  }
+.size-sm .logo-card { border-radius:7px; width:76%; height:76%; }
+.size-sm::before { border-radius:14px 14px 50% 50%; }
+
+/* ─────────────────────────────────────────────────────────
+   LAYOUT
+───────────────────────────────────────────────────────── */
+.preview-row {
+  display:flex; gap:52px;
+  align-items:flex-end; justify-content:center; flex-wrap:wrap;
+}
+.btn-col { display:flex; flex-direction:column; align-items:center; gap:16px; }
+.lbl { font-size:11px; color:#444; text-align:center; }
+
+.keypad-preview {
+  background:#050505;
+  border:1px solid #1a1a1a;
+  border-radius:28px;
+  padding:28px 32px;
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+}
+.kp-label { font-size:9px; color:#333; letter-spacing:2px; text-transform:uppercase; }
+.kp-grid  { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+.kp-cell  { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.kp-name  { font-size:8px; color:#444; text-align:center; }
+
+.legend { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+.leg-item { display:flex; align-items:center; gap:6px; font-size:9px; color:#333; }
+.leg-dot  { width:8px; height:8px; border-radius:50%; }
+</style>
+</head>
+<body>
+
+<div class="page-title">BiziBid — Tap any button to see press effect</div>
+
+<!-- ── Large preview ────────────────────────────────────── -->
+<div class="preview-row">
+
+  <!-- Carter's — button.jpg (already complete graphic) -->
+  <div class="btn-col">
+    <div class="btn-wrap">
+      <div class="img-btn size-lg">
+        <img src="../Images/button.jpg" alt="Carter's">
+      </div>
+    </div>
+    <div class="lbl">Carter's Hardware</div>
+  </div>
+
+  <!-- Massy Stores — blue button, white logo card elevated -->
+  <div class="btn-col">
+    <div class="btn-wrap">
+      <div class="ios-btn size-lg bg-massy glow-blue">
+        <div class="logo-card">
+          <img src="../Images/MassyStores.jpg" alt="Massy Stores">
+        </div>
+      </div>
+      <div class="bdg bdg-blue">3</div>
+    </div>
+    <div class="lbl">Massy Stores</div>
+  </div>
+
+</div>
+
+<!-- ── Keypad at real app size ───────────────────────────── -->
+<div class="keypad-preview">
+  <div class="kp-label">Keypad Grid — Real App Size · Tap any button</div>
+  <div class="kp-grid">
+
+    <!-- Massy — blue, bids active -->
+    <div class="kp-cell">
+      <div class="btn-wrap">
+        <div class="ios-btn size-sm bg-massy glow-blue">
+          <div class="logo-card"><img src="../Images/MassyStores.jpg" alt="Massy"></div>
+        </div>
+        <div class="bdg bdg-blue">3</div>
+      </div>
+      <div class="kp-name">Massy</div>
+    </div>
+
+    <!-- Carter's — outbid, red flash -->
+    <div class="kp-cell">
+      <div class="btn-wrap">
+        <div class="img-btn size-sm glow-red">
+          <img src="../Images/button.jpg" alt="Carter's">
+        </div>
+        <div class="bdg bdg-red">!</div>
+      </div>
+      <div class="kp-name">Carter's</div>
+    </div>
+
+    <!-- H&B — orange, being watched -->
+    <div class="kp-cell">
+      <div class="btn-wrap">
+        <div class="ios-btn size-sm bg-hnb glow-orange">
+          <div class="logo-card"><img src="../Images/HBhardware_button.jpg" alt="H&B"></div>
+        </div>
+        <div class="bdg bdg-orange">5</div>
+      </div>
+      <div class="kp-name">H&amp;B</div>
+    </div>
+
+    <!-- Courts — gold idle -->
+    <div class="kp-cell">
+      <div class="btn-wrap">
+        <div class="ios-btn size-sm bg-courts glow-gold">
+          <div class="logo-card"><img src="../Images/Courts.jpg" alt="Courts"></div>
+        </div>
+      </div>
+      <div class="kp-name">Courts</div>
+    </div>
+
+    <!-- RBC Bank — gold idle -->
+    <div class="kp-cell">
+      <div class="btn-wrap">
+        <div class="ios-btn size-sm bg-rbc glow-gold">
+          <div class="logo-card"><img src="../Images/RBCBank.jpg" alt="RBC"></div>
+        </div>
+      </div>
+      <div class="kp-name">RBC Bank</div>
+    </div>
+
+    <!-- First Citizens — gold idle -->
+    <div class="kp-cell">
+      <div class="btn-wrap">
+        <div class="ios-btn size-sm bg-first glow-gold">
+          <div class="logo-card"><img src="../Images/firstcitizens.jpg" alt="First Citizens"></div>
+        </div>
+      </div>
+      <div class="kp-name">First Citizens</div>
+    </div>
+
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#3B82F6;box-shadow:0 0 6px #3B82F6"></div>Bids active</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#F97316;box-shadow:0 0 6px #F97316"></div>Being watched</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#EF4444;box-shadow:0 0 6px #EF4444"></div>Outbid — flash</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#C9A84C;box-shadow:0 0 6px #C9A84C"></div>Idle — gold pulse</div>
+  </div>
+</div>
+
+<script>
+// Press = logo card sinks + glows like a light switch
+document.querySelectorAll('.ios-btn, .img-btn').forEach(btn => {
+  const press   = () => btn.classList.add('pressed');
+  const release = () => setTimeout(() => btn.classList.remove('pressed'), 260);
+  btn.addEventListener('mousedown',  press);
+  btn.addEventListener('touchstart', press,   { passive:true });
+  btn.addEventListener('mouseup',    release);
+  btn.addEventListener('mouseleave', release);
+  btn.addEventListener('touchend',   release);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /WebSites/
+
+# Sitemap location
+Sitemap: https://www.interxdb.com/sitemap.xml
