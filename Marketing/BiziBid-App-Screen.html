@@ -425,7 +425,9 @@ body {
   border-radius:10px;
   display:flex; align-items:center; justify-content:center;
   font-size:24px; flex-shrink:0;
+  overflow:hidden; padding:0;
 }
+.ac-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
 .ac-info { flex:1; }
 .ac-info .name  { font-size:12px; font-weight:600; color:#fff; }
 .ac-info .store { font-size:10px; color:#555; }
@@ -600,6 +602,43 @@ body {
 }
 .demo-btn:hover { border-color:#C9A84C; color:#C9A84C; }
 .demo-note { font-size:10px; color:#333; text-align:center; margin-top:8px; max-width:393px; }
+
+/* ─── Product Detail Overlay ──────────────────────── */
+.product-overlay {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:90%;
+  background:#fff;
+  border-radius:26px 26px 0 0;
+  z-index:200;
+  transform:translateY(100%);
+  transition:transform .38s cubic-bezier(.32,.72,0,1);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.product-overlay.open { transform:translateY(0); }
+.po-handle { width:36px; height:4px; background:#ddd; border-radius:2px; margin:10px auto 0; flex-shrink:0; }
+.po-header { display:flex; align-items:center; justify-content:space-between; padding:6px 16px 2px; flex-shrink:0; }
+.po-back { background:none; border:none; font-size:13px; font-weight:700; color:#C9A84C; cursor:pointer; padding:4px 0; }
+.po-store-lbl { font-size:10px; color:#8e8e93; font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
+.po-image-wrap { width:100%; height:185px; background:#f5f5f5; flex-shrink:0; overflow:hidden; position:relative; }
+.po-img { width:100%; height:100%; object-fit:contain; padding:10px; display:block; }
+.po-emoji-fb { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:64px; }
+.po-body { flex:1; padding:12px 16px 16px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+.po-name { font-size:15px; font-weight:800; color:#1c1c1e; line-height:1.3; }
+.po-desc { font-size:12px; color:#636366; line-height:1.6; }
+.po-meta { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:#f5f5f5; border-radius:12px; }
+.po-current-bid { font-size:20px; font-weight:800; color:#1c1c1e; }
+.po-right { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+.po-bidders-lbl { font-size:10px; color:#8e8e93; }
+.po-timer-lbl { font-size:11px; font-weight:700; }
+.po-timer-lbl.urgent { color:#DC2626; }
+.po-timer-lbl.normal { color:#8e8e93; }
+.po-bid-row { display:flex; gap:8px; margin-top:auto; }
+.po-input { flex:1; padding:11px 14px; border:1.5px solid #e5e5ea; border-radius:10px; font-size:14px; color:#1c1c1e; outline:none; font-family:inherit; }
+.po-input:focus { border-color:#C9A84C; }
+.po-bid-btn { padding:11px 20px; background:linear-gradient(135deg,#C9A84C,#a07a28); color:#000; font-size:13px; font-weight:800; border:none; border-radius:10px; cursor:pointer; white-space:nowrap; letter-spacing:.5px; }
 </style>
 </head>
 <body>
@@ -984,6 +1023,34 @@ body {
     </div>
   </div><!-- /bids-panel -->
 
+  <!-- ─── Product Detail Overlay ─────────────── -->
+  <div class="product-overlay" id="productOverlay">
+    <div class="po-handle"></div>
+    <div class="po-header">
+      <button class="po-back" onclick="closeProduct()">← Back</button>
+      <span class="po-store-lbl" id="po-store"></span>
+    </div>
+    <div class="po-image-wrap">
+      <img id="po-img" src="" alt="" class="po-img">
+      <span id="po-emoji-fb" class="po-emoji-fb" style="display:none">📦</span>
+    </div>
+    <div class="po-body">
+      <div class="po-name" id="po-name"></div>
+      <div class="po-desc" id="po-desc"></div>
+      <div class="po-meta">
+        <div class="po-current-bid" id="po-bid"></div>
+        <div class="po-right">
+          <span class="po-bidders-lbl" id="po-bidders"></span>
+          <span class="po-timer-lbl" id="po-time"></span>
+        </div>
+      </div>
+      <div class="po-bid-row">
+        <input type="number" class="po-input" id="po-input" placeholder="Your bid (BBD)">
+        <button class="po-bid-btn">BID NOW</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ─── Outbid notification toast ──────────── -->
   <div class="notif-toast" id="notifToast">
     <div class="notif-icon">📣</div>
@@ -1008,57 +1075,105 @@ body {
 <div class="demo-note">Tap any store logo · Tap ⚡ My Bids · Tap 🔔 bell · Use demo buttons below</div>
 
 <script>
-// ── Store data ────────────────────────────────────────────
+// ── Store data with real product images ───────────────────
 const STORES = {
-  massy:    { name:'Massy Stores',     sub:'12 items live · Tap to bid', logo:'M', bg:'linear-gradient(135deg,#003087,#0050cc)', auctions:['Samsung 65" QLED TV','Apple iPhone 15 128GB','Sony PS5 + 2 Controllers'], store_name:'Massy Stores' },
-  carters:  { name:"Carter's Hardware",sub:'8 items live · 2 bids active', logo:'C', bg:'linear-gradient(135deg,#124A1F,#1e6b2e)', auctions:['Dewalt 20V Drill Set','Weber Genesis BBQ Grill','Stanley Tool Chest 5-Drawer'], store_name:"Carter's" },
-  hnb:      { name:'H&B Hardware',     sub:'6 items live · You were outbid!', logo:'H', bg:'linear-gradient(135deg,#7a1010,#cc2222)', auctions:['Bosch 18V Impact Driver','ACE Paint Kit (12 Colours)','Makita Circular Saw 7¼"'], store_name:'H&B Hardware' },
-  bluestar: { name:'BlueStar',         sub:'5 items live', logo:'B', bg:'linear-gradient(135deg,#0f2a4a,#1a4a7a)', auctions:['LG 32" Monitor 4K','Logitech Gaming Bundle','Philips Air Fryer XL'], store_name:'BlueStar' },
-  royal:    { name:'RoyalMart',        sub:'9 items live · 5 watching you', logo:'R', bg:'linear-gradient(135deg,#3a1050,#6020a0)', auctions:['Dyson V11 Vacuum','KitchenAid Stand Mixer','Ninja Dual Blender'], store_name:'RoyalMart' },
-  superking:{ name:'SuperKing',        sub:'7 items live', logo:'S', bg:'linear-gradient(135deg,#3a1010,#6a1a1a)', auctions:['HP Laptop 15" i5','Canon DSLR Bundle','Samsung Galaxy Tab A9'], store_name:'SuperKing' },
-  fresh:    { name:'FreshMart',        sub:'4 items live', logo:'F', bg:'linear-gradient(135deg,#0f3020,#1a5c38)', auctions:['Keurig Coffee Maker K-Elite','Instant Pot Duo 7-in-1','Vitamix Blender 5200'], store_name:'FreshMart' },
-  courts:   { name:'Courts Barbados',  sub:'9 items live · 5 watching', logo:'C', bg:'linear-gradient(135deg,#144499,#2266cc)', auctions:['Samsung 65" Neo QLED TV','LG French Door Fridge','Dyson V15 Detect Vacuum'], store_name:'Courts' },
-  first:    { name:'First Citizens',   sub:'6 items live', logo:'FC', bg:'linear-gradient(135deg,#116622,#229944)', auctions:['MacBook Air M2 13"','iPad Pro 12.9" WiFi','Apple Watch Series 9'], store_name:'First Citizens' },
-  rbc:      { name:'RBC Bank',         sub:'3 items live', logo:'RBC', bg:'linear-gradient(135deg,#991111,#cc2222)', auctions:['Toyota Corolla 2024 Lease Deal','Honda Civic Finance Package','Kia Sportage 0% APR'], store_name:'RBC Bank' },
-  courtesy: { name:'Courtesy Garage',  sub:'2 items live', logo:'CG', bg:'linear-gradient(135deg,#2a2a2a,#555)', auctions:['Toyota Corolla 2023 Pre-Owned','Honda CRV 2022 Demo','Hyundai Tucson Certified'], store_name:'Courtesy Garage' },
-  hilton:   { name:'Hilton Barbados',  sub:'3 items live', logo:'H', bg:'linear-gradient(135deg,#103070,#2255aa)', auctions:['2-Night Suite Stay','Champagne Brunch for Two','Ocean View Dinner Package'], store_name:'Hilton' },
-  promotech:{ name:'PromoTech',        sub:'5 items live', logo:'PT', bg:'linear-gradient(135deg,#0d5555,#229999)', auctions:['Samsung Galaxy S24 Ultra','JBL PartyBox 310','Sony WH-1000XM5 Headphones'], store_name:'PromoTech' },
+  massy: { name:'Massy Stores', sub:'9 items live · Tap to bid', logo:'M', bg:'linear-gradient(135deg,#003087,#0050cc)', color:'#003087', store_name:'Massy Stores', auctions:[
+    { name:'Queen Bed Frame',      img:'bed2.jpg',        desc:'Modern queen-size bed frame. Solid wood, minimalist design. Delivery and assembly included.',       bid:'$899 BBD',   bidders:5,  time:'2d 3h left',  urgent:false },
+    { name:'Mountain Bike 21-Spd', img:'bike1.jpg',       desc:'21-speed mountain bike. Alloy frame, front suspension, mechanical disc brakes. Great for trails.',  bid:'$599 BBD',   bidders:8,  time:'14h left',    urgent:true  },
+    { name:'Designer Lampshade',   img:'lampshade1.jpg',  desc:'Hand-crafted fabric lampshade. Neutral tones. Fits standard E27 bulb fitting.',                     bid:'$79 BBD',    bidders:3,  time:'3d left',     urgent:false },
+    { name:'Luxury Gift Basket',   img:'giftbasket1.jpg', desc:'Premium gourmet gift basket — cheeses, wine, chocolates and mixed nuts. Perfect for any occasion.', bid:'$189 BBD',   bidders:6,  time:'4h left',     urgent:true  },
+    { name:'Android Smartphone',   img:'smartphone2.jpg', desc:'6.4" HD+ display, 64MP quad-camera, 128GB storage, 5000mAh battery. Ready to ship.',                bid:'$699 BBD',   bidders:11, time:'1h 48m left', urgent:true  },
+    { name:'Full Length Mirror',   img:'miirror.jpg',     desc:'Freestanding full-length mirror. Brushed gold aluminium frame. 165×40cm. Adjustable angle.',        bid:'$249 BBD',   bidders:4,  time:'1d 22h left', urgent:false },
+    { name:'King Bed Complete Set', img:'bed.jpg',        desc:'Complete king bed set — solid frame, memory foam mattress and pillows. 5-year warranty.',            bid:'$1,499 BBD', bidders:7,  time:'2d left',     urgent:false },
+    { name:'Premium Dark Rum',     img:'rum2.jpg',        desc:'Aged 12-year Barbadian dark rum. 750ml. Limited release. Presented in luxury gift box.',             bid:'$129 BBD',   bidders:9,  time:'6h left',     urgent:true  },
+    { name:'Smart Watch',          img:'smartwatch1.jpg', desc:'Stylish fitness smartwatch. Heart rate, sleep tracking, notifications. 5-day battery life.',         bid:'$299 BBD',   bidders:5,  time:'3d left',     urgent:false },
+  ]},
+  carters: { name:"Carter's Hardware", sub:'5 items live · 2 bids active', logo:'C', bg:'linear-gradient(135deg,#124A1F,#1e6b2e)', color:'#1e6b2e', store_name:"Carter's", auctions:[
+    { name:'Dewalt 20V Drill Set',  img:'drill2.jpg',        desc:'Dewalt 20V MAX drill/driver combo. Includes 2 batteries, fast charger and carry case.',           bid:'$189 BBD', bidders:7, time:'14h left',    urgent:true  },
+    { name:'Makita Cordless Drill', img:'drill3.jpg',        desc:'Makita 18V LXT cordless drill. Variable-speed trigger, ergonomic grip, 30-piece bit set.',        bid:'$219 BBD', bidders:4, time:'2d 3h left',  urgent:false },
+    { name:'Modern Floor Lamp',     img:'lamp1.jpg',         desc:'Contemporary adjustable floor lamp, 160cm. Warm white shade. Ideal for living rooms or offices.',  bid:'$149 BBD', bidders:3, time:'1d 22h left', urgent:false },
+    { name:'Premium Wine Bottle',   img:'wine1.jpg',         desc:'Fine vintage selection. Imported label. Perfect gift or collector\'s item. Presented in box.',     bid:'$89 BBD',  bidders:5, time:'4h left',     urgent:true  },
+    { name:'Crystal Vase Set',      img:'crystal vase.jpg',  desc:'Handcrafted crystal vase set of 3. Elegant European design. Gift-wrapped and ready to give.',      bid:'$129 BBD', bidders:2, time:'3d left',     urgent:false },
+  ]},
+  hnb: { name:'H&B Hardware', sub:'3 items live · You were outbid!', logo:'H', bg:'linear-gradient(135deg,#7a1010,#cc2222)', color:'#cc2222', store_name:'H&B Hardware', auctions:[
+    { name:'Dewalt Impact Drill',   img:'drill2.jpg',    desc:'Professional 20V impact drill. 2-speed settings, LED work light, soft-grip handle. Case included.',  bid:'$199 BBD', bidders:9, time:'1h 48m left', urgent:true  },
+    { name:'Power Drill Kit Pro',   img:'drill4.jpg',    desc:'High-torque power drill kit. 32-piece bit set, belt clip, carry case. Max torque 65Nm.',             bid:'$249 BBD', bidders:6, time:'2d left',     urgent:false },
+    { name:'Contractor Tool Case',  img:'toolcase1.jpg', desc:'Heavy-duty rolling tool case. 27-compartment organiser, telescoping handle. Water-resistant shell.', bid:'$179 BBD', bidders:4, time:'14h left',    urgent:true  },
+  ]},
+  promotech: { name:'PromoTech', sub:'7 items live', logo:'PT', bg:'linear-gradient(135deg,#0d5555,#229999)', color:'#229999', store_name:'PromoTech', auctions:[
+    { name:'Laptop Computer',      img:'laptop1.jpg',      desc:'15.6" Full HD laptop. Intel Core i5, 8GB RAM, 512GB SSD, Windows 11. Backlit keyboard.',          bid:'$1,299 BBD', bidders:12, time:'2d 3h left',  urgent:false },
+    { name:'Premium Laptop Bag',   img:'laptop bag.jpg',   desc:'Waterproof 15.6" shoulder bag. Padded laptop compartment, USB charging port, anti-theft back.',   bid:'$89 BBD',    bidders:3,  time:'3d left',     urgent:false },
+    { name:'Colour Laser Printer', img:'printer2.jpg',     desc:'Wireless colour laser printer. 22ppm, auto-duplex, 250-sheet tray. Mobile + cloud print ready.',  bid:'$649 BBD',   bidders:5,  time:'14h left',    urgent:true  },
+    { name:'Memory Card Pack',     img:'memory2.jpg',      desc:'128GB high-speed microSD bundle. Class 10 UHS-I, 100MB/s read. Pack of 2 + SD adapter.',          bid:'$129 BBD',   bidders:7,  time:'4h left',     urgent:true  },
+    { name:'GPS Smart Watch Pro',  img:'smartwatch3.jpg',  desc:'Multi-sport GPS smartwatch. Heart rate, SpO2 monitor, 7-day battery, water-resistant 50m.',       bid:'$449 BBD',   bidders:9,  time:'1d 22h left', urgent:false },
+    { name:'Flagship Smartphone',  img:'smartphone4.jpg',  desc:'Latest Android flagship. 6.7" AMOLED 120Hz, 108MP triple camera, 5G, 256GB storage.',             bid:'$1,599 BBD', bidders:14, time:'1h 48m left', urgent:true  },
+    { name:'Smart Watch Series 2', img:'smartwatch2.jpg',  desc:'Fitness smartwatch. AMOLED always-on display, sleep tracking, 100+ workout modes, 7-day battery.',bid:'$349 BBD',   bidders:6,  time:'2d left',     urgent:false },
+  ]},
+  courtesy: { name:'Courtesy Garage', sub:'3 items live', logo:'CG', bg:'linear-gradient(135deg,#2a2a2a,#555)', color:'#555555', store_name:'Courtesy Garage', auctions:[
+    { name:'Pre-Owned SUV',          img:'vehicle1.jpg', desc:'2020 SUV. Low mileage, full service history. A/C, reverse camera, alloy wheels. Financing available.', bid:'$28,900 BBD', bidders:4, time:'2d 3h left', urgent:false },
+    { name:'Performance Tyre Set',   img:'tire1.jpg',    desc:'Set of 4 all-season performance tyres. 205/55 R16. Balanced and fitted. 2-year warranty.',             bid:'$849 BBD',    bidders:6, time:'14h left',   urgent:true  },
+    { name:'Certified Used Sedan',   img:'vehicle2.jpg', desc:'2019 sedan, certified pre-owned. 1 owner, clean title, 12-month warranty. Financing available.',       bid:'$22,500 BBD', bidders:3, time:'3d left',    urgent:false },
+  ]},
+  hilton: { name:'Hilton Barbados', sub:'1 exclusive offer live', logo:'H', bg:'linear-gradient(135deg,#103070,#2255aa)', color:'#2255aa', store_name:'Hilton', auctions:[
+    { name:'Hilton Gold Membership', img:'hotelmember1.jpg', desc:'1-year Hilton Honors Gold upgrade. Room upgrades, executive lounge access, late checkout and bonus points on every stay.', bid:'$799 BBD', bidders:8, time:'1d 22h left', urgent:false },
+  ]},
+  courts: { name:'Courts Barbados', sub:'9 items live · 5 watching', logo:'C', bg:'linear-gradient(135deg,#144499,#2266cc)', color:'#2266cc', store_name:'Courts', auctions:[
+    { name:'Smart LCD TV 55"',        img:'lcd1.jpg',       desc:'55" Full HD Smart LED TV. Built-in WiFi, Netflix & YouTube ready. Wall-mount bracket included.',  bid:'$1,899 BBD', bidders:12, time:'14h left',    urgent:true  },
+    { name:'4K LCD TV 65"',           img:'lcd2.jpg',       desc:'65" 4K UHD LCD Smart TV. HDR10, Dolby Vision, 3x HDMI. Gaming mode with 4ms response time.',     bid:'$2,999 BBD', bidders:8,  time:'2d 3h left',  urgent:false },
+    { name:'Electric Range Stove',    img:'stove2.jpg',     desc:'60cm freestanding electric range. 4-zone ceramic hob, self-clean oven, digital timer.',           bid:'$1,299 BBD', bidders:5,  time:'3d left',     urgent:false },
+    { name:'Android Smartphone',      img:'smartphone3.jpg',desc:'6.5" HD+ display, 50MP triple camera, 4GB RAM, 128GB storage. Dual SIM, 4G LTE.',                 bid:'$599 BBD',   bidders:9,  time:'4h left',     urgent:true  },
+    { name:'Luxury Gift Basket Set',  img:'giftbasket2.jpg',desc:'Premium deluxe gift basket. Premium wines, artisan cheeses, chocolates and seasonal treats.',     bid:'$229 BBD',   bidders:6,  time:'1h 48m left', urgent:true  },
+    { name:'Countertop Microwave',    img:'microwave1.jpg', desc:'900W countertop microwave. 25L capacity, 10 power levels, defrost function. Stainless finish.',    bid:'$449 BBD',   bidders:4,  time:'1d 22h left', urgent:false },
+    { name:'Food Warming Tray',       img:'warmer.jpg',     desc:'Electric buffet food warmer. 3-pan stainless steel server. Adjustable temperature. Ideal for entertaining.', bid:'$189 BBD', bidders:3, time:'2d left', urgent:false },
+    { name:'Trail Bike 26"',          img:'bike2.jpg',      desc:'26" alloy frame trail bike. 21-speed Shimano gears, front suspension fork, disc brakes.',         bid:'$699 BBD',   bidders:7,  time:'3d left',     urgent:false },
+    { name:'Power Drill Set',         img:'drill4.jpg',     desc:'High-torque drill kit. Variable speed, 32-piece bit set, battery + charger included.',             bid:'$249 BBD',   bidders:5,  time:'14h left',    urgent:true  },
+  ]},
+  first: { name:'First Citizens', sub:'2 asset listings live', logo:'FC', bg:'linear-gradient(135deg,#116622,#229944)', color:'#229944', store_name:'First Citizens', auctions:[
+    { name:'Foreclosure Property',    img:'foreclosure.jpg',    desc:'Bank-owned foreclosure property. 3-bed, 2-bath residential home. Clear title. Open inspection available. Financing pre-approval offered.', bid:'$285,000 BBD', bidders:6, time:'2d 3h left', urgent:false },
+    { name:'Repossessed Vehicle',     img:'carauction1repo.jpg',desc:'Bank-repossessed car. Full inspection report available. Clean title transfer. Financing available at preferred rates for bidders.',           bid:'$18,500 BBD',  bidders:9, time:'14h left',   urgent:true  },
+  ]},
+  rbc: { name:'RBC Bank', sub:'1 vehicle auction live', logo:'RBC', bg:'linear-gradient(135deg,#991111,#cc2222)', color:'#cc2222', store_name:'RBC Bank', auctions:[
+    { name:'Repo Vehicle Auction',    img:'carauction1repo2.jpg',desc:'RBC repossessed vehicle. Low mileage, service history on file. Clean title. Same-day financing available for qualified bidders.', bid:'$24,900 BBD', bidders:7, time:'1h 48m left', urgent:true },
+  ]},
 };
 
-const AUCTION_BIDS  = ['$499 BBD','$899 BBD','$299 BBD','$189 BBD','$349 BBD','$219 BBD'];
-const AUCTION_TIMES = ['14h left','2d 3h left','1d 22h left','1h 48m left','3d left','4h left'];
-const AUCTION_BIDDERS = ['7 bidders','12 bidders','4 bidders','9 bidders','2 bidders','6 bidders'];
-const URGENTS       = [true, false, false, true, false, false];
+let _curAuctions  = [];
+let _curStoreName = '';
 
 function openStore(key) {
   const s = STORES[key];
   if (!s) return;
-  // set header
+  _curAuctions  = s.auctions;
+  _curStoreName = s.store_name;
+  // header
   document.getElementById('ohLogo').textContent = s.logo;
   document.getElementById('ohLogo').style.background = s.bg;
   document.getElementById('ohName').textContent = s.name;
   document.getElementById('ohSub').textContent  = s.sub;
-  // colour-coded edge strip — extract first colour from store gradient
-  const col = s.bg.match(/#[0-9a-fA-F]{3,6}/)?.[0] || '#C9A84C';
-  document.getElementById('storeOverlay').style.setProperty('--store-color', col);
-  // rebuild auction cards
+  // colour-coded edge strip
+  document.getElementById('storeOverlay').style.setProperty('--store-color', s.color || '#C9A84C');
+  // rebuild auction cards with real product images
   const items = document.getElementById('auctionItems');
   items.innerHTML = '';
-  s.auctions.forEach((name, i) => {
-    const urgent = URGENTS[i];
+  s.auctions.forEach((item, i) => {
+    const thumb = item.img
+      ? `<img src="../Images/products/${item.img}" alt="${item.name}">`
+      : `<span>${['📺','📱','💻','🔧','🏠','💡'][i % 6]}</span>`;
     items.innerHTML += `
-      <div class="auction-card">
-        <div class="ac-thumb">${['📺','📱','🎮','🔧','🏠','💡'][i % 6]}</div>
+      <div class="auction-card" onclick="openProduct(${i})">
+        <div class="ac-thumb">${thumb}</div>
         <div class="ac-info">
-          <div class="name">${name}</div>
+          <div class="name">${item.name}</div>
           <div class="store">${s.store_name}</div>
           <div class="ac-meta">
-            <div class="ac-bid">${AUCTION_BIDS[i % 6]}</div>
-            <div class="ac-bidders">· ${AUCTION_BIDDERS[i % 6]}</div>
-            <div class="ac-timer ${urgent?'urgent':'normal'}">${AUCTION_TIMES[i % 6]}</div>
+            <div class="ac-bid">${item.bid}</div>
+            <div class="ac-bidders">· ${item.bidders} bidders</div>
+            <div class="ac-timer ${item.urgent?'urgent':'normal'}">${item.time}</div>
           </div>
         </div>
-        <div class="ac-right"><button class="bid-now-btn">BID NOW</button></div>
+        <div class="ac-right">
+          <button class="bid-now-btn" onclick="event.stopPropagation();openProduct(${i})">BID NOW</button>
+        </div>
       </div>`;
   });
   // reset to auctions tab
@@ -1068,6 +1183,35 @@ function openStore(key) {
   // open
   document.getElementById('storeOverlay').classList.add('open');
   document.getElementById('keypadDim').classList.add('visible');
+}
+
+function openProduct(i) {
+  const item = _curAuctions[i];
+  if (!item) return;
+  const img = document.getElementById('po-img');
+  const fb  = document.getElementById('po-emoji-fb');
+  if (item.img) {
+    img.src = `../Images/products/${item.img}`;
+    img.style.display = 'block';
+    fb.style.display  = 'none';
+  } else {
+    img.style.display = 'none';
+    fb.style.display  = 'block';
+  }
+  document.getElementById('po-store').textContent   = _curStoreName;
+  document.getElementById('po-name').textContent    = item.name;
+  document.getElementById('po-desc').textContent    = item.desc;
+  document.getElementById('po-bid').textContent     = item.bid;
+  document.getElementById('po-bidders').textContent = item.bidders + ' bidders';
+  const timeEl = document.getElementById('po-time');
+  timeEl.textContent  = item.time;
+  timeEl.className    = 'po-timer-lbl ' + (item.urgent ? 'urgent' : 'normal');
+  document.getElementById('po-input').value = '';
+  document.getElementById('productOverlay').classList.add('open');
+}
+
+function closeProduct() {
+  document.getElementById('productOverlay').classList.remove('open');
 }
 
 function closeOverlay() {
