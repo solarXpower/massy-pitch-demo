@@ -1,8 +1,17 @@
-# INTERXDB — Retail Digital Platform & Pitch Demo Workspace
+# INTERXDB — BiziBid Platform & Retail Pitch Demo Workspace
+
+## Platform Name
+**BiziBid** — Barbados' first retail auction and deals mobile platform, operated by INTERXDB.
+- Domain secured: **BiziBid.com**
+- Mobile app: **BiziBid** (iOS + Android)
+- Back-office portal: **BiziBid.com** (store owners)
+- Platform code: `C:\AI Software\AuctionPlatform\` → GitHub: `solarXpower/bizibid-platform`
+
+---
 
 ## Service Overview
 
-INTERXDB is a Barbados-based digital platform company that offers retail stores a fully managed mobile auction and deals service. INTERXDB owns and operates all technology — the platform, mobile app, hosting, and infrastructure. Retail stores do not manage any technology; they list products and INTERXDB handles the rest.
+INTERXDB is a Barbados-based digital platform company that offers retail stores a fully managed mobile auction and deals service under the **BiziBid** brand. INTERXDB owns and operates all technology — the platform, mobile app, hosting, and infrastructure. Retail stores do not manage any technology; they list products and INTERXDB handles the rest.
 
 The service is designed to keep retail stores as the buzz word in every customer's household, 24 hours a day, 7 days a week — whether store doors are open or not.
 
@@ -10,12 +19,12 @@ The service is designed to keep retail stores as the buzz word in every customer
 
 ## Platform Rules & Model
 
-- **App-only:** All auctions, Deal of the Week, and Deal of the Month activity runs exclusively through the INTERXDB mobile app. The public website is not used for auctions or deals.
+- **App-only bidding:** All auctions, Deal of the Week, and Deal of the Month activity runs exclusively through the BiziBid mobile app. The public website is not used for bidding.
 - **Registered businesses only:** Only verified retail businesses may list products. No individual or private sellers permitted.
 - **Free customer registration:** End-users (customers) register and use the app at no cost.
-- **25-item weekly limit per store:** Controlled supply creates scarcity, urgency, and competitive bidding.
-- **Store promotion obligation:** Participating stores must promote the INTERXDB app in-store and via their own social media and marketing channels.
-- **User conduct:** Customers who fail to honour confirmed auction wins are banned. Disputes reviewed with evidence from both parties.
+- **25-item weekly limit per store:** Controlled supply creates scarcity, urgency, and competitive bidding. 5 items released daily at random times (05:30–15:00 AST).
+- **Store promotion obligation:** Participating stores must promote the BiziBid app in-store and via their own social media and marketing channels.
+- **User conduct:** Customers who fail to honour confirmed auction wins receive warnings. Three warnings = automatic ban.
 
 ---
 
@@ -75,6 +84,13 @@ The service is designed to keep retail stores as the buzz word in every customer
 - [x] Carter's-specific letter and email — Carter's pitch link only
 - [x] H&B Hardware-specific letter and email — H&B pitch link only
 - [x] Each company's documents are saved in their own folder — competitors cannot see each other's pitch links
+- [x] Word `.docx` marketing letters generated via `Marketing/generate_letters.py` (python-docx)
+
+### BiziBid Partner Presentation
+- [x] Platform design spec — `docs/specs/2026-05-05-bizibid-platform-design.md` (17 sections, full architecture)
+- [x] Partner PowerPoint — `Marketing/BiziBid-Partner-Presentation.pptx` (14 slides, marketing-only, no tech details)
+- [x] Print/PDF version — `Marketing/BiziBid-Partner-Presentation-PRINT.html` (open in Chrome → Print → Save as PDF)
+- [x] Generator script — `Marketing/generate_presentation.py` (python-pptx)
 
 ### Infrastructure
 - [x] `robots.txt` — Disallows `/WebSites/` from search engine indexing to keep pitch demos private
@@ -101,8 +117,15 @@ websites/
 │   ├── marketing-letter.html
 │   └── email-template.html
 ├── Marketing/
-│   ├── marketing-letter.html   (combined — all 3 pitch links)
-│   └── email-template.html     (combined — all 3 pitch links)
+│   ├── marketing-letter.html          (combined — all 3 pitch links)
+│   ├── email-template.html            (combined — all 3 pitch links)
+│   ├── generate_letters.py            (generates .docx letters via python-docx)
+│   ├── generate_presentation.py       (generates PPTX + HTML via python-pptx)
+│   ├── BiziBid-Partner-Presentation.pptx
+│   └── BiziBid-Partner-Presentation-PRINT.html
+├── docs/
+│   └── specs/
+│       └── 2026-05-05-bizibid-platform-design.md
 ├── robots.txt
 └── CLAUDE.md              (this file)
 ```
