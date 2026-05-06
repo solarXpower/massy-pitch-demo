@@ -3,305 +3,150 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTERXDB — Email Template</title>
+  <title>BiziBid — Email Template — [Business Name]</title>
   <style>
-    /* Reset */
-    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-    img { -ms-interpolation-mode: bicubic; border: 0; display: block; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Roboto,Arial,sans-serif; background:#E8EDF3; color:#2C3E50; }
+    .email-wrapper { max-width:640px; margin:32px auto; }
 
-    body {
-      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-      background: #E8EDF3;
-      color: #2C3E50;
-    }
+    .email-header { background:#0B1F3A; padding:28px 40px; border-radius:10px 10px 0 0; display:flex; align-items:center; justify-content:space-between; }
+    .eh-brand { font-family:Georgia,serif; font-size:26px; font-weight:700; color:#fff; }
+    .eh-brand span { color:#C9A84C; }
+    .eh-sub   { font-size:11px; color:rgba(255,255,255,0.6); margin-top:3px; }
+    .eh-sub strong { color:#C9A84C; }
+    .eh-tag   { font-size:10px; color:rgba(255,255,255,0.4); letter-spacing:2px; text-transform:uppercase; margin-top:2px; }
+    .gold-line { height:4px; background:linear-gradient(to right,#C9A84C,#e8c870,#C9A84C); }
 
-    .email-wrapper { max-width: 640px; margin: 32px auto; }
+    .email-hero { background:linear-gradient(135deg,#0B1F3A 0%,#1A4A8A 100%); padding:40px 40px 36px; text-align:center; }
+    .eh-eyebrow  { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#C9A84C; margin-bottom:12px; }
+    .eh-headline { font-size:26px; font-weight:800; color:#fff; line-height:1.25; margin-bottom:14px; }
+    .eh-sub2     { font-size:14px; color:rgba(255,255,255,0.7); line-height:1.7; max-width:480px; margin:0 auto 24px; }
+    .eh-badge    { display:inline-block; background:#C9A84C; color:#0B1F3A; font-size:13px; font-weight:800; padding:10px 28px; border-radius:30px; }
 
-    /* ── HEADER ── */
-    .email-header {
-      background: #0B1F3A;
-      padding: 28px 40px;
-      border-radius: 10px 10px 0 0;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .eh-brand { font-family: Georgia, serif; font-size: 26px; font-weight: 700; color: #fff; letter-spacing: 1px; }
-    .eh-brand span { color: #C9A84C; }
-    .eh-tag { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase; margin-top: 3px; }
-    .gold-line { height: 4px; background: linear-gradient(to right, #C9A84C, #e8c870, #C9A84C); }
+    .email-body { background:#fff; padding:40px 40px 32px; }
+    .greeting  { font-size:15px; font-weight:600; color:#0B1F3A; margin-bottom:18px; }
+    .body-p    { font-size:14px; line-height:1.85; color:#4A5568; margin-bottom:18px; }
+    .body-p strong { color:#0B1F3A; }
 
-    /* ── HERO BANNER ── */
-    .email-hero {
-      background: linear-gradient(135deg, #0B1F3A 0%, #1A4A8A 100%);
-      padding: 40px 40px 36px;
-      text-align: center;
-    }
-    .eh-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C9A84C; margin-bottom: 12px; }
-    .eh-headline { font-size: 26px; font-weight: 800; color: #fff; line-height: 1.25; margin-bottom: 14px; }
-    .eh-sub { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; max-width: 480px; margin: 0 auto 24px; }
-    .eh-badge {
-      display: inline-block;
-      background: #C9A84C; color: #0B1F3A;
-      font-size: 13px; font-weight: 800; padding: 10px 28px;
-      border-radius: 30px; letter-spacing: 0.5px;
-    }
+    .benefits { background:#F7F9FC; border-radius:10px; padding:24px 28px; margin:28px 0; }
+    .benefits h3 { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#1A4A8A; margin-bottom:16px; }
+    .benefit-item { display:flex; align-items:flex-start; gap:12px; margin-bottom:13px; }
+    .benefit-item:last-child { margin-bottom:0; }
+    .bi-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+    .bi-text  { font-size:13px; color:#4A5568; line-height:1.6; }
+    .bi-text strong { color:#0B1F3A; }
 
-    /* ── BODY ── */
-    .email-body { background: #fff; padding: 40px 40px 32px; }
+    .free-strip { background:#0B1F3A; border-radius:10px; padding:22px 28px; margin:24px 0; display:flex; align-items:center; gap:20px; }
+    .fs-badge { background:#C9A84C; color:#0B1F3A; font-size:11px; font-weight:800; text-align:center; padding:10px 14px; border-radius:8px; flex-shrink:0; white-space:nowrap; }
+    .fs-badge span { display:block; font-size:26px; font-weight:900; line-height:1; }
+    .fs-text h4 { font-size:14px; font-weight:700; color:#fff; margin-bottom:5px; }
+    .fs-text p  { font-size:12px; color:rgba(255,255,255,0.65); line-height:1.65; }
+    .fs-text strong { color:#C9A84C; }
 
-    .greeting { font-size: 15px; font-weight: 600; color: #0B1F3A; margin-bottom: 18px; }
-    .body-p    { font-size: 14px; line-height: 1.85; color: #4A5568; margin-bottom: 18px; }
-    .body-p strong { color: #0B1F3A; }
+    .pricing-summary h3 { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#1A4A8A; margin-bottom:14px; }
+    .price-row { display:flex; justify-content:space-between; align-items:center; padding:11px 14px; border-radius:6px; margin-bottom:6px; background:#F7F9FC; border:1px solid #E2E8F0; }
+    .price-row:nth-child(odd) { background:#fff; }
+    .price-label  { font-size:13px; color:#4A5568; }
+    .price-amount { font-size:14px; font-weight:800; color:#0B1F3A; }
+    .price-free   { font-size:13px; font-weight:800; color:#16A34A; }
 
-    /* ── KEY BENEFITS ── */
-    .benefits { background: #F7F9FC; border-radius: 10px; padding: 24px 28px; margin: 28px 0; }
-    .benefits h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #1A4A8A; margin-bottom: 16px; }
-    .benefit-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 13px; }
-    .benefit-item:last-child { margin-bottom: 0; }
-    .bi-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-    .bi-text { font-size: 13px; color: #4A5568; line-height: 1.6; }
-    .bi-text strong { color: #0B1F3A; }
+    .pitch-section { margin:28px 0; }
+    .pitch-section h3 { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#1A4A8A; margin-bottom:6px; }
+    .pitch-section p  { font-size:13px; color:#4A5568; margin-bottom:14px; line-height:1.6; }
+    .pitch-btn { display:flex; align-items:center; justify-content:space-between; text-decoration:none; border:1px solid #D8E2EF; border-radius:8px; padding:13px 18px; background:#F7F9FC; }
+    .pb-left  { display:flex; align-items:center; gap:12px; }
+    .pb-dot   { width:32px; height:32px; border-radius:6px; background:#0B1F3A; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; color:#C9A84C; }
+    .pb-name  { font-size:13px; font-weight:700; color:#0B1F3A; }
+    .pb-url   { font-size:11px; color:#9CA3AF; }
+    .pb-arrow { color:#C9A84C; font-size:16px; font-weight:700; }
 
-    /* ── FREE OFFER STRIP ── */
-    .free-strip {
-      background: #0B1F3A; border-radius: 10px;
-      padding: 22px 28px; margin: 24px 0;
-      display: flex; align-items: center; gap: 20px;
-    }
-    .fs-badge {
-      background: #C9A84C; color: #0B1F3A;
-      font-size: 11px; font-weight: 800; text-align: center;
-      padding: 10px 14px; border-radius: 8px; flex-shrink: 0;
-      letter-spacing: 0.5px; white-space: nowrap;
-    }
-    .fs-badge span { display: block; font-size: 26px; font-weight: 900; line-height: 1; }
-    .fs-text h4  { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
-    .fs-text p   { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.65; }
-    .fs-text strong { color: #C9A84C; }
+    .cta-block { text-align:center; margin:32px 0 16px; }
+    .cta-btn   { display:inline-block; text-decoration:none; background:#0B1F3A; color:#fff; font-size:14px; font-weight:700; padding:15px 48px; border-radius:40px; }
+    .cta-sub   { font-size:12px; color:#9CA3AF; margin-top:10px; text-align:center; }
 
-    /* ── PRICING SUMMARY ── */
-    .pricing-summary { margin: 28px 0; }
-    .pricing-summary h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #1A4A8A; margin-bottom: 14px; }
-    .price-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 11px 14px; border-radius: 6px; margin-bottom: 6px;
-      background: #F7F9FC; border: 1px solid #E2E8F0;
-    }
-    .price-row:nth-child(2) { background: #fff; }
-    .price-label { font-size: 13px; color: #4A5568; }
-    .price-amount { font-size: 14px; font-weight: 800; color: #0B1F3A; }
-    .price-free   { font-size: 13px; font-weight: 800; color: #16A34A; }
+    .email-footer { background:#0B1F3A; padding:24px 40px; border-radius:0 0 10px 10px; text-align:center; }
+    .ef-brand { font-size:16px; font-weight:700; margin-bottom:4px; }
+    .ef-bizi  { color:#C9A84C; }
+    .ef-bid   { color:#fff; }
+    .ef-by    { color:rgba(255,255,255,0.5); font-weight:400; font-size:13px; }
+    .ef-links { font-size:11px; color:rgba(255,255,255,0.5); margin-top:6px; }
+    .ef-links a { color:#C9A84C; text-decoration:none; }
+    .ef-unsub { font-size:10px; color:rgba(255,255,255,0.3); margin-top:10px; }
 
-    /* ── PITCH DEMOS ── */
-    .pitch-section { margin: 28px 0; }
-    .pitch-section h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #1A4A8A; margin-bottom: 6px; }
-    .pitch-section p  { font-size: 13px; color: #4A5568; margin-bottom: 14px; line-height: 1.6; }
-    .pitch-btn {
-      display: block; text-decoration: none;
-      border: 1px solid #D8E2EF; border-radius: 8px;
-      padding: 13px 18px; margin-bottom: 8px;
-      display: flex; align-items: center; justify-content: space-between;
-      background: #F7F9FC;
-    }
-    .pitch-btn:hover { border-color: #C9A84C; }
-    .pb-left { display: flex; align-items: center; gap: 12px; }
-    .pb-dot { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
-    .pb-dot.m { background: #003087; }
-    .pb-dot.c { background: #124A1F; }
-    .pb-dot.h { background: #CC2222; }
-    .pb-name  { font-size: 13px; font-weight: 700; color: #0B1F3A; }
-    .pb-url   { font-size: 11px; color: #9CA3AF; }
-    .pb-arrow { color: #C9A84C; font-size: 16px; font-weight: 700; }
-
-    /* ── CTA BUTTON ── */
-    .cta-block { text-align: center; margin: 32px 0 16px; }
-    .cta-btn {
-      display: inline-block; text-decoration: none;
-      background: #0B1F3A; color: #fff;
-      font-size: 14px; font-weight: 700; padding: 15px 48px;
-      border-radius: 40px; letter-spacing: 0.5px;
-    }
-    .cta-sub { font-size: 12px; color: #9CA3AF; margin-top: 10px; text-align: center; }
-
-    /* ── FOOTER ── */
-    .email-footer {
-      background: #0B1F3A; padding: 24px 40px;
-      border-radius: 0 0 10px 10px;
-      text-align: center;
-    }
-    .ef-brand  { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .ef-brand span { color: #C9A84C; }
-    .ef-links  { font-size: 11px; color: rgba(255,255,255,0.5); }
-    .ef-links a { color: #C9A84C; text-decoration: none; }
-    .ef-unsub  { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 10px; }
-
-    /* ── PREVIEW LABEL (not part of actual email) ── */
-    .preview-note {
-      background: #FEF3C7; border: 1px solid #F59E0B; border-radius: 6px;
-      padding: 12px 18px; max-width: 640px; margin: 0 auto 16px;
-      font-size: 12px; color: #92400E;
-    }
-    .preview-note strong { font-weight: 700; }
+    .preview-note { background:#FEF3C7; border:1px solid #F59E0B; border-radius:6px; padding:12px 18px; max-width:640px; margin:0 auto 16px; font-size:12px; color:#92400E; }
   </style>
 </head>
 <body>
-
-  <!-- Preview guide (remove before sending) -->
-  <div class="preview-note">
-    <strong>TEMPLATE GUIDE:</strong> Replace <em>[Business Name]</em> and <em>[Contact Name]</em> before sending. Remove this yellow bar. The email is 640px wide — compatible with Gmail, Outlook, and Apple Mail.
-  </div>
-
+  <div class="preview-note"><strong>TEMPLATE GUIDE:</strong> Replace <em>[Contact Name]</em> before sending. Remove this yellow bar before use.</div>
   <div class="email-wrapper">
 
-    <!-- HEADER -->
     <div class="email-header">
       <div>
         <div class="eh-brand">INTER<span>XDB</span></div>
-        <div class="eh-tag">Digital Retail &amp; Auction Platform</div>
+        <div class="eh-sub">Presenting <strong>BiziBid</strong> — bizibid.com</div>
+        <div class="eh-tag">Barbados&#39; First Auction &amp; Deals App</div>
       </div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);text-align:right;">Barbados<br>www.interxdb.com</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);text-align:right;">Barbados<br>www.bizibid.com</div>
     </div>
     <div class="gold-line"></div>
 
-    <!-- HERO -->
     <div class="email-hero">
-      <div class="eh-eyebrow">Exclusive Invitation — Founding Partner</div>
+      <div class="eh-eyebrow">Exclusive Invitation — [Business Name]</div>
       <div class="eh-headline">Your Store. On Every Phone.<br>24 Hours a Day.</div>
-      <div class="eh-sub">INTERXDB is inviting selected Barbados retail businesses to join the island's first dedicated mobile auction and deals platform — at no cost for 60 days.</div>
+      <div class="eh-sub2">INTERXDB invites [Business Name] to join BiziBid — Barbados&#39; first dedicated mobile auction and deals platform — at no cost for 60 days.</div>
       <div class="eh-badge">Auction &amp; Get Buzz</div>
     </div>
 
-    <!-- BODY -->
     <div class="email-body">
+      <p class="greeting">Dear [Contact Name] / Management Team,</p>
+      <p class="body-p">We would like to introduce <strong>BiziBid</strong> — Barbados&#39; first dedicated mobile auction and deals platform, operated by INTERXDB — that keeps <strong>your store</strong> in front of Barbadian customers <strong>24/7</strong>. We own and operate all technology. You simply list your products.</p>
 
-      <p class="greeting">Dear [Contact Name] / [Business Name] Management Team,</p>
-
-      <p class="body-p">
-        We would like to introduce you to <strong>INTERXDB</strong> — a fully managed digital platform that puts your store's products in front of Barbadian customers <strong>24/7 through a live mobile auction and deals app</strong>.
-      </p>
-
-      <p class="body-p">
-        We own and operate all technology. You simply list your products — we handle the platform, the app, the hosting, and the customer experience.
-      </p>
-
-      <!-- BENEFITS -->
       <div class="benefits">
-        <h3>Why Partner with INTERXDB</h3>
-        <div class="benefit-item">
-          <div class="bi-icon">📱</div>
-          <div class="bi-text"><strong>App-Only Auctions &amp; Deals</strong> — all activity happens exclusively on the INTERXDB mobile app. No website bidding. Customers download, register free, and bid.</div>
-        </div>
-        <div class="benefit-item">
-          <div class="bi-icon">🏪</div>
-          <div class="bi-text"><strong>Registered Businesses Only</strong> — your brand is in a professional marketplace. No private sellers. Only verified retail stores like yours.</div>
-        </div>
-        <div class="benefit-item">
-          <div class="bi-icon">🔥</div>
-          <div class="bi-text"><strong>25 Items Per Week, Controlled Scarcity</strong> — a limited weekly supply creates urgency and drives competitive bidding among your customers.</div>
-        </div>
-        <div class="benefit-item">
-          <div class="bi-icon">📣</div>
-          <div class="bi-text"><strong>Your Store Becomes the Buzz</strong> — stores promote the app in-store and via social channels. Your customers talk about your auctions at home, at work, everywhere.</div>
-        </div>
-        <div class="benefit-item">
-          <div class="bi-icon">🌐</div>
-          <div class="bi-text"><strong>No Store Hours Needed</strong> — auctions run around the clock. While your doors are closed, your products are still generating excitement and bids.</div>
-        </div>
+        <h3>Why Partner with BiziBid</h3>
+        <div class="benefit-item"><div class="bi-icon">📱</div><div class="bi-text"><strong>BiziBid App-Only Auctions &amp; Deals</strong> — All activity happens exclusively on the BiziBid mobile app. Customers download, register free, and bid on your store products.</div></div>
+        <div class="benefit-item"><div class="bi-icon">🏪</div><div class="bi-text"><strong>Registered Businesses Only</strong> — A professional marketplace. No private sellers. Only verified retail stores.</div></div>
+        <div class="benefit-item"><div class="bi-icon">🔥</div><div class="bi-text"><strong>25 Items Per Week — Controlled Scarcity</strong> — Limited weekly supply creates urgency and drives competitive bidding.</div></div>
+        <div class="benefit-item"><div class="bi-icon">📣</div><div class="bi-text"><strong>Your Store Becomes the Buzz</strong> — Customers talk about your store BiziBid auctions at home, at work, everywhere.</div></div>
+        <div class="benefit-item"><div class="bi-icon">🌐</div><div class="bi-text"><strong>No Store Hours Needed</strong> — Auctions run around the clock — whether your doors are open or not.</div></div>
       </div>
 
-      <!-- FREE OFFER -->
       <div class="free-strip">
         <div class="fs-badge"><span>60</span>DAYS<br>FREE</div>
         <div class="fs-text">
           <h4>Zero Cost for Your First 60 Days</h4>
-          <p>Full access to the platform with no monthly fee for 60 days. A <strong>$500.00 deposit</strong> secures your store's primary ad placement within the app from launch. Refundable subject to terms.</p>
+          <p>Full BiziBid platform access with no monthly fee. A <strong>$500.00 deposit</strong> secures your store&#39;s primary ad placement within the app from launch.</p>
         </div>
       </div>
 
-      <!-- PRICING -->
       <div class="pricing-summary">
-        <h3>After 60 Days — Simple, Transparent Pricing (BBD)</h3>
-        <div class="price-row">
-          <span class="price-label">First 60 Days</span>
-          <span class="price-free">FREE + $500 deposit</span>
-        </div>
-        <div class="price-row">
-          <span class="price-label">Base Package — 25 items/week</span>
-          <span class="price-amount">$450 / month</span>
-        </div>
-        <div class="price-row">
-          <span class="price-label">Additional Items — per 10 items above 25</span>
-          <span class="price-amount">$150 / month</span>
-        </div>
-        <div class="price-row">
-          <span class="price-label">Deal of the Week Feature</span>
-          <span class="price-amount">$150 / week</span>
-        </div>
-        <div class="price-row">
-          <span class="price-label">Deal of the Month Feature</span>
-          <span class="price-amount">$200 / month</span>
-        </div>
+        <h3>After 60 Days — Simple Pricing (BBD)</h3>
+        <div class="price-row"><span class="price-label">First 60 Days</span><span class="price-free">FREE + $500 deposit</span></div>
+        <div class="price-row"><span class="price-label">Base Package — 25 items/week</span><span class="price-amount">$450 / month</span></div>
+        <div class="price-row"><span class="price-label">Additional Items — per 10 items above 25</span><span class="price-amount">$150 / month</span></div>
+        <div class="price-row"><span class="price-label">Deal of the Week Feature</span><span class="price-amount">$150 / week</span></div>
+        <div class="price-row"><span class="price-label">Deal of the Month Feature</span><span class="price-amount">$200 / month</span></div>
       </div>
 
-      <!-- PITCH DEMOS -->
       <div class="pitch-section">
-        <h3>See Your Store's Potential — Live Demos</h3>
-        <p>We have built interactive before-and-after demos for Barbados retail stores. Click your store's link below to see the vision:</p>
-        <a class="pitch-btn" href="https://interxdb.com/WebSites/massy-pitch/" target="_blank">
-          <div class="pb-left">
-            <div class="pb-dot m">🛒</div>
-            <div>
-              <div class="pb-name">Massy Stores Barbados</div>
-              <div class="pb-url">interxdb.com/WebSites/massy-pitch/</div>
-            </div>
-          </div>
-          <div class="pb-arrow">→</div>
-        </a>
-        <a class="pitch-btn" href="https://interxdb.com/WebSites/carters-pitch/" target="_blank">
-          <div class="pb-left">
-            <div class="pb-dot c">🪵</div>
-            <div>
-              <div class="pb-name">Carter &amp; Co Ltd</div>
-              <div class="pb-url">interxdb.com/WebSites/carters-pitch/</div>
-            </div>
-          </div>
-          <div class="pb-arrow">→</div>
-        </a>
-        <a class="pitch-btn" href="https://interxdb.com/WebSites/hbhardware-pitch/" target="_blank">
-          <div class="pb-left">
-            <div class="pb-dot h">🏠</div>
-            <div>
-              <div class="pb-name">ACE H&amp;B Hardware &amp; Lumber Inc.</div>
-              <div class="pb-url">interxdb.com/WebSites/hbhardware-pitch/</div>
-            </div>
-          </div>
-          <div class="pb-arrow">→</div>
-        </a>
+        <h3>Live Platform Demo</h3>
+        <p>Visit <strong>www.bizibid.com</strong> for the full interactive platform walkthrough and live BiziBid app demo.</p>
       </div>
 
-      <!-- CTA -->
       <div class="cta-block">
-        <a class="cta-btn" href="mailto:contact@INTERXDB.com?subject=INTERXDB%20Partnership%20Enquiry">
-          Request a Presentation
-        </a>
-        <p class="cta-sub">Or contact us directly: <strong>contact@INTERXDB.com</strong> &nbsp;|&nbsp; Tel 1(246) 241-3771</p>
+        <a class="cta-btn" href="mailto:contact@bizibid.com?subject=BiziBid+Partnership+-+[Business+Name]">Request a Presentation</a>
+        <p class="cta-sub">contact@bizibid.com &nbsp;|&nbsp; Tel 1(246) 241-3771</p>
       </div>
-
-    </div><!-- /email-body -->
-
-    <!-- FOOTER -->
-    <div class="email-footer">
-      <div class="ef-brand">INTER<span>XDB</span></div>
-      <div class="ef-links">
-        <a href="mailto:contact@INTERXDB.com">contact@INTERXDB.com</a> &nbsp;·&nbsp;
-        Tel 1(246) 241-3771 &nbsp;·&nbsp;
-        <a href="https://www.interxdb.com">www.interxdb.com</a>
-      </div>
-      <div class="ef-unsub">This email was sent to [recipient@email.com]. To unsubscribe, reply with "Unsubscribe" in the subject line.</div>
     </div>
 
-  </div><!-- /email-wrapper -->
-
+    <div class="email-footer">
+      <div class="ef-brand"><span class="ef-bizi">Bizi</span><span class="ef-bid">Bid</span> <span class="ef-by">by INTERXDB</span></div>
+      <div class="ef-links">
+        <a href="mailto:contact@bizibid.com">contact@bizibid.com</a> ·
+        Tel 1(246) 241-3771 ·
+        <a href="https://www.bizibid.com">www.bizibid.com</a>
+      </div>
+      <div class="ef-unsub">Confidential — prepared exclusively for [Business Name].</div>
+    </div>
+  </div>
 </body>
 </html>
