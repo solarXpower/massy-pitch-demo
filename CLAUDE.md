@@ -115,6 +115,26 @@ The service is designed to keep retail stores as the buzz word in every customer
 - **Button image paths** — all logos in `Images/` folder, Carter's uses `button.jpg` (dome img-btn), others use `.ios-btn` with white logo card
 - Do NOT revert to dark mode or letter-initial placeholder buttons in any new demo or pitch page
 
+### Merchant Presentation Folder — Laptop Ready
+- [x] `BiziBid/APP/BiziBid-App-Screen.html` — full interactive app demo, self-contained, copy entire `BiziBid/` folder to laptop
+- [x] `BiziBid/APP/BiziBid-How-It-Works.html` — platform walkthrough presentation
+- [x] `BiziBid/images/` — all store logos (17 files) copied here
+- [x] `BiziBid/images/products/` — all 53 product images copied here
+- **To present:** copy the entire `BiziBid/` folder to laptop → open `BiziBid/APP/BiziBid-App-Screen.html` in browser — works fully offline, no internet required
+
+### Store Product Assignments (all with real photos + descriptions)
+| Store | Products |
+|---|---|
+| Massy Stores | bed2, bike1, lampshade1, giftbasket1, smartphone2, mirror, bed, rum2, smartwatch1 |
+| Carter's Hardware | drill2, drill3, lamp1, wine1, crystal vase |
+| H&B Hardware | drill2, drill4, toolcase1 |
+| PromoTech | laptop1, laptop bag, printer2, memory2, smartwatch3, smartphone4, smartwatch2 |
+| Courts | lcd1, lcd2, stove2, smartphone3, giftbasket2, microwave1, warmer, bike2, drill4 |
+| Courtesy Garage | vehicle1, tire1, vehicle2 |
+| Hilton | hotelmember1 |
+| First Citizens | foreclosure, carauction1repo |
+| RBC Bank | carauction1repo2 |
+
 ### Infrastructure
 - [x] `robots.txt` — Disallows `/WebSites/` from search engine indexing to keep pitch demos private
 
