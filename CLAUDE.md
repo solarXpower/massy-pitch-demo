@@ -93,13 +93,46 @@ The service is designed to keep retail stores as the buzz word in every customer
 - [x] Generator script — `Marketing/generate_presentation.py` (python-pptx)
 
 ### BiziBid Interactive Platform Demos (2026-05-06)
-- [x] Platform walkthrough — `Marketing/BiziBid-How-It-Works.html` — 9-section scrollable presentation: platform overview, keypad, auction state machine (8 states, auto-play), item release engine, win key system, share/viral loop, tech stack, build phases, pricing
-- [x] Full app screen demo — `Marketing/BiziBid-App-Screen.html` — interactive phone mockup: keypad with animated glow rings, store overlays (auctions + deals tabs), My Bids slide panel (outbid/leading/active cards), rotating ad banner, outbid notification toast, demo controls
+- [x] Platform walkthrough — `Marketing/BiziBid-How-It-Works.html` — 8-section scrollable presentation: platform overview, keypad (9-button light-mode iOS glass), auction state machine (8 states, auto-play), item release engine, win key system, share/viral loop, build phases, contact form
+- [x] Full app screen demo — `Marketing/BiziBid-App-Screen.html` — interactive phone mockup (light mode): 9 iOS glass keypad buttons, store overlays (auctions + deals tabs), My Bids slide panel, RBC vehicle ad banner, outbid notification toast, demo controls
 - [x] Button design samples — `Marketing/BiziBid-Button-Sample.html` — iOS 3D squircle buttons: opaque brand-colour backgrounds, white elevated logo card with drop shadow, press = logo sinks + light-switch glow, notification badges float outside clip boundary, glow rings (blue/orange/red flash/gold pulse)
-- [x] Store logos — `Images/` folder — MassyStores.jpg, button.jpg (Carter's dome), HBhardware_button.jpg, Courts.jpg, RBCBank.jpg, firstcitizens.jpg, and others
+- [x] Store logos — `Images/` folder — MassyStores.jpg, button.jpg (Carter's dome), HBhardware_button.jpg, Courts.jpg, RBCBank.jpg, firstcitizens.jpg, courtesygarage.jpg, hilton.jpg, promotech.jpg
+- [x] Product images — `Images/products/` folder — 40 product photos across categories: electronics (smartphones, laptops, smartwatches, memory), tools (drills, toolcase), furniture (beds, lamps, mirror), vehicles (rims, tires, vehicles), hospitality (hotel, wine, rum), lifestyle (bikes, gift baskets, printer, crystal vase)
+- [x] App screenshots — `Images/` folder — `Bizibid App NEW Look.jpg`, `Bizibid App NEW Look OutBid.jpg`
+
+### Store Overlay Slide-Out (fixed 2026-05-06)
+- Store overlay changed from top-slide-down to **bottom sheet** (slides up from bottom, `translateY(100%) → 0`)
+- Reason: `overflow:hidden` on phone shell was clipping the top-slide animation
+- Color-coded left edge strip — 4px bar takes store's brand colour via CSS `--store-color` variable
+- Gold top border accent, rounded top corners (26px), max-height 82% of phone, scrollable items
+
+### Mobile App GUI Standard (enforced across all demos)
+- **Light mode by default** — phone interior: `#f2f2f7` background, white bars, dark text (`#1c1c1e`)
+- **9-button keypad** — 3×3 grid: Carter's, H&B, Massy, Courts, First Citizens, RBC Bank, Courtesy Garage, Hilton, PromoTech
+- **iOS glass button design** — opaque brand gradient shell, white elevated logo card (`.logo-card`/`.lc-xs`), press = card sinks + gold glow, badges float on `.btn-wrap` (never clipped)
+- **Glow ring system** — gold=idle (breathing), blue=bids active (steady ring), orange=watching (steady ring), red=outbid (flash animation)
+- **Ad banner stays dark** — merchant ad banner keeps dark gradient (paid ad aesthetic, contrasts light UI)
+- **Button image paths** — all logos in `Images/` folder, Carter's uses `button.jpg` (dome img-btn), others use `.ios-btn` with white logo card
+- Do NOT revert to dark mode or letter-initial placeholder buttons in any new demo or pitch page
 
 ### Infrastructure
 - [x] `robots.txt` — Disallows `/WebSites/` from search engine indexing to keep pitch demos private
+
+---
+
+## TODO — Platform Features (Pre-Build)
+
+### Multi-Country Support
+- [ ] Tag every `store`, `auction`, and `item` record with a `country_code` (e.g. `BB`=Barbados, `TT`=Trinidad, `JM`=Jamaica)
+- [ ] Every user account stores a **verified home country** tied to their registered address
+- [ ] Keypad loads only stores matching the user's active country — no cross-country mixing
+- [ ] Server enforces bid isolation: API rejects any bid where `user.country ≠ item.country`
+- [ ] **Settings → Country selector** — users with multiple verified addresses can switch active country; switching reloads the keypad with that country's stores
+- [ ] UI clearly shows active country context: e.g. "🇧🇧 Bidding as Barbados resident"
+- [ ] **Multi-address unlock** — user submits secondary address (utility bill or ID); INTERXDB admin verifies and approves; that country then unlocks in user Settings
+- [ ] Each country operates as a separate business unit (own store list, pricing, release schedule) managed from the same INTERXDB admin panel
+- [ ] `country_code` must be designed into the DB schema from day one — do NOT retrofit later
+- [ ] Consider: separate push notification channels per country so store alerts never cross borders
 - [x] Bluehost/cPanel deployment — Massy demo uploaded to `interxdb.com/WebSites/massy-pitch/`
 - [x] GitHub repository — all files committed and pushed to `solarXpower/massy-pitch-demo`
 

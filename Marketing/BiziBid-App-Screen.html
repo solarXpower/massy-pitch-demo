@@ -66,14 +66,14 @@ body {
   z-index:100;
   pointer-events:none;
 }
-.sb-time { font-size:15px; font-weight:600; color:#fff; }
-.sb-icons { display:flex; align-items:center; gap:6px; font-size:13px; color:#fff; }
+.sb-time { font-size:15px; font-weight:600; color:#1c1c1e; }
+.sb-icons { display:flex; align-items:center; gap:6px; font-size:13px; color:#1c1c1e; }
 
-/* ─── App screen ─────────────────────────────────────── */
+/* ─── App screen — light mode ─────────────────────────── */
 .app-screen {
   position:absolute;
   top:0; left:0; right:0; bottom:0;
-  background:#000;
+  background:#f2f2f7;
   display:flex;
   flex-direction:column;
   overflow:hidden;
@@ -86,34 +86,70 @@ body {
   display:flex;
   align-items:center;
   justify-content:space-between;
-  background:#000;
+  background:#ffffff;
+  border-bottom:1px solid #e5e5ea;
   flex-shrink:0;
 }
-.wm-logo { font-size:22px; font-weight:900; }
+.wm-logo { font-size:22px; font-weight:900; color:#1c1c1e; }
 .wm-logo span { color:#C9A84C; }
 .wm-right { display:flex; align-items:center; gap:12px; }
-.wm-loc { font-size:10px; color:#555; letter-spacing:1px; }
+.wm-loc { font-size:10px; color:#8e8e93; letter-spacing:1px; }
 .wm-bell { font-size:20px; cursor:pointer; position:relative; }
 .bell-dot {
   position:absolute; top:-1px; right:-1px;
   width:9px; height:9px; border-radius:50%;
-  background:#DC2626; border:1.5px solid #000;
+  background:#DC2626; border:1.5px solid #fff;
   animation:bflash .8s ease-in-out infinite;
 }
 
-/* Ad banner */
+/* Merchant ad banner */
 .ad-banner {
-  background:linear-gradient(90deg,#110e00,#0d0b00,#110e00);
-  border-top:1px solid #C9A84C22;
-  border-bottom:1px solid #C9A84C22;
-  padding:7px 16px;
-  font-size:11px;
-  color:#C9A84C;
-  text-align:center;
-  overflow:hidden;
-  white-space:nowrap;
+  position:relative;
+  display:flex;
+  align-items:center;
+  background:linear-gradient(105deg,#00112e 0%,#000d22 45%,#0a0600 100%);
+  border-top:1px solid rgba(255,255,255,.13);
+  border-bottom:1px solid rgba(255,255,255,.13);
+  box-shadow:0 0 18px rgba(255,255,255,.16), inset 0 0 0 1px rgba(255,255,255,.05);
+  padding:6px 14px;
+  gap:10px;
+  min-height:66px;
   flex-shrink:0;
-  transition:opacity .3s;
+  overflow:hidden;
+}
+/* Corner bracket accents */
+.bc {
+  position:absolute;
+  width:11px; height:11px;
+  border-color:rgba(255,255,255,.55);
+  border-style:solid;
+  pointer-events:none;
+}
+.bc.tl { top:4px;    left:4px;  border-width:1.5px 0 0 1.5px; }
+.bc.tr { top:4px;    right:4px; border-width:1.5px 1.5px 0 0; }
+.bc.bl { bottom:4px; left:4px;  border-width:0 0 1.5px 1.5px; }
+.bc.br { bottom:4px; right:4px; border-width:0 1.5px 1.5px 0; }
+/* RBC logo */
+.b-logo {
+  height:30px; width:auto;
+  object-fit:contain; flex-shrink:0;
+  filter:brightness(1.05);
+}
+/* Ad text */
+.b-text { flex:1; text-align:center; padding:0 4px; }
+.b-drive {
+  font-size:13px; font-weight:800;
+  color:#fff; letter-spacing:.5px; line-height:1.2;
+}
+.b-sub {
+  font-size:9px; color:rgba(201,168,76,.88);
+  margin-top:2px; letter-spacing:.3px;
+}
+/* Vehicle image */
+.b-vehicle {
+  height:52px; width:auto;
+  object-fit:contain; flex-shrink:0;
+  filter:drop-shadow(0 0 10px rgba(255,255,255,.28));
 }
 
 /* Pinned store */
@@ -121,7 +157,7 @@ body {
   padding:10px 18px 8px;
   flex-shrink:0;
 }
-.pinned-lbl { font-size:9px; color:#555; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; }
+.pinned-lbl { font-size:9px; color:#8e8e93; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; }
 .pinned-row { display:flex; align-items:center; gap:12px; }
 .pl-logo {
   width:52px; height:52px; border-radius:14px;
@@ -136,9 +172,9 @@ body {
   from { box-shadow:0 0 10px #3B82F6,0 0 20px #3B82F633; }
   to   { box-shadow:0 0 22px #3B82F6,0 0 44px #3B82F655; }
 }
-.pl-info h3 { font-size:13px; font-weight:700; color:#fff; }
+.pl-info h3 { font-size:13px; font-weight:700; color:#1c1c1e; }
 .pl-info .sub { font-size:10px; color:#C9A84C; margin-top:2px; }
-.pl-info .cnt { font-size:10px; color:#555; margin-top:1px; }
+.pl-info .cnt { font-size:10px; color:#8e8e93; margin-top:1px; }
 .pl-live {
   margin-left:auto;
   padding:4px 10px;
@@ -156,68 +192,112 @@ body {
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
-  padding:6px 18px;
+  padding:18px 18px 6px;
   flex:1;
+  align-content:start;
 }
-.store-btn {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-  cursor:pointer;
+/* ── iOS glass store buttons ──────────────────────────── */
+.kp-cell { display:flex; flex-direction:column; align-items:center; gap:5px; }
+.btn-wrap { position:relative; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+.ios-btn {
+  position:relative; border-radius:18px; cursor:pointer; overflow:hidden;
+  user-select:none; transition:box-shadow .18s ease;
+  box-shadow:0 8px 20px rgba(0,0,0,.65),0 3px 8px rgba(0,0,0,.40),
+    inset 0 1px 0 rgba(255,255,255,.25),inset 0 -3px 6px rgba(0,0,0,.30);
 }
-.store-logo {
-  width:84px; height:84px;
-  border-radius:22px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:26px; font-weight:900; color:#fff;
-  position:relative;
-  transition:transform .15s;
-  user-select:none;
+.ios-btn::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:46%;
+  background:linear-gradient(to bottom,rgba(255,255,255,.36) 0%,rgba(255,255,255,.10) 55%,transparent 100%);
+  border-radius:18px 18px 50% 50%; z-index:4; pointer-events:none;
 }
-.store-logo:active { transform:scale(.94); }
-.store-name { font-size:10px; color:#777; text-align:center; font-weight:500; }
+.ios-btn::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:26%;
+  background:linear-gradient(to top,rgba(0,0,0,.28),transparent);
+  border-radius:0 0 18px 18px; z-index:4; pointer-events:none;
+}
+.logo-card {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-54%);
+  width:78%; height:78%; background:#fff; border-radius:10px;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+  z-index:3;
+  box-shadow:0 6px 14px rgba(0,0,0,.55),0 2px 5px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.20);
+  transition:transform .15s cubic-bezier(.32,.72,0,1),box-shadow .15s ease;
+  pointer-events:none;
+}
+.logo-card img { width:88%; height:88%; object-fit:contain; display:block; }
+.ios-btn.pressed {
+  box-shadow:0 3px 8px rgba(0,0,0,.50),0 1px 3px rgba(0,0,0,.30),
+    inset 0 1px 0 rgba(255,255,255,.18),inset 0 3px 10px rgba(0,0,0,.40),
+    0 0 36px rgba(255,255,255,.18);
+}
+.ios-btn.pressed .logo-card {
+  transform:translate(-50%,-47%) scale(0.86);
+  box-shadow:0 1px 3px rgba(0,0,0,.25),0 0 18px rgba(255,255,255,.70),0 0 8px rgba(201,168,76,.80);
+}
+/* Carter's dome image button */
+.img-btn {
+  border-radius:18px; overflow:hidden; cursor:pointer; position:relative;
+  box-shadow:0 8px 20px rgba(0,0,0,.65),0 3px 8px rgba(0,0,0,.40);
+  transition:box-shadow .15s ease;
+}
+.img-btn img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .15s cubic-bezier(.32,.72,0,1),filter .15s ease; }
+.img-btn.pressed { box-shadow:0 3px 8px rgba(0,0,0,.5),0 0 36px rgba(255,100,100,.30),inset 0 3px 10px rgba(0,0,0,.4); }
+.img-btn.pressed img { transform:scale(0.87); filter:drop-shadow(0 0 20px rgba(255,255,255,.85)) drop-shadow(0 0 10px rgba(255,80,80,.80)); }
+/* button size */
+.size-sm { width:84px; height:84px; }
+.size-sm .logo-card { border-radius:7px; width:76%; height:76%; }
+.size-sm::before { border-radius:14px 14px 50% 50%; }
+/* brand backgrounds */
+.bg-massy    { background:linear-gradient(155deg,#1a55cc 0%,#003087 55%,#001444 100%); }
+.bg-hnb      { background:linear-gradient(155deg,#dd3333 0%,#991111 55%,#550808 100%); }
+.bg-courts   { background:linear-gradient(155deg,#2266cc 0%,#144499 55%,#082244 100%); }
+.bg-first    { background:linear-gradient(155deg,#229944 0%,#116622 55%,#083a12 100%); }
+.bg-rbc      { background:linear-gradient(155deg,#cc2222 0%,#991111 55%,#550808 100%); }
+.bg-courtesy { background:linear-gradient(155deg,#555 0%,#2a2a2a 55%,#0f0f0f 100%); }
+.bg-hilton   { background:linear-gradient(155deg,#2255aa 0%,#103070 55%,#061830 100%); }
+.bg-promotech{ background:linear-gradient(155deg,#229999 0%,#0d5555 55%,#041e1e 100%); }
+.store-name { font-size:10px; color:#444; text-align:center; font-weight:500; }
 
-/* Badge */
+/* Badge — floats outside button corner on .btn-wrap */
 .bdg {
-  position:absolute; top:-4px; right:-4px;
-  min-width:18px; height:18px;
-  border-radius:9px;
+  position:absolute; top:-7px; right:-7px;
+  min-width:20px; height:20px;
+  border-radius:10px;
   font-size:9px; font-weight:700;
   display:flex; align-items:center; justify-content:center;
-  border:2px solid #000;
+  border:2.5px solid #000;
   padding:0 4px;
+  z-index:50; pointer-events:none;
 }
 .bdg-blue  { background:#1D4ED8; color:#fff; }
 .bdg-orange{ background:#EA580C; color:#fff; }
 .bdg-red   { background:#DC2626; color:#fff; animation:bflash .8s ease-in-out infinite; }
 
-/* Glow animations */
-.glow-gold   { animation:goldG 2.5s ease-in-out infinite alternate; }
-.glow-blue   { animation:blueG 1.5s ease-in-out infinite alternate; }
-.glow-orange { box-shadow:0 0 14px #F97316,0 0 28px #F9731633; }
-.glow-red    { animation:redG .8s ease-in-out infinite; }
+/* Glow rings — notification state */
+.glow-blue   { box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #3B82F6,0 0 22px #3B82F666 !important; }
+.glow-orange { box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #F97316,0 0 22px #F9731666 !important; }
+.glow-red    { animation:ringRed  .8s  ease-in-out infinite; }
+.glow-gold   { animation:ringGold 2.5s ease-in-out infinite alternate; }
 
-@keyframes goldG   { from{box-shadow:0 0 8px #C9A84C33} to{box-shadow:0 0 20px #C9A84C77} }
-@keyframes blueG   { from{box-shadow:0 0 10px #3B82F6}  to{box-shadow:0 0 24px #3B82F6}   }
-@keyframes redG    { 0%,100%{box-shadow:0 0 20px #EF4444} 50%{box-shadow:0 0 4px #EF444422} }
-@keyframes bflash  { 0%,100%{opacity:1} 50%{opacity:.25} }
+@keyframes ringRed  { 0%,100%{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #EF4444,0 0 26px #EF444477;} 50%{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #EF444433,0 0 5px #EF444433;} }
+@keyframes ringGold { from{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2px #C9A84C44,0 0 10px #C9A84C22;} to{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2px #C9A84CAA,0 0 24px #C9A84C55;} }
+@keyframes bflash   { 0%,100%{opacity:1} 50%{opacity:.25} }
 
 /* ─── Just Released ───────────────────────────────────── */
 .just-released {
   padding:8px 18px;
-  background:#050505;
-  border-top:1px solid #C9A84C1a;
+  background:#ffffff;
+  border-top:1px solid #e5e5ea;
   flex-shrink:0;
 }
 .jr-label { font-size:9px; color:#C9A84C; letter-spacing:1.5px; text-transform:uppercase; font-weight:600; }
 .jr-item  { display:flex; align-items:center; gap:10px; margin-top:5px; }
-.jr-thumb { width:36px; height:36px; background:#151515; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.jr-thumb { width:36px; height:36px; background:#f0f0f5; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
 .jr-mid   { flex:1; }
-.jr-mid .n{ font-size:11px; font-weight:600; color:#fff; }
-.jr-mid .s{ font-size:10px; color:#555; }
+.jr-mid .n{ font-size:11px; font-weight:600; color:#1c1c1e; }
+.jr-mid .s{ font-size:10px; color:#8e8e93; }
 .jr-price { text-align:right; }
-.jr-price .a{ font-size:13px; font-weight:700; color:#fff; }
+.jr-price .a{ font-size:13px; font-weight:700; color:#1c1c1e; }
 .jr-price .t{ font-size:10px; color:#DC2626; font-weight:600; }
 
 /* ─── Tab bar ─────────────────────────────────────────── */
@@ -226,11 +306,11 @@ body {
   align-items:center;
   justify-content:space-around;
   padding:10px 0 30px;
-  background:#050505;
-  border-top:1px solid #1a1a1a;
+  background:#ffffff;
+  border-top:1px solid #e5e5ea;
   flex-shrink:0;
 }
-.tab-item { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9px; color:#555; cursor:pointer; }
+.tab-item { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9px; color:#8e8e93; cursor:pointer; }
 .tab-item.active { color:#C9A84C; }
 .tab-ico { font-size:24px; }
 .mybids-btn {
@@ -254,24 +334,28 @@ body {
   animation:bflash .8s ease-in-out infinite;
 }
 
-/* ─── Store Overlay Panel ─────────────────────────────── */
+/* ─── Store Overlay Panel — bottom sheet ──────────────── */
 .store-overlay {
   position:absolute;
-  top:0; left:0; right:0;
+  bottom:0; left:0; right:0;
+  max-height:82%;
   background:#0a0a0a;
-  border-bottom:1px solid #C9A84C33;
-  border-radius:0 0 26px 26px;
+  border-top:2px solid #C9A84C55;
+  border-radius:26px 26px 0 0;
   z-index:150;
-  transform:translateY(-100%);
-  transition:transform .36s cubic-bezier(.32,.72,0,1);
+  transform:translateY(100%);
+  transition:transform .38s cubic-bezier(.32,.72,0,1);
   overflow:hidden;
+  display:flex;
+  flex-direction:column;
 }
 .store-overlay.open { transform:translateY(0); }
 
 .overlay-handle {
   width:36px; height:4px;
-  background:#333; border-radius:2px;
-  margin:10px auto 0;
+  background:#444; border-radius:2px;
+  margin:10px auto 6px;
+  flex-shrink:0;
 }
 .overlay-header {
   display:flex; align-items:center; gap:12px;
@@ -307,11 +391,22 @@ body {
 }
 .ot.active { color:#C9A84C; border-bottom-color:#C9A84C; }
 
+/* colour-coded left edge accent strip */
+.store-overlay::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; bottom:0;
+  width:4px;
+  background:var(--store-color, #C9A84C);
+  border-radius:26px 0 0 0;
+  z-index:5;
+}
+
 .overlay-items {
   padding:10px 14px 14px;
   display:flex; flex-direction:column; gap:8px;
-  max-height:340px;
   overflow-y:auto;
+  flex:1;
 }
 .auction-card {
   background:#111;
@@ -545,9 +640,16 @@ body {
       </div>
     </div>
 
-    <!-- Ad banner -->
-    <div class="ad-banner" id="adBanner">
-      🔥 Massy Stores · Samsung 65" QLED TV · Starting bid $499 BBD · 14h left
+    <!-- Merchant ad banner -->
+    <div class="ad-banner">
+      <div class="bc tl"></div><div class="bc tr"></div>
+      <div class="bc bl"></div><div class="bc br"></div>
+      <img class="b-logo" src="../Images/RBCBank.jpg" alt="RBC Bank">
+      <div class="b-text">
+        <div class="b-drive">Drive Away Today</div>
+        <div class="b-sub">RBC Auto Financing &nbsp;·&nbsp; Low Rates &nbsp;·&nbsp; Apply In-App</div>
+      </div>
+      <img class="b-vehicle" src="../Images/vehicle.jpg" alt="Vehicle">
     </div>
 
     <!-- Pinned store -->
@@ -571,54 +673,96 @@ body {
     <div class="keypad-grid">
 
       <!-- Carter's — blue glow (bids active) -->
-      <div class="store-btn" onclick="openStore('carters')">
-        <div class="store-logo glow-blue" style="background:linear-gradient(135deg,#124A1F,#1e6b2e)">
-          C
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('carters')">
+          <div class="img-btn size-sm glow-blue">
+            <img src="../Images/button.jpg" alt="Carter's">
+          </div>
           <div class="bdg bdg-blue">2</div>
         </div>
         <div class="store-name">Carter's</div>
       </div>
 
       <!-- H&B — red flashing (outbid) -->
-      <div class="store-btn" onclick="openStore('hnb')">
-        <div class="store-logo glow-red" id="hnbLogo" style="background:linear-gradient(135deg,#7a1010,#cc2222)">
-          H
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('hnb')">
+          <div class="ios-btn size-sm bg-hnb glow-red" id="hnbLogo">
+            <div class="logo-card"><img src="../Images/HBhardware_button.jpg" alt="H&amp;B"></div>
+          </div>
           <div class="bdg bdg-red" id="hnbBadge">!</div>
         </div>
         <div class="store-name">H&amp;B Hardware</div>
       </div>
 
-      <!-- BlueStar — gold idle -->
-      <div class="store-btn" onclick="openStore('bluestar')">
-        <div class="store-logo glow-gold" style="background:linear-gradient(135deg,#0f2a4a,#1a4a7a)">
-          B
+      <!-- Massy — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('massy')">
+          <div class="ios-btn size-sm bg-massy glow-gold">
+            <div class="logo-card"><img src="../Images/MassyStores.jpg" alt="Massy"></div>
+          </div>
         </div>
-        <div class="store-name">BlueStar</div>
+        <div class="store-name">Massy Stores</div>
       </div>
 
-      <!-- RoyalMart — orange (being watched) -->
-      <div class="store-btn" onclick="openStore('royal')">
-        <div class="store-logo glow-orange" style="background:linear-gradient(135deg,#3a1050,#6020a0)">
-          R
+      <!-- Courts — orange (being watched) -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('courts')">
+          <div class="ios-btn size-sm bg-courts glow-orange">
+            <div class="logo-card"><img src="../Images/Courts.jpg" alt="Courts"></div>
+          </div>
           <div class="bdg bdg-orange">5</div>
         </div>
-        <div class="store-name">RoyalMart</div>
+        <div class="store-name">Courts</div>
       </div>
 
-      <!-- SuperKing — gold idle -->
-      <div class="store-btn" onclick="openStore('superking')">
-        <div class="store-logo glow-gold" style="background:linear-gradient(135deg,#3a1010,#6a1a1a)">
-          S
+      <!-- First Citizens — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('first')">
+          <div class="ios-btn size-sm bg-first glow-gold">
+            <div class="logo-card"><img src="../Images/firstcitizens.jpg" alt="First Citizens"></div>
+          </div>
         </div>
-        <div class="store-name">SuperKing</div>
+        <div class="store-name">First Citizens</div>
       </div>
 
-      <!-- FreshMart — gold idle -->
-      <div class="store-btn" onclick="openStore('fresh')">
-        <div class="store-logo glow-gold" style="background:linear-gradient(135deg,#0f3020,#1a5c38)">
-          F
+      <!-- RBC Bank — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('rbc')">
+          <div class="ios-btn size-sm bg-rbc glow-gold">
+            <div class="logo-card"><img src="../Images/RBCBank.jpg" alt="RBC Bank"></div>
+          </div>
         </div>
-        <div class="store-name">FreshMart</div>
+        <div class="store-name">RBC Bank</div>
+      </div>
+
+      <!-- Courtesy Garage — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('courtesy')">
+          <div class="ios-btn size-sm bg-courtesy glow-gold">
+            <div class="logo-card"><img src="../Images/courtesygarage.jpg" alt="Courtesy"></div>
+          </div>
+        </div>
+        <div class="store-name">Courtesy</div>
+      </div>
+
+      <!-- Hilton — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('hilton')">
+          <div class="ios-btn size-sm bg-hilton glow-gold">
+            <div class="logo-card"><img src="../Images/hilton.jpg" alt="Hilton"></div>
+          </div>
+        </div>
+        <div class="store-name">Hilton</div>
+      </div>
+
+      <!-- PromoTech — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('promotech')">
+          <div class="ios-btn size-sm bg-promotech glow-gold">
+            <div class="logo-card"><img src="../Images/promotech.jpg" alt="PromoTech"></div>
+          </div>
+        </div>
+        <div class="store-name">PromoTech</div>
       </div>
 
     </div><!-- /keypad-grid -->
@@ -873,6 +1017,12 @@ const STORES = {
   royal:    { name:'RoyalMart',        sub:'9 items live · 5 watching you', logo:'R', bg:'linear-gradient(135deg,#3a1050,#6020a0)', auctions:['Dyson V11 Vacuum','KitchenAid Stand Mixer','Ninja Dual Blender'], store_name:'RoyalMart' },
   superking:{ name:'SuperKing',        sub:'7 items live', logo:'S', bg:'linear-gradient(135deg,#3a1010,#6a1a1a)', auctions:['HP Laptop 15" i5','Canon DSLR Bundle','Samsung Galaxy Tab A9'], store_name:'SuperKing' },
   fresh:    { name:'FreshMart',        sub:'4 items live', logo:'F', bg:'linear-gradient(135deg,#0f3020,#1a5c38)', auctions:['Keurig Coffee Maker K-Elite','Instant Pot Duo 7-in-1','Vitamix Blender 5200'], store_name:'FreshMart' },
+  courts:   { name:'Courts Barbados',  sub:'9 items live · 5 watching', logo:'C', bg:'linear-gradient(135deg,#144499,#2266cc)', auctions:['Samsung 65" Neo QLED TV','LG French Door Fridge','Dyson V15 Detect Vacuum'], store_name:'Courts' },
+  first:    { name:'First Citizens',   sub:'6 items live', logo:'FC', bg:'linear-gradient(135deg,#116622,#229944)', auctions:['MacBook Air M2 13"','iPad Pro 12.9" WiFi','Apple Watch Series 9'], store_name:'First Citizens' },
+  rbc:      { name:'RBC Bank',         sub:'3 items live', logo:'RBC', bg:'linear-gradient(135deg,#991111,#cc2222)', auctions:['Toyota Corolla 2024 Lease Deal','Honda Civic Finance Package','Kia Sportage 0% APR'], store_name:'RBC Bank' },
+  courtesy: { name:'Courtesy Garage',  sub:'2 items live', logo:'CG', bg:'linear-gradient(135deg,#2a2a2a,#555)', auctions:['Toyota Corolla 2023 Pre-Owned','Honda CRV 2022 Demo','Hyundai Tucson Certified'], store_name:'Courtesy Garage' },
+  hilton:   { name:'Hilton Barbados',  sub:'3 items live', logo:'H', bg:'linear-gradient(135deg,#103070,#2255aa)', auctions:['2-Night Suite Stay','Champagne Brunch for Two','Ocean View Dinner Package'], store_name:'Hilton' },
+  promotech:{ name:'PromoTech',        sub:'5 items live', logo:'PT', bg:'linear-gradient(135deg,#0d5555,#229999)', auctions:['Samsung Galaxy S24 Ultra','JBL PartyBox 310','Sony WH-1000XM5 Headphones'], store_name:'PromoTech' },
 };
 
 const AUCTION_BIDS  = ['$499 BBD','$899 BBD','$299 BBD','$189 BBD','$349 BBD','$219 BBD'];
@@ -888,6 +1038,9 @@ function openStore(key) {
   document.getElementById('ohLogo').style.background = s.bg;
   document.getElementById('ohName').textContent = s.name;
   document.getElementById('ohSub').textContent  = s.sub;
+  // colour-coded edge strip — extract first colour from store gradient
+  const col = s.bg.match(/#[0-9a-fA-F]{3,6}/)?.[0] || '#C9A84C';
+  document.getElementById('storeOverlay').style.setProperty('--store-color', col);
   // rebuild auction cards
   const items = document.getElementById('auctionItems');
   items.innerHTML = '';
@@ -953,21 +1106,18 @@ function closeAll() {
   document.getElementById('notifToast').classList.remove('show');
 }
 
-// ── Ad banner rotation ─────────────────────────────────────
-const BANNERS = [
-  '🔥 Massy Stores · Samsung 65" QLED TV · Starting bid $499 BBD · 14h left',
-  "⚡ Carter's Hardware · Weber Genesis BBQ Grill · 5 bidders · 3d left",
-  '🏷️ H&B Hardware · Dewalt Drill Set · Deal of the Week · Walk-in $89 BBD',
-  '🆕 RoyalMart · Dyson V11 Vacuum · Just released · Bid starts at $349 BBD',
-  '📲 Download BiziBid · New items drop every day from 5:30 AM · Free to join',
-];
-let bi = 0;
-const banner = document.getElementById('adBanner');
-banner.style.transition = 'opacity .35s';
-setInterval(() => {
-  banner.style.opacity = '0';
-  setTimeout(() => { bi=(bi+1)%BANNERS.length; banner.textContent=BANNERS[bi]; banner.style.opacity='1'; }, 370);
-}, 4000);
+// ── Merchant banner is now a fixed visual ad (RBC vehicle) ──
+
+// ── iOS button press animation ───────────────────────────
+document.querySelectorAll('.ios-btn, .img-btn').forEach(btn => {
+  const press   = () => btn.classList.add('pressed');
+  const release = () => setTimeout(() => btn.classList.remove('pressed'), 260);
+  btn.addEventListener('mousedown',  press);
+  btn.addEventListener('touchstart', press,   { passive:true });
+  btn.addEventListener('mouseup',    release);
+  btn.addEventListener('mouseleave', release);
+  btn.addEventListener('touchend',   release);
+});
 
 // ── Auto-trigger outbid on load for demo ─────────────────
 setTimeout(triggerOutbid, 2000);

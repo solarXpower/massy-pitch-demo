@@ -71,49 +71,125 @@ h2 { font-size:34px; font-weight:800; text-align:center; margin-bottom:10px; }
 .rule-box .rule-title { font-size:11px; color:#C9A84C; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
 .rule-box p { font-size:13px; color:#9CA3AF; line-height:1.6; }
 
-/* KEYPAD DEMO */
+/* KEYPAD DEMO — light mode phone */
 #keypad-demo { background:#000; }
 .demo-wrap { display:flex; gap:56px; align-items:center; max-width:960px; width:100%; margin-top:36px; }
 
-/* PHONE */
-.phone { width:256px; min-width:256px; height:530px; background:#0A0A0A; border-radius:34px; border:2px solid #2a2a2a; overflow:hidden; position:relative; box-shadow:0 40px 80px rgba(0,0,0,.8),0 0 0 1px #1a1a1a; }
-.phone-notch { width:72px; height:20px; background:#000; border-radius:0 0 14px 14px; margin:0 auto; }
-.app-bar { background:#000; padding:5px 14px; display:flex; align-items:center; justify-content:space-between; }
-.app-bar .logo { font-size:16px; font-weight:900; } .app-bar .logo span { color:#C9A84C; }
-.app-bar .loc { font-size:8px; color:#9CA3AF; letter-spacing:1px; }
-.ad-banner { background:linear-gradient(90deg,#1a1000,#0a0800,#1a1000); padding:6px 14px; font-size:9px; color:#C9A84C; text-align:center; border-top:1px solid #C9A84C22; border-bottom:1px solid #C9A84C22; overflow:hidden; white-space:nowrap; }
-.pinned-zone { padding:8px 12px 4px; }
-.pinned-lbl { font-size:7px; color:#9CA3AF; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+/* PHONE SHELL — light mode interior */
+.phone { width:256px; min-width:256px; height:530px; background:#f2f2f7; border-radius:34px; border:2px solid #c8c8d0; overflow:hidden; position:relative; box-shadow:0 40px 80px rgba(0,0,0,.9),0 0 0 1px #aaaaaa; }
+.phone-notch { width:72px; height:20px; background:#1c1c1e; border-radius:0 0 14px 14px; margin:0 auto; }
+.app-bar { background:#ffffff; border-bottom:1px solid #e5e5ea; padding:5px 14px; display:flex; align-items:center; justify-content:space-between; }
+.app-bar .logo { font-size:16px; font-weight:900; color:#1c1c1e; }
+.app-bar .logo span { color:#C9A84C; }
+.app-bar .loc { font-size:8px; color:#8e8e93; letter-spacing:1px; }
+/* Merchant ad banner — small phone scale (stays dark — it's a paid ad) */
+.ad-banner {
+  position:relative; display:flex; align-items:center;
+  background:linear-gradient(105deg,#00112e 0%,#000d22 45%,#0a0600 100%);
+  border-top:1px solid rgba(255,255,255,.13);
+  border-bottom:1px solid rgba(255,255,255,.13);
+  box-shadow:0 0 14px rgba(255,255,255,.15), inset 0 0 0 1px rgba(255,255,255,.05);
+  padding:5px 10px; gap:8px; min-height:44px; flex-shrink:0; overflow:hidden;
+}
+.bc { position:absolute; width:8px; height:8px; border-color:rgba(255,255,255,.55); border-style:solid; pointer-events:none; }
+.bc.tl { top:3px; left:3px;   border-width:1.5px 0 0 1.5px; }
+.bc.tr { top:3px; right:3px;  border-width:1.5px 1.5px 0 0; }
+.bc.bl { bottom:3px; left:3px;  border-width:0 0 1.5px 1.5px; }
+.bc.br { bottom:3px; right:3px; border-width:0 1.5px 1.5px 0; }
+.b-logo   { height:20px; width:auto; object-fit:contain; flex-shrink:0; }
+.b-text   { flex:1; text-align:center; padding:0 3px; }
+.b-drive  { font-size:9px; font-weight:800; color:#fff; letter-spacing:.4px; line-height:1.2; }
+.b-sub    { font-size:7px; color:rgba(201,168,76,.85); margin-top:1px; }
+.b-vehicle{ height:34px; width:auto; object-fit:contain; flex-shrink:0; filter:drop-shadow(0 0 7px rgba(255,255,255,.28)); }
+/* Pinned zone — light */
+.pinned-zone { padding:8px 12px 4px; background:#ffffff; }
+.pinned-lbl { font-size:7px; color:#8e8e93; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
 .pinned-row { display:flex; align-items:center; gap:10px; }
 .p-logo { width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#003087,#0050CC); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; color:#fff; position:relative; animation:bglow 2s ease-in-out infinite alternate; }
 @keyframes bglow { from{box-shadow:0 0 8px #3B82F6,0 0 16px #3B82F633} to{box-shadow:0 0 20px #3B82F6,0 0 40px #3B82F655} }
-.badge { position:absolute; top:-3px; right:-3px; width:14px; height:14px; border-radius:50%; font-size:7px; display:flex; align-items:center; justify-content:center; font-weight:700; border:1px solid #000; }
+.badge { position:absolute; top:-3px; right:-3px; width:14px; height:14px; border-radius:50%; font-size:7px; display:flex; align-items:center; justify-content:center; font-weight:700; border:1.5px solid #fff; }
 .bb { background:#1D4ED8; color:#fff; }
 .bo { background:#EA580C; color:#fff; }
 .br { background:#DC2626; color:#fff; animation:bflash .8s ease-in-out infinite; }
 @keyframes bflash { 0%,100%{opacity:1} 50%{opacity:.3} }
-.p-info h4 { font-size:10px; font-weight:700; } .p-info .sub { font-size:8px; color:#C9A84C; margin-top:1px; } .p-info .cnt { font-size:8px; color:#9CA3AF; }
-.kgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:6px 10px; }
-.sbtn { display:flex; flex-direction:column; align-items:center; gap:3px; }
-.slogo { width:50px; height:50px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; position:relative; cursor:pointer; }
-.sname { font-size:7px; color:#9CA3AF; text-align:center; }
-.g-gold { animation:ggold 2.5s ease-in-out infinite alternate; }
-.g-blue { animation:gblue 1.5s ease-in-out infinite alternate; }
-.g-orange { box-shadow:0 0 10px #F97316,0 0 20px #F9731633; }
-.g-red { animation:gred .8s ease-in-out infinite; }
-@keyframes ggold { from{box-shadow:0 0 5px #C9A84C33} to{box-shadow:0 0 14px #C9A84C77} }
-@keyframes gblue { from{box-shadow:0 0 7px #3B82F6} to{box-shadow:0 0 18px #3B82F6} }
-@keyframes gred { 0%,100%{box-shadow:0 0 14px #EF4444} 50%{box-shadow:0 0 3px #EF444433} }
-.jreleased { padding:5px 10px; background:#050505; border-top:1px solid #C9A84C22; }
+.p-info h4 { font-size:10px; font-weight:700; color:#1c1c1e; }
+.p-info .sub { font-size:8px; color:#C9A84C; margin-top:1px; }
+.p-info .cnt { font-size:8px; color:#8e8e93; }
+/* Keypad grid — 9 buttons, light */
+.kgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:14px 10px 5px; background:#f2f2f7; }
+/* iOS glass buttons — xs size for phone mockup */
+.kp-xs  { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.bw-xs  { position:relative; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+.ios-xs {
+  position:relative; border-radius:14px; cursor:pointer; overflow:hidden; user-select:none;
+  transition:box-shadow .18s ease;
+  box-shadow:0 4px 12px rgba(0,0,0,.6),0 2px 5px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 4px rgba(0,0,0,.25);
+}
+.ios-xs::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:46%;
+  background:linear-gradient(to bottom,rgba(255,255,255,.36) 0%,rgba(255,255,255,.10) 55%,transparent 100%);
+  border-radius:14px 14px 50% 50%; z-index:4; pointer-events:none;
+}
+.ios-xs::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:26%;
+  background:linear-gradient(to top,rgba(0,0,0,.28),transparent);
+  border-radius:0 0 14px 14px; z-index:4; pointer-events:none;
+}
+.lc-xs {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-54%);
+  width:76%; height:76%; background:#fff; border-radius:6px;
+  display:flex; align-items:center; justify-content:center; overflow:hidden; z-index:3;
+  box-shadow:0 4px 10px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.3);
+  transition:transform .15s cubic-bezier(.32,.72,0,1),box-shadow .15s ease;
+  pointer-events:none;
+}
+.lc-xs img { width:88%; height:88%; object-fit:contain; display:block; }
+.ios-xs.pressed { box-shadow:0 2px 5px rgba(0,0,0,.4),inset 0 2px 8px rgba(0,0,0,.35),0 0 20px rgba(255,255,255,.15); }
+.ios-xs.pressed .lc-xs { transform:translate(-50%,-47%) scale(0.86); box-shadow:0 0 12px rgba(255,255,255,.65),0 0 5px rgba(201,168,76,.75); }
+/* Carter's dome image button — xs */
+.imb-xs { border-radius:14px; overflow:hidden; cursor:pointer; position:relative; box-shadow:0 4px 12px rgba(0,0,0,.6),0 2px 5px rgba(0,0,0,.35); transition:box-shadow .15s; }
+.imb-xs img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .15s cubic-bezier(.32,.72,0,1),filter .15s; }
+.imb-xs.pressed { box-shadow:0 2px 5px rgba(0,0,0,.5),0 0 20px rgba(255,100,100,.25),inset 0 2px 8px rgba(0,0,0,.4); }
+.imb-xs.pressed img { transform:scale(0.87); filter:drop-shadow(0 0 12px rgba(255,255,255,.8)) drop-shadow(0 0 6px rgba(255,80,80,.75)); }
+/* xs button size */
+.sz-xs { width:50px; height:50px; }
+.sz-xs .lc-xs { border-radius:5px; width:74%; height:74%; }
+.sz-xs::before { border-radius:11px 11px 50% 50%; }
+/* brand backgrounds */
+.bg-massy    { background:linear-gradient(155deg,#1a55cc 0%,#003087 55%,#001444 100%); }
+.bg-hnb      { background:linear-gradient(155deg,#dd3333 0%,#991111 55%,#550808 100%); }
+.bg-courts   { background:linear-gradient(155deg,#2266cc 0%,#144499 55%,#082244 100%); }
+.bg-first    { background:linear-gradient(155deg,#229944 0%,#116622 55%,#083a12 100%); }
+.bg-rbc      { background:linear-gradient(155deg,#cc2222 0%,#991111 55%,#550808 100%); }
+.bg-courtesy { background:linear-gradient(155deg,#555 0%,#2a2a2a 55%,#0f0f0f 100%); }
+.bg-hilton   { background:linear-gradient(155deg,#2255aa 0%,#103070 55%,#061830 100%); }
+.bg-promotech{ background:linear-gradient(155deg,#229999 0%,#0d5555 55%,#041e1e 100%); }
+/* badge floats on .bw-xs */
+.bdg-xs { position:absolute; top:-5px; right:-5px; min-width:14px; height:14px; border-radius:7px; font-size:7px; font-weight:700; display:flex; align-items:center; justify-content:center; border:1.5px solid #f2f2f7; padding:0 3px; z-index:50; pointer-events:none; }
+.bdg-xs.bb { background:#1D4ED8; color:#fff; }
+.bdg-xs.bo { background:#EA580C; color:#fff; }
+.bdg-xs.br { background:#DC2626; color:#fff; animation:bflash .8s ease-in-out infinite; }
+/* glow rings — new ring style */
+.gr-gold   { animation:grGold 2.5s ease-in-out infinite alternate; }
+.gr-blue   { box-shadow:0 4px 12px rgba(0,0,0,.6),0 0 0 2px #3B82F6,0 0 14px #3B82F666 !important; }
+.gr-orange { box-shadow:0 4px 12px rgba(0,0,0,.6),0 0 0 2px #F97316,0 0 14px #F9731666 !important; }
+.gr-red    { animation:grRed .8s ease-in-out infinite; }
+@keyframes grGold { from{box-shadow:0 4px 12px rgba(0,0,0,.6),0 0 0 2px #C9A84C44,0 0 8px #C9A84C22;} to{box-shadow:0 4px 12px rgba(0,0,0,.6),0 0 0 2px #C9A84CAA,0 0 16px #C9A84C55;} }
+@keyframes grRed  { 0%,100%{box-shadow:0 4px 12px rgba(0,0,0,.6),0 0 0 2px #EF4444,0 0 18px #EF444477;} 50%{box-shadow:0 4px 12px rgba(0,0,0,.6),0 0 0 2px #EF444433,0 0 3px #EF444433;} }
+.sname { font-size:7px; color:#444; text-align:center; }
+/* Just Released — light */
+.jreleased { padding:5px 10px; background:#ffffff; border-top:1px solid #e5e5ea; }
 .jr-lbl { font-size:7px; color:#C9A84C; letter-spacing:1px; text-transform:uppercase; }
 .jr-row { display:flex; align-items:center; gap:7px; margin-top:3px; }
-.jr-thumb { width:26px; height:26px; background:#1a1a1a; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; }
-.jr-info .n { font-size:8px; color:#fff; } .jr-info .s { font-size:7px; color:#9CA3AF; }
+.jr-thumb { width:26px; height:26px; background:#f0f0f5; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; }
+.jr-info .n { font-size:8px; color:#1c1c1e; } .jr-info .s { font-size:7px; color:#8e8e93; }
 .jr-price { margin-left:auto; text-align:right; }
-.jr-price .a { font-size:10px; font-weight:700; color:#fff; }
+.jr-price .a { font-size:10px; font-weight:700; color:#1c1c1e; }
 .jr-price .t { font-size:7px; color:#DC2626; font-weight:600; }
-.tab-bar { position:absolute; bottom:0; left:0; right:0; background:#050505; border-top:1px solid #1a1a1a; display:flex; align-items:center; justify-content:space-around; padding:8px 0 14px; }
-.tab-item { display:flex; flex-direction:column; align-items:center; gap:2px; font-size:7px; color:#9CA3AF; }
+/* Tab bar — light */
+.tab-bar { position:absolute; bottom:0; left:0; right:0; background:#ffffff; border-top:1px solid #e5e5ea; display:flex; align-items:center; justify-content:space-around; padding:8px 0 14px; }
+.tab-item { display:flex; flex-direction:column; align-items:center; gap:2px; font-size:7px; color:#8e8e93; }
 .tab-item.active { color:#C9A84C; }
 .tab-ico { font-size:16px; }
 .mybids { background:#C9A84C; border-radius:16px; padding:5px 12px; display:flex; align-items:center; gap:3px; position:relative; }
@@ -185,16 +261,6 @@ h2 { font-size:34px; font-weight:800; text-align:center; margin-bottom:10px; }
 .varr-h { font-size:18px; color:#C9A84C; padding-bottom:26px; }
 .varr-v { font-size:18px; color:#C9A84C; margin:6px 0; }
 
-/* TECH STACK */
-#tech-stack { background:#050505; }
-.sgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; max-width:860px; width:100%; margin-top:36px; }
-.scard { background:#0A0A0A; border:1px solid #1a1a1a; border-radius:10px; padding:18px; }
-.scard h3 { font-size:11px; font-weight:700; color:#C9A84C; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
-.si2 { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #111; }
-.si2:last-child { border-bottom:none; }
-.si2 .tech { font-size:11px; color:#fff; }
-.si2 .pur { font-size:10px; color:#9CA3AF; }
-
 /* BUILD PHASES */
 #build-phases { background:#000; }
 .pgrid { display:grid; grid-template-columns:repeat(5,1fr); gap:0; max-width:960px; width:100%; margin-top:44px; position:relative; }
@@ -206,16 +272,19 @@ h2 { font-size:34px; font-weight:800; text-align:center; margin-bottom:10px; }
 .phase p { font-size:9px; color:#9CA3AF; line-height:1.4; }
 .phase .dur { margin-top:6px; font-size:9px; color:#C9A84C; font-weight:600; }
 
-/* PRICING */
-.ptable { max-width:660px; width:100%; margin-top:50px; border:1px solid #C9A84C33; border-radius:14px; overflow:hidden; }
-.prow { display:flex; justify-content:space-between; align-items:center; padding:14px 22px; border-bottom:1px solid #111; }
-.prow:last-child { border-bottom:none; }
-.prow.ph { background:#C9A84C; color:#000; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; }
-.prow.promo { background:#1a1200; }
-.prow .svc { font-size:12px; color:#fff; }
-.prow .rate { font-size:12px; font-weight:700; color:#C9A84C; }
-.prow.promo .svc,.prow.promo .rate { color:#C9A84C; }
-.prow.promo .rate { font-size:17px; }
+/* CONTACT FORM */
+.contact-form { max-width:660px; width:100%; margin-top:50px; background:#0a0a0a; border:1px solid #C9A84C33; border-radius:14px; padding:32px 36px; }
+.contact-intro { font-size:12px; color:#9CA3AF; line-height:1.7; margin-bottom:28px; text-align:center; }
+.cf-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.cf-field { display:flex; flex-direction:column; gap:6px; }
+.cf-field label { font-size:10px; font-weight:700; color:#C9A84C; letter-spacing:1px; text-transform:uppercase; }
+.cf-field input { background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:11px 14px; font-size:13px; color:#fff; outline:none; transition:border-color .2s; }
+.cf-field input::placeholder { color:#444; }
+.cf-field input:focus { border-color:#C9A84C66; }
+.cf-submit { margin-top:24px; width:100%; padding:14px; background:linear-gradient(135deg,#C9A84C,#a07a28); border:none; border-radius:10px; font-size:14px; font-weight:700; color:#000; cursor:pointer; letter-spacing:1px; text-transform:uppercase; transition:background .25s, transform .1s; }
+.cf-submit:hover { filter:brightness(1.1); }
+.cf-submit:active { transform:scale(0.98); }
+@media(max-width:540px){ .cf-grid { grid-template-columns:1fr; } }
 
 /* FADE IN */
 .fi { opacity:0; transform:translateY(24px); transition:opacity .6s ease,transform .6s ease; }
@@ -239,7 +308,6 @@ footer p { font-size:11px; color:#9CA3AF; }
     <a href="#release-engine" class="nav-link">Release</a>
     <a href="#win-key" class="nav-link">Win Key</a>
     <a href="#share-loop" class="nav-link">Share</a>
-    <a href="#tech-stack" class="nav-link">Tech</a>
     <a href="#build-phases" class="nav-link">Phases</a>
   </div>
 </nav>
@@ -298,7 +366,16 @@ footer p { font-size:11px; color:#9CA3AF; }
           <div class="logo">Bizi<span>Bid</span></div>
           <div class="loc">BARBADOS</div>
         </div>
-        <div class="ad-banner" id="adBanner">🔥 Massy Stores · Samsung 65" QLED · Bid starts $499 BBD · 14h left</div>
+        <div class="ad-banner">
+          <div class="bc tl"></div><div class="bc tr"></div>
+          <div class="bc bl"></div><div class="bc br"></div>
+          <img class="b-logo" src="../Images/RBCBank.jpg" alt="RBC">
+          <div class="b-text">
+            <div class="b-drive">Drive Away Today</div>
+            <div class="b-sub">RBC Auto Financing · Low Rates</div>
+          </div>
+          <img class="b-vehicle" src="../Images/vehicle.jpg" alt="Vehicle">
+        </div>
         <div class="pinned-zone">
           <div class="pinned-lbl">📌 Pinned Store</div>
           <div class="pinned-row">
@@ -311,29 +388,71 @@ footer p { font-size:11px; color:#9CA3AF; }
           </div>
         </div>
         <div class="kgrid">
-          <div class="sbtn">
-            <div class="slogo g-blue" style="background:linear-gradient(135deg,#124A1F,#1E6B2E)">C<div class="badge bb">2</div></div>
+          <!-- Carter's — blue (bids active) -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="imb-xs sz-xs gr-blue"><img src="../Images/button.jpg" alt="Carter's"></div>
+              <div class="bdg-xs bb">2</div>
+            </div>
             <div class="sname">Carter's</div>
           </div>
-          <div class="sbtn">
-            <div class="slogo g-red" style="background:linear-gradient(135deg,#CC2222,#992222)">H<div class="badge br">!</div></div>
+          <!-- H&B — red flash (outbid) -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="ios-xs sz-xs bg-hnb gr-red"><div class="lc-xs"><img src="../Images/HBhardware_button.jpg" alt="H&amp;B"></div></div>
+              <div class="bdg-xs br">!</div>
+            </div>
             <div class="sname">H&amp;B</div>
           </div>
-          <div class="sbtn">
-            <div class="slogo g-gold" style="background:linear-gradient(135deg,#1a3a5c,#264d7a)">B</div>
-            <div class="sname">BlueStar</div>
+          <!-- Massy — gold idle -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="ios-xs sz-xs bg-massy gr-gold"><div class="lc-xs"><img src="../Images/MassyStores.jpg" alt="Massy"></div></div>
+            </div>
+            <div class="sname">Massy</div>
           </div>
-          <div class="sbtn">
-            <div class="slogo g-orange" style="background:linear-gradient(135deg,#4a1a6e,#6b2599)">R<div class="badge bo">5</div></div>
-            <div class="sname">RoyalMart</div>
+          <!-- Courts — orange (watching) -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="ios-xs sz-xs bg-courts gr-orange"><div class="lc-xs"><img src="../Images/Courts.jpg" alt="Courts"></div></div>
+              <div class="bdg-xs bo">5</div>
+            </div>
+            <div class="sname">Courts</div>
           </div>
-          <div class="sbtn">
-            <div class="slogo g-gold" style="background:linear-gradient(135deg,#5c1a1a,#7a2222)">S</div>
-            <div class="sname">SuperKing</div>
+          <!-- First Citizens — gold idle -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="ios-xs sz-xs bg-first gr-gold"><div class="lc-xs"><img src="../Images/firstcitizens.jpg" alt="First Citizens"></div></div>
+            </div>
+            <div class="sname">First Citizens</div>
           </div>
-          <div class="sbtn">
-            <div class="slogo g-gold" style="background:linear-gradient(135deg,#1a4a3a,#226b52)">F</div>
-            <div class="sname">FreshMart</div>
+          <!-- RBC Bank — gold idle -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="ios-xs sz-xs bg-rbc gr-gold"><div class="lc-xs"><img src="../Images/RBCBank.jpg" alt="RBC"></div></div>
+            </div>
+            <div class="sname">RBC Bank</div>
+          </div>
+          <!-- Courtesy Garage — gold idle -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="ios-xs sz-xs bg-courtesy gr-gold"><div class="lc-xs"><img src="../Images/courtesygarage.jpg" alt="Courtesy"></div></div>
+            </div>
+            <div class="sname">Courtesy</div>
+          </div>
+          <!-- Hilton — gold idle -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="ios-xs sz-xs bg-hilton gr-gold"><div class="lc-xs"><img src="../Images/hilton.jpg" alt="Hilton"></div></div>
+            </div>
+            <div class="sname">Hilton</div>
+          </div>
+          <!-- PromoTech — gold idle -->
+          <div class="kp-xs">
+            <div class="bw-xs">
+              <div class="ios-xs sz-xs bg-promotech gr-gold"><div class="lc-xs"><img src="../Images/promotech.jpg" alt="PromoTech"></div></div>
+            </div>
+            <div class="sname">PromoTech</div>
           </div>
         </div>
         <div class="jreleased">
@@ -356,7 +475,7 @@ footer p { font-size:11px; color:#9CA3AF; }
     <div class="glegend">
       <p class="section-label">Glow System</p>
       <h2>The Keypad<br>Home Screen</h2>
-      <p class="subtitle" style="text-align:left;margin:10px 0 18px;">Store logo buttons glow to signal your notification state — no reading required.</p>
+      <p class="subtitle" style="text-align:left;margin:10px 0 18px;">9 store logo buttons glow to signal your notification state — no reading required.</p>
       <div class="glist">
         <div class="gitem"><div class="gdot gold"></div><div class="gtext"><h4>Gold — Idle</h4><p>No notifications. Slow breathing pulse (2.5s)</p></div></div>
         <div class="gitem"><div class="gdot blue"></div><div class="gtext"><h4>Blue — Bids Active</h4><p>You have active bids at this store. Steady blue glow.</p></div></div>
@@ -536,43 +655,7 @@ footer p { font-size:11px; color:#9CA3AF; }
   </div>
 </section>
 
-<!-- TECH STACK -->
-<section id="tech-stack">
-  <p class="section-label">Technology</p>
-  <h2>The Stack</h2>
-  <p class="subtitle">Built for speed, real-time reliability, and Caribbean-edge delivery.</p>
-  <div class="sgrid fi">
-    <div class="scard">
-      <h3>📡 Backend API</h3>
-      <div class="si2"><span class="tech">Node.js + TypeScript</span><span class="pur">Runtime</span></div>
-      <div class="si2"><span class="tech">Fastify</span><span class="pur">HTTP (2× Express)</span></div>
-      <div class="si2"><span class="tech">Socket.IO</span><span class="pur">Real-time bids</span></div>
-      <div class="si2"><span class="tech">PostgreSQL</span><span class="pur">ACID transactions</span></div>
-      <div class="si2"><span class="tech">Redis</span><span class="pur">Auction state cache</span></div>
-      <div class="si2"><span class="tech">BullMQ</span><span class="pur">Job scheduling</span></div>
-    </div>
-    <div class="scard">
-      <h3>📱 Mobile App</h3>
-      <div class="si2"><span class="tech">React Native + Expo</span><span class="pur">iOS + Android</span></div>
-      <div class="si2"><span class="tech">Reanimated 3</span><span class="pur">Glow + animations</span></div>
-      <div class="si2"><span class="tech">MMKV</span><span class="pur">Local auction cache</span></div>
-      <div class="si2"><span class="tech">Socket.IO client</span><span class="pur">Live bid stream</span></div>
-      <div class="si2"><span class="tech">Firebase FCM</span><span class="pur">Push notifications</span></div>
-      <div class="si2"><span class="tech">react-native-fast-image</span><span class="pur">Image caching</span></div>
-    </div>
-    <div class="scard">
-      <h3>☁️ Infrastructure</h3>
-      <div class="si2"><span class="tech">Railway.app</span><span class="pur">API hosting</span></div>
-      <div class="si2"><span class="tech">Cloudflare R2</span><span class="pur">Images + PDFs</span></div>
-      <div class="si2"><span class="tech">Cloudflare Pages</span><span class="pur">Web portals (free)</span></div>
-      <div class="si2"><span class="tech">Sharp.js</span><span class="pur">PNG → WebP</span></div>
-      <div class="si2"><span class="tech">SendGrid</span><span class="pur">Email + invoices</span></div>
-      <div class="si2"><span class="tech">Docker Compose</span><span class="pur">Dev + production</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- BUILD PHASES + PRICING -->
+<!-- BUILD PHASES + CONTACT -->
 <section id="build-phases">
   <p class="section-label">Roadmap</p>
   <h2>Build Phases</h2>
@@ -584,15 +667,28 @@ footer p { font-size:11px; color:#9CA3AF; }
     <div class="phase"><div class="pnum">4</div><h3>Mobile App</h3><p>Keypad, glow, live bidding, win key, share, FCM push</p><div class="dur">6–8 weeks</div></div>
     <div class="phase"><div class="pnum">5</div><h3>Billing</h3><p>Monthly cron, fee tiers, PDF invoices, SendGrid</p><div class="dur">1–2 weeks</div></div>
   </div>
-  <p class="section-label" style="margin-top:52px">Pricing (BBD)</p>
-  <div class="ptable fi">
-    <div class="prow ph"><span>Service</span><span>Rate</span></div>
-    <div class="prow promo"><span class="svc">🎉 First 60 Days</span><span class="rate">FREE</span></div>
-    <div class="prow promo"><span class="svc">📍 Deposit — primary ad placement</span><span class="rate">$500 BBD</span></div>
-    <div class="prow"><span class="svc">Base Package — 25 items/week</span><span class="rate">$450 / month</span></div>
-    <div class="prow"><span class="svc">Additional items (per 10 above 25)</span><span class="rate">$150 / month</span></div>
-    <div class="prow"><span class="svc">Deal of the Week</span><span class="rate">$150 / week</span></div>
-    <div class="prow"><span class="svc">Deal of the Month</span><span class="rate">$200 / month</span></div>
+  <p class="section-label" style="margin-top:52px">Get Started</p>
+  <div class="contact-form fi">
+    <p class="contact-intro">Service fees are tailored to your store's size and goals. Leave your details below and an INTERXDB representative will reach out with our current pricing and packages.</p>
+    <div class="cf-grid">
+      <div class="cf-field">
+        <label>Company Name</label>
+        <input type="text" placeholder="e.g. Massy Stores Barbados">
+      </div>
+      <div class="cf-field">
+        <label>Contact Person</label>
+        <input type="text" placeholder="Full name">
+      </div>
+      <div class="cf-field">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@company.com">
+      </div>
+      <div class="cf-field">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+1 (246) ___-____">
+      </div>
+    </div>
+    <button class="cf-submit" onclick="this.textContent='Sent ✓';this.style.background='#1a6b2e';setTimeout(()=>{this.textContent='Submit Enquiry';this.style.background='';},3000)">Submit Enquiry</button>
   </div>
 </section>
 
@@ -604,6 +700,17 @@ footer p { font-size:11px; color:#9CA3AF; }
 <script>
 // Smooth scroll helper
 function scroll(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+// iOS press animation for keypad demo
+document.querySelectorAll('.ios-xs, .imb-xs').forEach(btn => {
+  const press   = () => btn.classList.add('pressed');
+  const release = () => setTimeout(() => btn.classList.remove('pressed'), 260);
+  btn.addEventListener('mousedown',  press);
+  btn.addEventListener('touchstart', press,   { passive:true });
+  btn.addEventListener('mouseup',    release);
+  btn.addEventListener('mouseleave', release);
+  btn.addEventListener('touchend',   release);
+});
 
 // ── State Machine ──────────────────────────────────────────────
 const STATES = [
@@ -680,20 +787,7 @@ function toggleAP() {
 selState(0);
 setTimeout(toggleAP, 800);
 
-// ── Ad banner rotation ─────────────────────────────────────────
-const BANNERS = [
-  '🔥 Massy Stores · Samsung 65" QLED · Bid starts $499 BBD · 14h left',
-  '⚡ Carter\'s Hardware · Weber BBQ Grill · 3 bidders · 2d 6h left',
-  '🏷️ H&B Hardware · Dewalt Drill Set · Deal of the Week · Walk-in $189',
-  '🎯 New items drop every day from 5:30 AM · Download BiziBid now',
-];
-let bi = 0;
-const banner = document.getElementById('adBanner');
-banner.style.transition = 'opacity .4s';
-setInterval(() => {
-  banner.style.opacity = '0';
-  setTimeout(() => { bi = (bi+1)%BANNERS.length; banner.textContent = BANNERS[bi]; banner.style.opacity='1'; }, 420);
-}, 3800);
+// ── Merchant banner is now a fixed visual ad (RBC vehicle) ──
 
 // ── Fade-in on scroll ──────────────────────────────────────────
 const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); }), {threshold:.1});
