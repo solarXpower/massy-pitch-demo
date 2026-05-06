@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BiziBid — Retail Partner Presentation</title>
+<style>
+@page { size: 13.33in 7.5in; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #ccc; }
+.slide { width: 13.33in; height: 7.5in; background: #fff; position: relative; page-break-after: always; overflow: hidden; display: flex; flex-direction: column; padding: 0.45in 0.5in 0.4in; }
+.slide:last-child { page-break-after: avoid; }
+.gold-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 0.09in; background: #C9A84C; }
+.logo-top { position: absolute; top: 0.2in; left: 0.4in; font-size: 22pt; font-weight: 900; }
+.logo-top .bizi { color: #0A0A0A; }
+.logo-top .bid  { color: #C9A84C; }
+.page-num { position: absolute; bottom: 0.2in; right: 0.4in; font-size: 9pt; color: #9CA3AF; }
+
+.slide-label { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #C9A84C; margin-top: 0.55in; margin-bottom: 0.06in; }
+.slide-h1 { font-size: 28pt; font-weight: 900; color: #0A0A0A; margin-bottom: 0.08in; line-height: 1.15; }
+.slide-sub { font-size: 13pt; color: #4B5563; margin-bottom: 0.22in; }
+
+.card-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.14in; margin-top: 0.1in; }
+.card-row.four { grid-template-columns: repeat(4, 1fr); }
+.card { background: #F8F8F8; padding: 0.16in; border-left: 0.05in solid #C9A84C; }
+.card.sm { padding: 0.12in; }
+.card-icon { font-size: 18pt; margin-bottom: 0.06in; }
+.card-title { font-size: 11pt; font-weight: 700; color: #0A0A0A; margin-bottom: 0.06in; }
+.card p { font-size: 10pt; color: #4B5563; line-height: 1.45; }
+.card.sm p { font-size: 9pt; }
+
+.big-bullets { list-style: none; padding-left: 0; }
+.big-bullets li { font-size: 13pt; color: #0A0A0A; padding: 0.06in 0; padding-left: 0.2in; position: relative; border-bottom: 1px solid #F3F4F6; }
+.big-bullets li::before { content: "▸"; color: #C9A84C; position: absolute; left: 0; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.22in; }
+.dark-box { background: #0B1F3A; padding: 0.18in; color: #fff; }
+.dark-box-title { font-size: 12pt; font-weight: 700; color: #C9A84C; margin-bottom: 0.1in; }
+.win-steps { padding-left: 0.18in; }
+.win-steps li { font-size: 11pt; color: #fff; padding: 0.04in 0; }
+.dark-note { font-size: 9pt; color: #9CA3AF; margin-top: 0.1in; font-style: italic; }
+.info-box { padding: 0.14in; border-left: 0.05in solid #C9A84C; }
+.light-box { background: #F8F8F8; }
+.dark-box-sm { background: #0B1F3A; }
+.ib-title { font-size: 11pt; font-weight: 700; color: #0A0A0A; margin-bottom: 0.06in; }
+.ib-title.gold { color: #C9A84C; }
+.info-box p { font-size: 10pt; color: #4B5563; line-height: 1.6; }
+.dark-box-sm p { color: #C0C8D8; }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.12in; }
+.stat-card { background: #F8F8F8; padding: 0.12in; text-align: center; border-top: 0.04in solid #C9A84C; }
+.stat-num { font-size: 26pt; font-weight: 900; color: #C9A84C; }
+.stat-lbl { font-size: 9pt; color: #4B5563; margin-top: 0.04in; line-height: 1.3; }
+.footnote-box { background: #F8F8F8; border-left: 0.05in solid #C9A84C; padding: 0.12in; font-size: 10pt; color: #4B5563; line-height: 1.5; margin-top: 0.14in; }
+
+.flow-row { display: flex; align-items: stretch; gap: 0; margin: 0.1in 0; }
+.flow-box { flex: 1; padding: 0.14in; font-size: 11pt; position: relative; line-height: 1.4; }
+.flow-box.dark  { background: #0B1F3A; color: #fff; }
+.flow-box.light { background: #F8F8F8; color: #0A0A0A; }
+.flow-num { display: block; font-size: 9pt; font-weight: 700; color: #9CA3AF; margin-bottom: 0.06in; }
+.flow-num.gold { color: #C9A84C; }
+.flow-arrow { display: flex; align-items: center; font-size: 18pt; color: #C9A84C; padding: 0 0.06in; background: #F8F8F8; }
+
+.tier-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.14in; margin-top: 0.1in; }
+.tier { padding: 0.18in; color: #fff; }
+.tier.gold-tier  { background: #C9A84C; color: #0A0A0A; }
+.tier.navy-tier  { background: #0B1F3A; }
+.tier.grey-tier  { background: #4B5563; }
+.tier.dark-tier  { background: #1F2937; }
+.tier-label { font-size: 11pt; font-weight: 700; margin-bottom: 0.1in; }
+.gold-tier .tier-label { color: #0A0A0A; }
+.tier p { font-size: 10pt; line-height: 1.45; opacity: 0.9; }
+.gold-tier p { color: #2A1800; opacity: 0.85; }
+
+.offer-box { background: #0B1F3A; color: #fff; padding: 0.16in; border-left: 0.06in solid #C9A84C; font-size: 12pt; line-height: 1.5; margin-bottom: 0.18in; }
+.offer-days { font-size: 18pt; font-weight: 900; color: #C9A84C; margin-right: 0.12in; }
+.price-table { width: 100%; border-collapse: collapse; font-size: 11pt; }
+.price-table thead tr { background: #0B1F3A; }
+.price-table thead th { padding: 0.1in; text-align: left; color: #fff; font-weight: 700; font-size: 10pt; }
+.price-table tbody td { padding: 0.09in 0.1in; color: #0A0A0A; border-bottom: 1px solid #E5E7EB; }
+.price-table tbody tr.alt td { background: #F8F8F8; }
+.price-table tbody td.price { font-weight: 700; color: #0B1F3A; }
+.table-note { font-size: 9pt; color: #9CA3AF; margin-top: 0.1in; font-style: italic; }
+
+.cover-slide { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 0; }
+.cover-band { background: #0B1F3A; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5in; }
+.cover-logo { font-size: 72pt; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+.cover-logo .bizi, .cover-logo span.bizi { color: #fff; }
+.cover-logo span { color: #C9A84C; }
+.cover-tagline { font-size: 18pt; color: #C0C8D8; margin-top: 0.15in; text-align: center; }
+.cover-sub { font-size: 12pt; color: #5A6678; margin-top: 0.1in; font-style: italic; text-align: center; }
+.cover-footer { background: #fff; padding: 0.18in 0.4in; font-size: 11pt; color: #4B5563; text-align: center; }
+.cta-cards { display: flex; gap: 0.2in; margin-top: 0.3in; }
+.cta-card { background: #122A4A; padding: 0.2in; flex: 1; border-top: 0.05in solid #C9A84C; }
+.cta-icon { font-size: 18pt; margin-bottom: 0.08in; }
+.cta-title { font-size: 12pt; font-weight: 700; color: #fff; margin-bottom: 0.06in; }
+.cta-card p { font-size: 10pt; color: #9CA3AF; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="cover-slide">
+  <div class="cover-band">
+    <div class="cover-logo">Bizi<span>Bid</span></div>
+    <div class="cover-tagline">Barbados' First Retail Auction &amp; Deals Platform</div>
+    <div class="cover-sub">Partnership Opportunity &nbsp;·&nbsp; Confidential</div>
+  </div>
+  <div class="cover-footer">
+    Presented by INTERXDB &nbsp;·&nbsp; Digital Retail &amp; Auction Platform &nbsp;·&nbsp; Barbados<br>
+    bizibid.com &nbsp;·&nbsp; contact@interxdb.com &nbsp;·&nbsp; Tel 1(246) 241-3771
+  </div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">1 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Platform Overview</div>
+<div class="slide-h1">What is BiziBid?</div>
+<div class="slide-sub">A mobile-first auction and deals platform built exclusively for Barbados' retail market.</div>
+<div class="card-row">
+  <div class="card"><div class="card-icon">📱</div><div class="card-title">The BiziBid App</div><p>A free mobile app (iOS &amp; Android) where registered customers browse live auctions and exclusive deals — 24 hours a day, 7 days a week.</p></div>
+  <div class="card"><div class="card-icon">🏪</div><div class="card-title">Your Back-Office Portal</div><p>A private web portal at BiziBid.com where your team uploads products, manages deals, reviews auction results, and tracks performance.</p></div>
+  <div class="card"><div class="card-icon">🏆</div><div class="card-title">Operated by INTERXDB</div><p>INTERXDB owns and operates the entire platform — the app, the hosting, the technology. You simply list products. We handle everything else.</p></div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">2 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">The Opportunity</div>
+<div class="slide-h1">Your Store — 24/7 in Every Customer's Pocket</div>
+<div class="slide-sub">BiziBid keeps your brand top-of-mind every single day — whether your doors are open or not.</div>
+<ul class="big-bullets">
+  <li>Customers open the app daily to check new auctions and deals from your store</li>
+  <li>Your store logo is displayed prominently on the app's home screen</li>
+  <li>Exclusive auction prices (below shelf) create urgency and loyal repeat engagement</li>
+  <li>Deals of the Week and Month drive customers physically through your doors</li>
+  <li>Every deal or auction shared on WhatsApp or Instagram puts your brand in front of new potential customers — at no cost to you</li>
+  <li>Founding retail partners secure premium placement before competitors</li>
+</ul>
+  <div class="gold-bar"></div>
+  <div class="page-num">3 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Customer Experience</div>
+<div class="slide-h1">How Customers Experience BiziBid</div>
+<div class="slide-sub">A beautifully simple home screen keeps customers focused on your store — and coming back every day.</div>
+<div class="card-row">
+  <div class="card"><div class="card-icon">⌨️</div><div class="card-title">The Store Keypad</div><p>Your store logo appears on the app's home screen — just like a speed-dial button. Customers tap it to see your live auctions and deals instantly.</p></div>
+  <div class="card"><div class="card-icon">🔔</div><div class="card-title">Live Notifications</div><p>Colour-coded badge alerts on your store logo tell customers how many bids are active, who is watching, and when they have been outbid.</p></div>
+  <div class="card"><div class="card-icon">📌</div><div class="card-title">Pin Your Store</div><p>Customers can pin your store as their favourite, giving your logo a prominent permanent position on their personal home screen.</p></div>
+  <div class="card"><div class="card-icon">⚡</div><div class="card-title">One-Tap Bidding</div><p>Customers bid with a single tap without leaving the home screen. A sliding panel shows all active bids across all stores simultaneously.</p></div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">4 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Feature — Auctions</div>
+<div class="slide-h1">Live Auctions — Excitement That Sells</div>
+<div class="slide-sub">Customers compete in real-time for your products. The excitement keeps them engaged and coming back.</div>
+<div class="two-col">
+  <ul class="big-bullets">
+    <li>You upload products with a starting bid price (set below shelf price)</li>
+    <li>Up to 25 items per week rotate through the platform automatically</li>
+    <li>5 new items are released each day at varied morning hours — keeping customers checking in daily</li>
+    <li>Auctions run for 3, 7, or 14 days depending on the item</li>
+    <li>Real-time bidding — customers see bids update live on their screen</li>
+    <li>Unsold items re-enter the rotation for the following week automatically</li>
+  </ul>
+  <div class="dark-box">
+    <div class="dark-box-title">When a Customer Wins</div>
+    <ol class="win-steps">
+      <li>Auction closes — winner is confirmed</li>
+      <li>A unique collection code is generated</li>
+      <li>Winner receives code on their phone</li>
+      <li>Winner visits your store and shows code to cashier</li>
+      <li>Cashier confirms the code — item is collected</li>
+      <li>Record of the sale is stored in your portal</li>
+    </ol>
+    <div class="dark-note">No online payment needed — all purchases are cash in-store.</div>
+  </div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">5 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Feature — Deals</div>
+<div class="slide-h1">Deals of the Week &amp; Month — Drive Foot Traffic</div>
+<div class="slide-sub">Fixed-price deals showcase your best offers and bring customers through your doors.</div>
+<div class="two-col">
+  <ul class="big-bullets">
+    <li>You set a fixed price — no bidding, no auction pressure</li>
+    <li>Customers see your deal prominently in the app all week or all month</li>
+    <li>Customers can Like the deal — like count is visible to all users (social proof)</li>
+    <li>Customers share deals directly to WhatsApp, Instagram, and other platforms</li>
+    <li>Shared links show the deal to people who do not yet have the app — driving new downloads</li>
+    <li>Walk-in customers ask for the deal by name — increased foot traffic guaranteed</li>
+    <li>Deals of the Month offer extended 30-day visibility at premium placement</li>
+  </ul>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div class="info-box light-box"><div class="ib-title">Deal of the Week</div><p>7-day fixed-price feature<br>Premium placement in app<br>Like + Share enabled<br>Drives walk-in purchase</p></div>
+    <div class="info-box dark-box-sm"><div class="ib-title gold">Deal of the Month</div><p>Full 30-day visibility<br>Top placement position<br>Maximum brand exposure<br>Ideal for key product lines</p></div>
+  </div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">6 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Your Back-Office — BiziBid.com</div>
+<div class="slide-h1">Your Private Management Portal</div>
+<div class="slide-sub">Log in at BiziBid.com to manage your entire BiziBid presence — available 24/7 from any browser.</div>
+<div class="card-row three">
+  <div class="card"><div class="card-icon">📦</div><div class="card-title">Bulk Product Upload</div><p>Upload multiple products at once with images, descriptions, and your chosen starting bid price. No technical knowledge required.</p></div>
+  <div class="card"><div class="card-icon">🏷️</div><div class="card-title">Deals Management</div><p>Create and schedule Deals of the Week and Deals of the Month. Set your own price and valid dates. Activate with one click.</p></div>
+  <div class="card"><div class="card-icon">🏆</div><div class="card-title">Auction Results</div><p>View all completed auctions — winning bid amount, customer name, collection code. Full record of every sale.</p></div>
+  <div class="card"><div class="card-icon">🔑</div><div class="card-title">Collection Codes</div><p>See the unique code for each auction winner so your cashier can verify the customer quickly and confidently.</p></div>
+  <div class="card"><div class="card-icon">📄</div><div class="card-title">Invoice Download</div><p>View and download your monthly platform invoices as PDF. Full record of your subscription and activity charges.</p></div>
+  <div class="card"><div class="card-icon">📊</div><div class="card-title">Store Statistics</div><p>Live dashboard showing user engagement, bid activity, deal shares, and more. Know exactly how customers interact with your store.</p></div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">7 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Back-Office — Statistics Dashboard</div>
+<div class="slide-h1">Know Your Customers — Live Store Statistics</div>
+<div class="slide-sub">Your back-office portal shows you exactly how registered BiziBid users interact with your store in real time.</div>
+<div class="stat-row">
+  <div class="stat-card"><div class="stat-num">1,240</div><div class="stat-lbl">Registered users following your store</div></div>
+  <div class="stat-card"><div class="stat-num">86</div><div class="stat-lbl">Active bids on your items today</div></div>
+  <div class="stat-card"><div class="stat-num">312</div><div class="stat-lbl">Users watching your products</div></div>
+  <div class="stat-card"><div class="stat-num">94%</div><div class="stat-lbl">Auction completion rate this month</div></div>
+</div>
+<div class="stat-row" style="margin-top:10px;">
+  <div class="stat-card"><div class="stat-num">48</div><div class="stat-lbl">Deals shared on WhatsApp &amp; Instagram</div></div>
+  <div class="stat-card"><div class="stat-num">$8,400</div><div class="stat-lbl">Total auction value generated this month</div></div>
+  <div class="stat-card"><div class="stat-num">22</div><div class="stat-lbl">New app users from your shared links</div></div>
+  <div class="stat-card"><div class="stat-num">4.8★</div><div class="stat-lbl">Average customer engagement score</div></div>
+</div>
+<div class="footnote-box">All statistics are updated in real time in your back-office portal. No data is shared with other retail partners.</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">8 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Feature — Viral Growth</div>
+<div class="slide-h1">Every Share is Free Marketing for Your Store</div>
+<div class="slide-sub">When customers share your auctions and deals, your store name reaches people who have never heard of BiziBid.</div>
+<div class="flow-row">
+  <div class="flow-box dark"><span class="flow-num">01</span>Your customer sees a great deal or live auction</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box light"><span class="flow-num gold">02</span>They share it to WhatsApp or Instagram</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box dark"><span class="flow-num">03</span>Their contact sees your store name, price &amp; product</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box light"><span class="flow-num gold">04</span>They visit BiziBid.com and download the app</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box dark"><span class="flow-num">05</span>New registered bidder — on your auctions</div>
+</div>
+<div class="footnote-box" style="margin-top:14px;">
+  <b>Auction shares</b> show the live bid price and countdown — creating instant urgency for the viewer.<br>
+  <b>Deal shares</b> show your store name, product image, and fixed price — driving walk-in intent.<br>
+  All shared links direct visitors to BiziBid.com to download the app. New downloads = new bidders on your products.
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">9 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Placement &amp; Visibility</div>
+<div class="slide-h1">Secure Your Position on the BiziBid Keypad</div>
+<div class="slide-sub">Your store logo placement on the app home screen is a paid position. First come, first placed.</div>
+<div class="tier-row">
+  <div class="tier gold-tier"><div class="tier-label">Tier 1 — Pinned Position</div><p>Top of every user's home screen. Your logo is displayed largest, with full notification badge visibility. One store only — the most premium placement available.</p></div>
+  <div class="tier navy-tier"><div class="tier-label">Tier 2 — Primary Keypad</div><p>First 6–9 visible positions in the main keypad grid. Seen immediately when the app opens. No scrolling required. Highest traffic positions after Tier 1.</p></div>
+  <div class="tier grey-tier"><div class="tier-label">Tier 3 — Slide-Out Panel</div><p>Your store appears in the extended keypad panel. Still fully accessible and notified — ideal for entry-level platform participation.</p></div>
+  <div class="tier dark-tier"><div class="tier-label">Banner Advertisements</div><p>A rotating advertisement strip displayed across all screens. Separate from keypad placement — available to any registered partner.</p></div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">10 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Customer App Features</div>
+<div class="slide-h1">What BiziBid Offers Your Customers</div>
+<div class="slide-sub">A rich, engaging experience that keeps registered users checking the app every day.</div>
+<div class="card-row four">
+  <div class="card sm"><div class="card-icon">📱</div><div class="card-title">Free to Download</div><p>The app is free. Quick registration — name, email, mobile number.</p></div>
+  <div class="card sm"><div class="card-icon">⚡</div><div class="card-title">Real-Time Bidding</div><p>Bids update live. No refreshing required. Instant engagement.</p></div>
+  <div class="card sm"><div class="card-icon">🔴</div><div class="card-title">Outbid Alerts</div><p>Push notifications fire the moment a customer is outbid. They return to bid immediately.</p></div>
+  <div class="card sm"><div class="card-icon">📌</div><div class="card-title">Pin Favourite Stores</div><p>Customers pin their favourite store for prominent home screen placement.</p></div>
+  <div class="card sm"><div class="card-icon">🗂️</div><div class="card-title">Active Bids Panel</div><p>Slide-out panel shows all active bids across all stores — no navigation required.</p></div>
+  <div class="card sm"><div class="card-icon">↗️</div><div class="card-title">Share Deals &amp; Auctions</div><p>One tap to share to WhatsApp, Instagram, or any app on their phone.</p></div>
+  <div class="card sm"><div class="card-icon">🏷️</div><div class="card-title">Like &amp; Save Deals</div><p>Customers like deals. High like counts signal popular products and drive walk-in intent.</p></div>
+  <div class="card sm"><div class="card-icon">🔑</div><div class="card-title">Collection Code</div><p>Every winner receives a unique code to present at your cashier — secure and fraud-proof.</p></div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">11 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Partnership Pricing</div>
+<div class="slide-h1">Simple, Transparent Pricing (BBD)</div>
+<div class="slide-sub">All rates are fixed for the first 12 months for founding partners. No hidden fees.</div>
+<div class="offer-box"><span class="offer-days">60 DAYS FREE</span> No monthly cost for the first 60 days. A <b>$500.00 BBD</b> deposit secures your primary advertisement placement — guaranteeing your store is featured prominently to all registered users from day one.</div>
+<table class="price-table">
+  <thead><tr><th>Service</th><th>Description</th><th>Rate (BBD)</th></tr></thead>
+  <tbody>
+    <tr><td><b>Base Listing Package</b></td><td>Up to 25 items listed per week on the app</td><td class="price">$450.00 / month</td></tr>
+    <tr class="alt"><td><b>Additional Items</b></td><td>Per additional 10 items above the 25-item base</td><td class="price">$150.00 / month</td></tr>
+    <tr><td><b>Deal of the Week</b></td><td>Featured deal highlighted to all users for 7 days</td><td class="price">$150.00 / week</td></tr>
+    <tr class="alt"><td><b>Deal of the Month</b></td><td>Premium featured deal — top placement for full month</td><td class="price">$200.00 / month</td></tr>
+  </tbody>
+</table>
+<div class="table-note">All pricing in Barbados Dollars (BBD). Rates fixed for the first 12 months for founding partners. Keypad placement and banner ad pricing available on request.</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">12 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="slide-label">Why BiziBid?</div>
+<div class="slide-h1">Built for Barbados Retail. Starting Today.</div>
+<div class="card-row three">
+  <div class="card"><div class="card-icon">🏝️</div><div class="card-title">Barbados First</div><p>Built specifically for the Barbados market — the culture, the community, the retail landscape. Not a foreign platform adapted for the island.</p></div>
+  <div class="card"><div class="card-icon">📲</div><div class="card-title">Zero Technical Effort</div><p>You upload products and set prices. INTERXDB operates the entire platform. Nothing more is required from you.</p></div>
+  <div class="card"><div class="card-icon">📈</div><div class="card-title">Keep Your Store Relevant</div><p>BiziBid gives your store a daily digital presence that keeps you competitive — without the cost of building your own platform.</p></div>
+  <div class="card"><div class="card-icon">🔒</div><div class="card-title">Exclusive &amp; Professional</div><p>Only verified, registered businesses may list products. No individual sellers. A premium marketplace that reflects well on your brand.</p></div>
+  <div class="card"><div class="card-icon">👨‍👩‍👧</div><div class="card-title">Your Target Market</div><p>BiziBid targets medium-to-high income earners and family units — the customers who already shop at your store.</p></div>
+  <div class="card"><div class="card-icon">🌱</div><div class="card-title">Founding Partner Advantage</div><p>Founding partners lock in rates for 12 months and secure preferred keypad placement before the platform opens to all retailers.</p></div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">13 / 14</div>
+</div>
+<div class="slide">
+  <div class="logo-top"><span class="bizi">Bizi</span><span class="bid">Bid</span></div>
+  
+<div class="cover-slide cta-slide">
+  <div class="cover-band">
+    <div class="cover-logo" style="font-size:42px;">Bizi<span>Bid</span></div>
+    <div class="cover-tagline" style="font-size:26px;margin-top:12px;">Ready to Join BiziBid?</div>
+    <div class="cover-sub">Secure your founding partner status today — positions are limited.</div>
+    <div class="cta-cards">
+      <div class="cta-card"><div class="cta-icon">📞</div><div class="cta-title">Schedule a Presentation</div><p>A personalised walkthrough at your convenience.</p></div>
+      <div class="cta-card"><div class="cta-icon">🌐</div><div class="cta-title">View Your Interactive Demo</div><p>A personalised before-and-after demonstration prepared for your store.</p></div>
+      <div class="cta-card"><div class="cta-icon">✉️</div><div class="cta-title">Contact Us Directly</div><p>Our team is ready to answer any questions and walk you through the terms.</p></div>
+    </div>
+  </div>
+  <div class="cover-footer">
+    BiziBid &nbsp;·&nbsp; Operated by INTERXDB &nbsp;·&nbsp; contact@interxdb.com &nbsp;·&nbsp; Tel 1(246) 241-3771 &nbsp;·&nbsp; BiziBid.com<br>
+    <span style="font-size:10px;color:#6B7280;">Confidential — For Addressee Only</span>
+  </div>
+</div>
+  <div class="gold-bar"></div>
+  <div class="page-num">14 / 14</div>
+</div>
+</body></html>
