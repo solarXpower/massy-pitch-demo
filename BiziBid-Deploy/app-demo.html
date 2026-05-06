@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BiziBid — App Screen</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  background:#000;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:24px 16px 40px;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  overflow-x:hidden;
+}
+
+/* ─── Page header ─────────────────────────────────────── */
+.page-header {
+  text-align:center;
+  margin-bottom:20px;
+}
+.page-header .logo { font-size:22px; font-weight:900; color:#C9A84C; text-decoration:none; }
+.page-header .logo span { color:#ffffff; }
+.page-header p { font-size:12px; color:#555; margin-top:4px; letter-spacing:.5px; }
+
+/* ─── Phone shell ─────────────────────────────────────── */
+.phone-shell {
+  width:393px;
+  height:852px;
+  background:#0a0a0a;
+  border-radius:52px;
+  border:10px solid #1c1c1e;
+  position:relative;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 1px #2a2a2a,
+    0 60px 120px rgba(0,0,0,.9),
+    0 0 80px #C9A84C0a;
+  flex-shrink:0;
+}
+
+/* Dynamic island */
+.dynamic-island {
+  position:absolute;
+  top:14px; left:50%; transform:translateX(-50%);
+  width:120px; height:34px;
+  background:#000;
+  border-radius:20px;
+  z-index:200;
+}
+
+/* Status bar */
+.status-bar {
+  position:absolute;
+  top:0; left:0; right:0;
+  height:59px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  padding:0 28px 8px;
+  z-index:100;
+  pointer-events:none;
+}
+.sb-time { font-size:15px; font-weight:600; color:#1c1c1e; }
+.sb-icons { display:flex; align-items:center; gap:6px; font-size:13px; color:#1c1c1e; }
+
+/* ─── App screen — light mode ─────────────────────────── */
+.app-screen {
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  background:#f2f2f7;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* Wordmark bar */
+.wordmark-bar {
+  margin-top:59px;
+  padding:8px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#ffffff;
+  border-bottom:1px solid #e5e5ea;
+  flex-shrink:0;
+}
+.wm-logo { font-size:22px; font-weight:900; color:#1c1c1e; text-decoration:none; }
+.wm-logo span { color:#C9A84C; }
+.wm-right { display:flex; align-items:center; gap:12px; }
+.wm-loc { font-size:10px; color:#8e8e93; letter-spacing:1px; }
+.wm-bell { font-size:20px; cursor:pointer; position:relative; }
+.bell-dot {
+  position:absolute; top:-1px; right:-1px;
+  width:9px; height:9px; border-radius:50%;
+  background:#DC2626; border:1.5px solid #fff;
+  animation:bflash .8s ease-in-out infinite;
+}
+
+/* Merchant ad banner */
+.ad-banner {
+  position:relative;
+  display:flex;
+  align-items:center;
+  background:linear-gradient(105deg,#00112e 0%,#000d22 45%,#0a0600 100%);
+  border-top:1px solid rgba(255,255,255,.13);
+  border-bottom:1px solid rgba(255,255,255,.13);
+  box-shadow:0 0 18px rgba(255,255,255,.16), inset 0 0 0 1px rgba(255,255,255,.05);
+  padding:6px 14px;
+  gap:10px;
+  min-height:66px;
+  flex-shrink:0;
+  overflow:hidden;
+}
+/* Corner bracket accents */
+.bc {
+  position:absolute;
+  width:11px; height:11px;
+  border-color:rgba(255,255,255,.55);
+  border-style:solid;
+  pointer-events:none;
+}
+.bc.tl { top:4px;    left:4px;  border-width:1.5px 0 0 1.5px; }
+.bc.tr { top:4px;    right:4px; border-width:1.5px 1.5px 0 0; }
+.bc.bl { bottom:4px; left:4px;  border-width:0 0 1.5px 1.5px; }
+.bc.br { bottom:4px; right:4px; border-width:0 1.5px 1.5px 0; }
+/* RBC logo */
+.b-logo {
+  height:30px; width:auto;
+  object-fit:contain; flex-shrink:0;
+  filter:brightness(1.05);
+}
+/* Ad text */
+.b-text { flex:1; text-align:center; padding:0 4px; }
+.b-drive {
+  font-size:13px; font-weight:800;
+  color:#fff; letter-spacing:.5px; line-height:1.2;
+}
+.b-sub {
+  font-size:9px; color:rgba(201,168,76,.88);
+  margin-top:2px; letter-spacing:.3px;
+}
+/* Vehicle image */
+.b-vehicle {
+  height:52px; width:auto;
+  object-fit:contain; flex-shrink:0;
+  filter:drop-shadow(0 0 10px rgba(255,255,255,.28));
+}
+
+/* Pinned store */
+.pinned-zone {
+  padding:10px 18px 8px;
+  flex-shrink:0;
+}
+.pinned-lbl { font-size:9px; color:#8e8e93; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; }
+.pinned-row { display:flex; align-items:center; gap:12px; }
+.pl-logo {
+  width:52px; height:52px; border-radius:14px;
+  background:linear-gradient(135deg,#003087,#0050cc);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; font-weight:900; color:#fff;
+  position:relative;
+  animation:blueGlow 2.2s ease-in-out infinite alternate;
+  cursor:pointer; flex-shrink:0;
+}
+@keyframes blueGlow {
+  from { box-shadow:0 0 10px #3B82F6,0 0 20px #3B82F633; }
+  to   { box-shadow:0 0 22px #3B82F6,0 0 44px #3B82F655; }
+}
+.pl-info h3 { font-size:13px; font-weight:700; color:#1c1c1e; }
+.pl-info .sub { font-size:10px; color:#C9A84C; margin-top:2px; }
+.pl-info .cnt { font-size:10px; color:#8e8e93; margin-top:1px; }
+.pl-live {
+  margin-left:auto;
+  padding:4px 10px;
+  background:#C9A84C15;
+  border:1px solid #C9A84C44;
+  border-radius:20px;
+  font-size:9px;
+  color:#C9A84C;
+  font-weight:600;
+  letter-spacing:.5px;
+}
+
+/* ─── Keypad grid ─────────────────────────────────────── */
+.keypad-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  padding:18px 18px 6px;
+  flex:1;
+  align-content:start;
+}
+/* ── iOS glass store buttons ──────────────────────────── */
+.kp-cell { display:flex; flex-direction:column; align-items:center; gap:5px; }
+.btn-wrap { position:relative; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+.ios-btn {
+  position:relative; border-radius:18px; cursor:pointer; overflow:hidden;
+  user-select:none; transition:box-shadow .18s ease;
+  box-shadow:0 8px 20px rgba(0,0,0,.65),0 3px 8px rgba(0,0,0,.40),
+    inset 0 1px 0 rgba(255,255,255,.25),inset 0 -3px 6px rgba(0,0,0,.30);
+}
+.ios-btn::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:46%;
+  background:linear-gradient(to bottom,rgba(255,255,255,.36) 0%,rgba(255,255,255,.10) 55%,transparent 100%);
+  border-radius:18px 18px 50% 50%; z-index:4; pointer-events:none;
+}
+.ios-btn::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:26%;
+  background:linear-gradient(to top,rgba(0,0,0,.28),transparent);
+  border-radius:0 0 18px 18px; z-index:4; pointer-events:none;
+}
+.logo-card {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-54%);
+  width:78%; height:78%; background:#fff; border-radius:10px;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+  z-index:3;
+  box-shadow:0 6px 14px rgba(0,0,0,.55),0 2px 5px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.20);
+  transition:transform .15s cubic-bezier(.32,.72,0,1),box-shadow .15s ease;
+  pointer-events:none;
+}
+.logo-card img { width:88%; height:88%; object-fit:contain; display:block; }
+.ios-btn.pressed {
+  box-shadow:0 3px 8px rgba(0,0,0,.50),0 1px 3px rgba(0,0,0,.30),
+    inset 0 1px 0 rgba(255,255,255,.18),inset 0 3px 10px rgba(0,0,0,.40),
+    0 0 36px rgba(255,255,255,.18);
+}
+.ios-btn.pressed .logo-card {
+  transform:translate(-50%,-47%) scale(0.86);
+  box-shadow:0 1px 3px rgba(0,0,0,.25),0 0 18px rgba(255,255,255,.70),0 0 8px rgba(201,168,76,.80);
+}
+/* Carter's dome image button */
+.img-btn {
+  border-radius:18px; overflow:hidden; cursor:pointer; position:relative;
+  box-shadow:0 8px 20px rgba(0,0,0,.65),0 3px 8px rgba(0,0,0,.40);
+  transition:box-shadow .15s ease;
+}
+.img-btn img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .15s cubic-bezier(.32,.72,0,1),filter .15s ease; }
+.img-btn.pressed { box-shadow:0 3px 8px rgba(0,0,0,.5),0 0 36px rgba(255,100,100,.30),inset 0 3px 10px rgba(0,0,0,.4); }
+.img-btn.pressed img { transform:scale(0.87); filter:drop-shadow(0 0 20px rgba(255,255,255,.85)) drop-shadow(0 0 10px rgba(255,80,80,.80)); }
+/* button size */
+.size-sm { width:84px; height:84px; }
+.size-sm .logo-card { border-radius:7px; width:76%; height:76%; }
+.size-sm::before { border-radius:14px 14px 50% 50%; }
+/* brand backgrounds */
+.bg-massy    { background:linear-gradient(155deg,#1a55cc 0%,#003087 55%,#001444 100%); }
+.bg-hnb      { background:linear-gradient(155deg,#dd3333 0%,#991111 55%,#550808 100%); }
+.bg-courts   { background:linear-gradient(155deg,#2266cc 0%,#144499 55%,#082244 100%); }
+.bg-first    { background:linear-gradient(155deg,#229944 0%,#116622 55%,#083a12 100%); }
+.bg-rbc      { background:linear-gradient(155deg,#cc2222 0%,#991111 55%,#550808 100%); }
+.bg-courtesy { background:linear-gradient(155deg,#555 0%,#2a2a2a 55%,#0f0f0f 100%); }
+.bg-hilton   { background:linear-gradient(155deg,#2255aa 0%,#103070 55%,#061830 100%); }
+.bg-promotech{ background:linear-gradient(155deg,#229999 0%,#0d5555 55%,#041e1e 100%); }
+.store-name { font-size:10px; color:#444; text-align:center; font-weight:500; }
+
+/* Badge — floats outside button corner on .btn-wrap */
+.bdg {
+  position:absolute; top:-7px; right:-7px;
+  min-width:20px; height:20px;
+  border-radius:10px;
+  font-size:9px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  border:2.5px solid #000;
+  padding:0 4px;
+  z-index:50; pointer-events:none;
+}
+.bdg-blue  { background:#1D4ED8; color:#fff; }
+.bdg-orange{ background:#EA580C; color:#fff; }
+.bdg-red   { background:#DC2626; color:#fff; animation:bflash .8s ease-in-out infinite; }
+
+/* Glow rings — notification state */
+.glow-blue   { box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #3B82F6,0 0 22px #3B82F666 !important; }
+.glow-orange { box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #F97316,0 0 22px #F9731666 !important; }
+.glow-red    { animation:ringRed  .8s  ease-in-out infinite; }
+.glow-gold   { animation:ringGold 2.5s ease-in-out infinite alternate; }
+
+@keyframes ringRed  { 0%,100%{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #EF4444,0 0 26px #EF444477;} 50%{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2.5px #EF444433,0 0 5px #EF444433;} }
+@keyframes ringGold { from{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2px #C9A84C44,0 0 10px #C9A84C22;} to{box-shadow:0 8px 20px rgba(0,0,0,.65),0 0 0 2px #C9A84CAA,0 0 24px #C9A84C55;} }
+@keyframes bflash   { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+/* ─── Just Released ───────────────────────────────────── */
+.just-released {
+  padding:8px 18px;
+  background:#ffffff;
+  border-top:1px solid #e5e5ea;
+  flex-shrink:0;
+}
+.jr-label { font-size:9px; color:#C9A84C; letter-spacing:1.5px; text-transform:uppercase; font-weight:600; }
+.jr-item  { display:flex; align-items:center; gap:10px; margin-top:5px; }
+.jr-thumb { width:36px; height:36px; background:#f0f0f5; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; overflow:hidden; padding:0; }
+.jr-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.jr-mid   { flex:1; }
+.jr-mid .n{ font-size:11px; font-weight:600; color:#1c1c1e; }
+.jr-mid .s{ font-size:10px; color:#8e8e93; }
+.jr-price { text-align:right; }
+.jr-price .a{ font-size:13px; font-weight:700; color:#1c1c1e; }
+.jr-price .t{ font-size:10px; color:#DC2626; font-weight:600; }
+
+/* ─── Tab bar ─────────────────────────────────────────── */
+.tab-bar {
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  padding:10px 0 30px;
+  background:#ffffff;
+  border-top:1px solid #e5e5ea;
+  flex-shrink:0;
+}
+.tab-item { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9px; color:#8e8e93; cursor:pointer; }
+.tab-item.active { color:#C9A84C; }
+.tab-ico { font-size:24px; }
+.mybids-btn {
+  background:#C9A84C;
+  border-radius:22px;
+  padding:8px 18px;
+  display:flex; align-items:center; gap:5px;
+  cursor:pointer; position:relative;
+  transition:transform .15s;
+}
+.mybids-btn:active { transform:scale(.96); }
+.mybids-btn .mi { font-size:14px; }
+.mybids-btn .ml { font-size:11px; font-weight:700; color:#000; }
+.mybids-count {
+  position:absolute; top:-5px; right:-5px;
+  background:#DC2626; color:#fff;
+  font-size:9px; font-weight:700;
+  width:16px; height:16px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid #000;
+  animation:bflash .8s ease-in-out infinite;
+}
+
+/* ─── Store Overlay Panel — bottom sheet ──────────────── */
+.store-overlay {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  max-height:82%;
+  background:#0a0a0a;
+  border-top:2px solid #C9A84C55;
+  border-radius:26px 26px 0 0;
+  z-index:150;
+  transform:translateY(100%);
+  transition:transform .38s cubic-bezier(.32,.72,0,1);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.store-overlay.open { transform:translateY(0); }
+
+.overlay-handle {
+  width:36px; height:4px;
+  background:#444; border-radius:2px;
+  margin:10px auto 6px;
+  flex-shrink:0;
+}
+.overlay-header {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 18px 10px;
+}
+.oh-logo {
+  width:44px; height:44px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:900; color:#fff; flex-shrink:0;
+}
+.oh-info h3 { font-size:15px; font-weight:700; color:#fff; }
+.oh-info p  { font-size:10px; color:#C9A84C; }
+.oh-close {
+  margin-left:auto;
+  width:28px; height:28px; border-radius:50%;
+  background:#1a1a1a;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; cursor:pointer; color:#fff;
+  border:none;
+}
+
+.overlay-tabs {
+  display:flex; gap:0;
+  border-bottom:1px solid #1a1a1a;
+  padding:0 18px;
+}
+.ot {
+  padding:8px 14px 7px;
+  font-size:11px; font-weight:600;
+  color:#555; cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all .2s;
+}
+.ot.active { color:#C9A84C; border-bottom-color:#C9A84C; }
+
+/* colour-coded left edge accent strip */
+.store-overlay::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; bottom:0;
+  width:4px;
+  background:var(--store-color, #C9A84C);
+  border-radius:26px 0 0 0;
+  z-index:5;
+}
+
+.overlay-items {
+  padding:10px 14px 14px;
+  display:flex; flex-direction:column; gap:8px;
+  overflow-y:auto;
+  flex:1;
+}
+.auction-card {
+  background:#111;
+  border-radius:14px;
+  padding:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  transition:background .2s;
+}
+.auction-card:hover { background:#181818; }
+.ac-thumb {
+  width:52px; height:52px;
+  background:#1a1a1a;
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px; flex-shrink:0;
+  overflow:hidden; padding:0;
+}
+.ac-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.ac-info { flex:1; }
+.ac-info .name  { font-size:12px; font-weight:600; color:#fff; }
+.ac-info .store { font-size:10px; color:#555; }
+.ac-meta { display:flex; align-items:center; gap:6px; margin-top:4px; }
+.ac-bid { font-size:13px; font-weight:700; color:#fff; }
+.ac-bidders { font-size:10px; color:#555; }
+.ac-timer { font-size:10px; font-weight:600; }
+.ac-timer.urgent { color:#DC2626; }
+.ac-timer.normal { color:#9CA3AF; }
+.ac-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
+.bid-now-btn {
+  padding:7px 14px;
+  background:#C9A84C; color:#000;
+  font-size:11px; font-weight:700;
+  border:none; border-radius:8px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.deal-card {
+  background:#111;
+  border-radius:14px;
+  padding:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.walkin-badge {
+  padding:3px 8px;
+  background:#1a1a1a;
+  border:1px solid #333;
+  border-radius:6px;
+  font-size:9px;
+  color:#9CA3AF;
+  white-space:nowrap;
+}
+
+/* Keypad dim overlay */
+.keypad-dim {
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,.55);
+  z-index:140;
+  opacity:0; pointer-events:none;
+  transition:opacity .3s;
+}
+.keypad-dim.visible { opacity:1; pointer-events:auto; }
+
+/* ─── My Bids slide panel ─────────────────────────────── */
+.bids-panel {
+  position:absolute;
+  top:0; bottom:0; right:0;
+  width:88%;
+  background:#0c0c0c;
+  border-left:1px solid #1a1a1a;
+  border-radius:0 0 0 0;
+  z-index:180;
+  transform:translateX(100%);
+  transition:transform .36s cubic-bezier(.32,.72,0,1);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.bids-panel.open { transform:translateX(0); }
+.bids-dim {
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,.6);
+  z-index:170;
+  opacity:0; pointer-events:none;
+  transition:opacity .3s;
+}
+.bids-dim.visible { opacity:1; pointer-events:auto; }
+
+.bp-header {
+  padding:52px 18px 14px;
+  border-bottom:1px solid #1a1a1a;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.bp-header h2 { font-size:17px; font-weight:700; color:#fff; }
+.bp-header .bpcount { font-size:11px; color:#555; margin-top:2px; }
+.bp-close {
+  width:30px; height:30px; border-radius:50%;
+  background:#1a1a1a; border:none;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; color:#fff; cursor:pointer;
+}
+
+.bp-items { flex:1; overflow-y:auto; padding:12px 14px; display:flex; flex-direction:column; gap:10px; }
+
+.bid-card {
+  background:#111;
+  border-radius:14px;
+  padding:12px;
+  border:1.5px solid #1a1a1a;
+}
+.bid-card.outbid { border-color:#DC2626; }
+.bid-card.leading { border-color:#16a34a; }
+
+.bc-top { display:flex; align-items:center; gap:10px; }
+.bc-thumb { width:44px; height:44px; background:#1a1a1a; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; overflow:hidden; padding:0; }
+.bc-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.bc-info { flex:1; }
+.bc-info .name { font-size:12px; font-weight:600; color:#fff; }
+.bc-info .store { font-size:10px; color:#555; }
+.bc-status {
+  padding:3px 8px; border-radius:6px;
+  font-size:9px; font-weight:700; letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.bc-status.outbid { background:#DC26261a; color:#DC2626; border:1px solid #DC262633; animation:bflash .8s ease-in-out infinite; }
+.bc-status.leading { background:#16a34a1a; color:#16a34a; border:1px solid #16a34a33; }
+.bc-status.active  { background:#3B82F61a; color:#3B82F6; border:1px solid #3B82F633; }
+
+.bc-bottom { margin-top:10px; display:flex; align-items:center; justify-content:space-between; }
+.bc-amounts { }
+.bc-amounts .leader { font-size:10px; color:#555; }
+.bc-amounts .myamt  { font-size:12px; font-weight:700; color:#9CA3AF; }
+.bc-amounts .timer  { font-size:10px; font-weight:600; }
+.bc-amounts .timer.urgent { color:#DC2626; }
+.bc-amounts .timer.normal { color:#9CA3AF; }
+.bid-action-btn {
+  padding:8px 14px;
+  border-radius:9px;
+  font-size:11px; font-weight:700;
+  border:none; cursor:pointer;
+}
+.bid-action-btn.gold { background:#C9A84C; color:#000; }
+.bid-action-btn.muted { background:#1a1a1a; color:#555; }
+
+.bp-divider {
+  display:flex; align-items:center; gap:8px;
+  padding:4px 4px;
+}
+.bp-divider span { font-size:10px; color:#444; white-space:nowrap; }
+.bp-divider::before,.bp-divider::after { content:''; flex:1; height:1px; background:#1a1a1a; }
+
+/* ─── Outbid notification toast ───────────────────────── */
+.notif-toast {
+  position:absolute;
+  top:68px; left:12px; right:12px;
+  background:#1c1c1e;
+  border:1px solid #DC262644;
+  border-radius:16px;
+  padding:12px 14px;
+  display:flex; align-items:center; gap:10px;
+  z-index:250;
+  transform:translateY(-120px);
+  transition:transform .35s cubic-bezier(.32,.72,0,1);
+  box-shadow:0 8px 32px rgba(0,0,0,.8);
+}
+.notif-toast.show { transform:translateY(0); }
+.notif-icon { font-size:24px; flex-shrink:0; }
+.notif-text .nt { font-size:12px; font-weight:700; color:#fff; }
+.notif-text .ns { font-size:11px; color:#9CA3AF; }
+.notif-action { margin-left:auto; padding:6px 12px; background:#DC2626; color:#fff; font-size:10px; font-weight:700; border-radius:7px; cursor:pointer; white-space:nowrap; border:none; }
+
+/* ─── Demo controls ───────────────────────────────────── */
+.demo-controls {
+  margin-top:20px;
+  display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+  max-width:393px;
+}
+.demo-btn {
+  padding:8px 16px;
+  background:#111;
+  border:1px solid #333;
+  border-radius:20px;
+  color:#9CA3AF;
+  font-size:11px;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:inherit;
+}
+.demo-btn:hover { border-color:#C9A84C; color:#C9A84C; }
+.demo-note { font-size:10px; color:#333; text-align:center; margin-top:8px; max-width:393px; }
+
+/* ─── Product Detail Overlay ──────────────────────── */
+.product-overlay {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:90%;
+  background:#fff;
+  border-radius:26px 26px 0 0;
+  z-index:200;
+  transform:translateY(100%);
+  transition:transform .38s cubic-bezier(.32,.72,0,1);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.product-overlay.open { transform:translateY(0); }
+.po-handle { width:36px; height:4px; background:#ddd; border-radius:2px; margin:10px auto 0; flex-shrink:0; }
+.po-header { display:flex; align-items:center; justify-content:space-between; padding:6px 16px 2px; flex-shrink:0; }
+.po-back { background:none; border:none; font-size:13px; font-weight:700; color:#C9A84C; cursor:pointer; padding:4px 0; }
+.po-store-lbl { font-size:10px; color:#8e8e93; font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
+.po-image-wrap { width:100%; height:185px; background:#f5f5f5; flex-shrink:0; overflow:hidden; position:relative; }
+.po-img { width:100%; height:100%; object-fit:contain; padding:10px; display:block; }
+.po-emoji-fb { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:64px; }
+.po-body { flex:1; padding:12px 16px 16px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+.po-name { font-size:15px; font-weight:800; color:#1c1c1e; line-height:1.3; }
+.po-desc { font-size:12px; color:#636366; line-height:1.6; }
+.po-meta { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:#f5f5f5; border-radius:12px; }
+.po-current-bid { font-size:20px; font-weight:800; color:#1c1c1e; }
+.po-right { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+.po-bidders-lbl { font-size:10px; color:#8e8e93; }
+.po-timer-lbl { font-size:11px; font-weight:700; }
+.po-timer-lbl.urgent { color:#DC2626; }
+.po-timer-lbl.normal { color:#8e8e93; }
+.po-bid-row { display:flex; gap:8px; margin-top:auto; }
+.po-input { flex:1; padding:11px 14px; border:1.5px solid #e5e5ea; border-radius:10px; font-size:14px; color:#1c1c1e; outline:none; font-family:inherit; }
+.po-input:focus { border-color:#C9A84C; }
+.po-bid-btn { padding:11px 20px; background:linear-gradient(135deg,#C9A84C,#a07a28); color:#000; font-size:13px; font-weight:800; border:none; border-radius:10px; cursor:pointer; white-space:nowrap; letter-spacing:.5px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="/" class="logo">Bizi<span>Bid</span></a>
+  <p>FULL APP SCREEN · INTERACTIVE DEMO</p>
+</div>
+
+<!-- ─── PHONE ────────────────────────────────────── -->
+<div class="phone-shell">
+
+  <!-- Dynamic Island -->
+  <div class="dynamic-island"></div>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <div class="sb-time">9:41</div>
+    <div class="sb-icons">
+      <span>●●●●</span>
+      <span>WiFi</span>
+      <span>🔋</span>
+    </div>
+  </div>
+
+  <!-- App screen -->
+  <div class="app-screen">
+
+    <!-- Wordmark -->
+    <div class="wordmark-bar">
+      <a href="/" class="wm-logo">Bizi<span>Bid</span></a>
+      <div class="wm-right">
+        <div class="wm-loc">BARBADOS</div>
+        <div class="wm-bell" onclick="triggerOutbid()">
+          🔔
+          <div class="bell-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Merchant ad banner -->
+    <div class="ad-banner">
+      <div class="bc tl"></div><div class="bc tr"></div>
+      <div class="bc bl"></div><div class="bc br"></div>
+      <img class="b-logo" src="images/RBCBank.jpg" alt="RBC Bank">
+      <div class="b-text">
+        <div class="b-drive">Drive Away Today</div>
+        <div class="b-sub">RBC Auto Financing &nbsp;·&nbsp; Low Rates &nbsp;·&nbsp; Apply In-App</div>
+      </div>
+      <img class="b-vehicle" src="images/vehicle.jpg" alt="Vehicle">
+    </div>
+
+    <!-- Pinned store -->
+    <div class="pinned-zone">
+      <div class="pinned-lbl">📌 Pinned Store</div>
+      <div class="pinned-row">
+        <div class="pl-logo" onclick="openStore('massy')">
+          M
+          <div class="bdg bdg-blue">3</div>
+        </div>
+        <div class="pl-info">
+          <h3>Massy Stores</h3>
+          <div class="sub">3 bids active · 8 watching</div>
+          <div class="cnt">12 items live right now</div>
+        </div>
+        <div class="pl-live">LIVE</div>
+      </div>
+    </div>
+
+    <!-- Keypad grid -->
+    <div class="keypad-grid">
+
+      <!-- Carter's — blue glow (bids active) -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('carters')">
+          <div class="img-btn size-sm glow-blue">
+            <img src="images/button.jpg" alt="Carter's">
+          </div>
+          <div class="bdg bdg-blue">2</div>
+        </div>
+        <div class="store-name">Carter's</div>
+      </div>
+
+      <!-- H&B — red flashing (outbid) -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('hnb')">
+          <div class="ios-btn size-sm bg-hnb glow-red" id="hnbLogo">
+            <div class="logo-card"><img src="images/HBhardware_button.jpg" alt="H&amp;B"></div>
+          </div>
+          <div class="bdg bdg-red" id="hnbBadge">!</div>
+        </div>
+        <div class="store-name">H&amp;B Hardware</div>
+      </div>
+
+      <!-- Massy — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('massy')">
+          <div class="ios-btn size-sm bg-massy glow-gold">
+            <div class="logo-card"><img src="images/MassyStores.jpg" alt="Massy"></div>
+          </div>
+        </div>
+        <div class="store-name">Massy Stores</div>
+      </div>
+
+      <!-- Courts — orange (being watched) -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('courts')">
+          <div class="ios-btn size-sm bg-courts glow-orange">
+            <div class="logo-card"><img src="images/Courts.jpg" alt="Courts"></div>
+          </div>
+          <div class="bdg bdg-orange">5</div>
+        </div>
+        <div class="store-name">Courts</div>
+      </div>
+
+      <!-- First Citizens — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('first')">
+          <div class="ios-btn size-sm bg-first glow-gold">
+            <div class="logo-card"><img src="images/firstcitizens.jpg" alt="First Citizens"></div>
+          </div>
+        </div>
+        <div class="store-name">First Citizens</div>
+      </div>
+
+      <!-- RBC Bank — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('rbc')">
+          <div class="ios-btn size-sm bg-rbc glow-gold">
+            <div class="logo-card"><img src="images/RBCBank.jpg" alt="RBC Bank"></div>
+          </div>
+        </div>
+        <div class="store-name">RBC Bank</div>
+      </div>
+
+      <!-- Courtesy Garage — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('courtesy')">
+          <div class="ios-btn size-sm bg-courtesy glow-gold">
+            <div class="logo-card"><img src="images/courtesygarage.jpg" alt="Courtesy"></div>
+          </div>
+        </div>
+        <div class="store-name">Courtesy</div>
+      </div>
+
+      <!-- Hilton — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('hilton')">
+          <div class="ios-btn size-sm bg-hilton glow-gold">
+            <div class="logo-card"><img src="images/hilton.jpg" alt="Hilton"></div>
+          </div>
+        </div>
+        <div class="store-name">Hilton</div>
+      </div>
+
+      <!-- PromoTech — gold idle -->
+      <div class="kp-cell">
+        <div class="btn-wrap" onclick="openStore('promotech')">
+          <div class="ios-btn size-sm bg-promotech glow-gold">
+            <div class="logo-card"><img src="images/promotech.jpg" alt="PromoTech"></div>
+          </div>
+        </div>
+        <div class="store-name">PromoTech</div>
+      </div>
+
+    </div><!-- /keypad-grid -->
+
+    <!-- Just Released -->
+    <div class="just-released">
+      <div class="jr-label">⚡ Just Released</div>
+      <div class="jr-item">
+        <div class="jr-thumb"><img src="images/products/lcd2.jpg" alt="Samsung 55 Smart TV"></div>
+        <div class="jr-mid">
+          <div class="n">Samsung 55" Smart TV</div>
+          <div class="s">Carter's Hardware · 12 bidders</div>
+        </div>
+        <div class="jr-price">
+          <div class="a">$299 BBD</div>
+          <div class="t">1h 48m left</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <div class="tab-item active">
+        <div class="tab-ico">🏠</div>
+        <div>Home</div>
+      </div>
+      <div class="mybids-btn" onclick="openBidsPanel()">
+        <span class="mi">⚡</span>
+        <span class="ml">My Bids</span>
+        <div class="mybids-count">1</div>
+      </div>
+      <div class="tab-item">
+        <div class="tab-ico">👤</div>
+        <div>Profile</div>
+      </div>
+    </div>
+
+  </div><!-- /app-screen -->
+
+  <!-- ─── Keypad dim layer ─────────────────────── -->
+  <div class="keypad-dim" id="keypadDim" onclick="closeAll()"></div>
+
+  <!-- ─── Store Overlay ─────────────────────────── -->
+  <div class="store-overlay" id="storeOverlay">
+    <div class="overlay-handle"></div>
+    <div class="overlay-header">
+      <div class="oh-logo" id="ohLogo">M</div>
+      <div class="oh-info">
+        <h3 id="ohName">Massy Stores</h3>
+        <p id="ohSub">12 items live · Tap to bid</p>
+      </div>
+      <button class="oh-close" onclick="closeOverlay()">✕</button>
+    </div>
+    <div class="overlay-tabs">
+      <div class="ot active" onclick="switchTab(this,'auctions')">Auctions (3)</div>
+      <div class="ot" onclick="switchTab(this,'deals')">Deals (2)</div>
+    </div>
+
+    <!-- Auction items (shown by default) -->
+    <div class="overlay-items" id="auctionItems">
+      <div class="auction-card">
+        <div class="ac-thumb"><img src="images/products/lcd1.jpg" alt="Samsung 65 Smart TV"></div>
+        <div class="ac-info">
+          <div class="name">Samsung 65" QLED Smart TV</div>
+          <div class="store" id="ac-store-1">Massy Stores</div>
+          <div class="ac-meta">
+            <div class="ac-bid">$499 BBD</div>
+            <div class="ac-bidders">· 7 bidders</div>
+            <div class="ac-timer urgent">14h left</div>
+          </div>
+        </div>
+        <div class="ac-right">
+          <button class="bid-now-btn">BID NOW</button>
+        </div>
+      </div>
+      <div class="auction-card">
+        <div class="ac-thumb"><img src="images/products/smartphone2.jpg" alt="Samsung Galaxy S24 Ultra"></div>
+        <div class="ac-info">
+          <div class="name">Samsung Galaxy S24 Ultra</div>
+          <div class="store" id="ac-store-2">Massy Stores</div>
+          <div class="ac-meta">
+            <div class="ac-bid">$899 BBD</div>
+            <div class="ac-bidders">· 12 bidders</div>
+            <div class="ac-timer normal">2d 3h left</div>
+          </div>
+        </div>
+        <div class="ac-right">
+          <button class="bid-now-btn">BID NOW</button>
+        </div>
+      </div>
+      <div class="auction-card">
+        <div class="ac-thumb"><img src="images/products/smartwatch1.jpg" alt="Samsung Galaxy Watch 6 Classic"></div>
+        <div class="ac-info">
+          <div class="name">Samsung Galaxy Watch 6 Classic</div>
+          <div class="store" id="ac-store-3">Massy Stores</div>
+          <div class="ac-meta">
+            <div class="ac-bid">$299 BBD</div>
+            <div class="ac-bidders">· 4 bidders</div>
+            <div class="ac-timer normal">1d 22h left</div>
+          </div>
+        </div>
+        <div class="ac-right">
+          <button class="bid-now-btn">BID NOW</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deal items (hidden by default) -->
+    <div class="overlay-items" id="dealItems" style="display:none">
+      <div class="deal-card">
+        <div class="ac-thumb"><img src="images/products/giftbasket1.jpg" alt="Premium Gift Basket"></div>
+        <div class="ac-info">
+          <div class="name">Premium Gift Basket</div>
+          <div class="ac-meta">
+            <div class="ac-bid" style="color:#C9A84C">$18.99 BBD</div>
+            <div class="walkin-badge">Walk-in Only</div>
+          </div>
+          <div style="font-size:10px;color:#555;margin-top:3px">Deal of the Week · Valid 7 days</div>
+        </div>
+        <div class="ac-right" style="margin-left:auto">
+          <div style="font-size:22px">❤️</div>
+          <div style="font-size:9px;color:#555;text-align:center">142</div>
+        </div>
+      </div>
+      <div class="deal-card">
+        <div class="ac-thumb"><img src="images/products/rum2.jpg" alt="Mount Gay Rum Selection"></div>
+        <div class="ac-info">
+          <div class="name">Mount Gay Rum Selection ×6</div>
+          <div class="ac-meta">
+            <div class="ac-bid" style="color:#C9A84C">$44.99 BBD</div>
+            <div class="walkin-badge">Walk-in Only</div>
+          </div>
+          <div style="font-size:10px;color:#555;margin-top:3px">Deal of the Month · May 2026</div>
+        </div>
+        <div class="ac-right" style="margin-left:auto">
+          <div style="font-size:22px">🤍</div>
+          <div style="font-size:9px;color:#555;text-align:center">67</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /store-overlay -->
+
+  <!-- ─── Bids panel dim ─────────────────────── -->
+  <div class="bids-dim" id="bidsDim" onclick="closeBidsPanel()"></div>
+
+  <!-- ─── My Bids Panel ─────────────────────────── -->
+  <div class="bids-panel" id="bidsPanel">
+    <div class="bp-header">
+      <div>
+        <h2>⚡ My Active Bids</h2>
+        <div class="bpcount">3 active · 1 outbid</div>
+      </div>
+      <button class="bp-close" onclick="closeBidsPanel()">✕</button>
+    </div>
+    <div class="bp-items">
+
+      <!-- Outbid card -->
+      <div class="bid-card outbid">
+        <div class="bc-top">
+          <div class="bc-thumb"><img src="images/products/smartphone2.jpg" alt="Samsung Galaxy S24 Ultra"></div>
+          <div class="bc-info">
+            <div class="name">Samsung Galaxy S24 Ultra</div>
+            <div class="store">Massy Stores</div>
+          </div>
+          <div class="bc-status outbid">OUTBID</div>
+        </div>
+        <div class="bc-bottom">
+          <div class="bc-amounts">
+            <div class="leader">Leader: $950 BBD</div>
+            <div class="myamt">Your bid: $899 BBD</div>
+            <div class="timer urgent">2d 3h left</div>
+          </div>
+          <button class="bid-action-btn gold">BID $950</button>
+        </div>
+      </div>
+
+      <div class="bp-divider"><span>Also Watching</span></div>
+
+      <!-- Leading card -->
+      <div class="bid-card leading">
+        <div class="bc-top">
+          <div class="bc-thumb"><img src="images/products/smartwatch1.jpg" alt="Samsung Galaxy Watch 6 Classic"></div>
+          <div class="bc-info">
+            <div class="name">Samsung Galaxy Watch 6 Classic</div>
+            <div class="store">Massy Stores</div>
+          </div>
+          <div class="bc-status leading">LEADING</div>
+        </div>
+        <div class="bc-bottom">
+          <div class="bc-amounts">
+            <div class="leader">You're the highest bidder</div>
+            <div class="myamt">Your bid: $299 BBD</div>
+            <div class="timer normal">1d 22h left</div>
+          </div>
+          <button class="bid-action-btn muted">Watching</button>
+        </div>
+      </div>
+
+      <!-- Active / expiring soon -->
+      <div class="bid-card">
+        <div class="bc-top">
+          <div class="bc-thumb"><img src="images/products/drill2.jpg" alt="DeWalt 20V Power Drill Set"></div>
+          <div class="bc-info">
+            <div class="name">DeWalt 20V Power Drill Set</div>
+            <div class="store">Carter's Hardware</div>
+          </div>
+          <div class="bc-status active">ACTIVE</div>
+        </div>
+        <div class="bc-bottom">
+          <div class="bc-amounts">
+            <div class="leader">Leader: $189 BBD</div>
+            <div class="myamt">Your bid: $189 BBD</div>
+            <div class="timer urgent">1h 12m left</div>
+          </div>
+          <button class="bid-action-btn gold">BID $199</button>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /bids-panel -->
+
+  <!-- ─── Product Detail Overlay ─────────────── -->
+  <div class="product-overlay" id="productOverlay">
+    <div class="po-handle"></div>
+    <div class="po-header">
+      <button class="po-back" onclick="closeProduct()">← Back</button>
+      <span class="po-store-lbl" id="po-store"></span>
+    </div>
+    <div class="po-image-wrap">
+      <img id="po-img" src="" alt="" class="po-img">
+      <span id="po-emoji-fb" class="po-emoji-fb" style="display:none">📦</span>
+    </div>
+    <div class="po-body">
+      <div class="po-name" id="po-name"></div>
+      <div class="po-desc" id="po-desc"></div>
+      <div class="po-meta">
+        <div class="po-current-bid" id="po-bid"></div>
+        <div class="po-right">
+          <span class="po-bidders-lbl" id="po-bidders"></span>
+          <span class="po-timer-lbl" id="po-time"></span>
+        </div>
+      </div>
+      <div class="po-bid-row">
+        <input type="number" class="po-input" id="po-input" placeholder="Your bid (BBD)">
+        <button class="po-bid-btn">BID NOW</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Outbid notification toast ──────────── -->
+  <div class="notif-toast" id="notifToast">
+    <div class="notif-icon">📣</div>
+    <div class="notif-text">
+      <div class="nt">You've been outbid!</div>
+      <div class="ns">iPhone 15 · H&amp;B Hardware · New bid: $220</div>
+    </div>
+    <button class="notif-action" onclick="openBidsPanel()">BID NOW</button>
+  </div>
+
+</div><!-- /phone-shell -->
+
+<!-- ─── Demo Controls ────────────────────────────── -->
+<div class="demo-controls">
+  <button class="demo-btn" onclick="openStore('massy')">📱 Open Massy</button>
+  <button class="demo-btn" onclick="openStore('carters')">🔨 Open Carter's</button>
+  <button class="demo-btn" onclick="openStore('hnb')">🏪 Open H&amp;B</button>
+  <button class="demo-btn" onclick="openBidsPanel()">⚡ My Bids Panel</button>
+  <button class="demo-btn" onclick="triggerOutbid()">📣 Outbid Alert</button>
+  <button class="demo-btn" onclick="closeAll()">✕ Reset</button>
+</div>
+<div class="demo-note">Tap any store logo · Tap ⚡ My Bids · Tap 🔔 bell · Use demo buttons below</div>
+
+<script>
+// ── Store data with real product images ───────────────────
+const STORES = {
+  massy: { name:'Massy Stores', sub:'9 items live · Tap to bid', logo:'M', bg:'linear-gradient(135deg,#003087,#0050cc)', color:'#003087', store_name:'Massy Stores', auctions:[
+    { name:'Queen Bed Frame',      img:'bed2.jpg',        desc:'Modern queen-size bed frame. Solid wood, minimalist design. Delivery and assembly included.',       bid:'$899 BBD',   bidders:5,  time:'2d 3h left',  urgent:false },
+    { name:'Mountain Bike 21-Spd', img:'bike1.jpg',       desc:'21-speed mountain bike. Alloy frame, front suspension, mechanical disc brakes. Great for trails.',  bid:'$599 BBD',   bidders:8,  time:'14h left',    urgent:true  },
+    { name:'Designer Lampshade',   img:'lampshade1.jpg',  desc:'Hand-crafted fabric lampshade. Neutral tones. Fits standard E27 bulb fitting.',                     bid:'$79 BBD',    bidders:3,  time:'3d left',     urgent:false },
+    { name:'Luxury Gift Basket',   img:'giftbasket1.jpg', desc:'Premium gourmet gift basket — cheeses, wine, chocolates and mixed nuts. Perfect for any occasion.', bid:'$189 BBD',   bidders:6,  time:'4h left',     urgent:true  },
+    { name:'Android Smartphone',   img:'smartphone2.jpg', desc:'6.4" HD+ display, 64MP quad-camera, 128GB storage, 5000mAh battery. Ready to ship.',                bid:'$699 BBD',   bidders:11, time:'1h 48m left', urgent:true  },
+    { name:'Full Length Mirror',   img:'miirror.jpg',     desc:'Freestanding full-length mirror. Brushed gold aluminium frame. 165×40cm. Adjustable angle.',        bid:'$249 BBD',   bidders:4,  time:'1d 22h left', urgent:false },
+    { name:'King Bed Complete Set', img:'bed.jpg',        desc:'Complete king bed set — solid frame, memory foam mattress and pillows. 5-year warranty.',            bid:'$1,499 BBD', bidders:7,  time:'2d left',     urgent:false },
+    { name:'Premium Dark Rum',     img:'rum2.jpg',        desc:'Aged 12-year Barbadian dark rum. 750ml. Limited release. Presented in luxury gift box.',             bid:'$129 BBD',   bidders:9,  time:'6h left',     urgent:true  },
+    { name:'Smart Watch',          img:'smartwatch1.jpg', desc:'Stylish fitness smartwatch. Heart rate, sleep tracking, notifications. 5-day battery life.',         bid:'$299 BBD',   bidders:5,  time:'3d left',     urgent:false },
+  ]},
+  carters: { name:"Carter's Hardware", sub:'5 items live · 2 bids active', logo:'C', bg:'linear-gradient(135deg,#124A1F,#1e6b2e)', color:'#1e6b2e', store_name:"Carter's", auctions:[
+    { name:'Dewalt 20V Drill Set',  img:'drill2.jpg',        desc:'Dewalt 20V MAX drill/driver combo. Includes 2 batteries, fast charger and carry case.',           bid:'$189 BBD', bidders:7, time:'14h left',    urgent:true  },
+    { name:'Makita Cordless Drill', img:'drill3.jpg',        desc:'Makita 18V LXT cordless drill. Variable-speed trigger, ergonomic grip, 30-piece bit set.',        bid:'$219 BBD', bidders:4, time:'2d 3h left',  urgent:false },
+    { name:'Modern Floor Lamp',     img:'lamp1.jpg',         desc:'Contemporary adjustable floor lamp, 160cm. Warm white shade. Ideal for living rooms or offices.',  bid:'$149 BBD', bidders:3, time:'1d 22h left', urgent:false },
+    { name:'Premium Wine Bottle',   img:'wine1.jpg',         desc:'Fine vintage selection. Imported label. Perfect gift or collector\'s item. Presented in box.',     bid:'$89 BBD',  bidders:5, time:'4h left',     urgent:true  },
+    { name:'Crystal Vase Set',      img:'crystal vase.jpg',  desc:'Handcrafted crystal vase set of 3. Elegant European design. Gift-wrapped and ready to give.',      bid:'$129 BBD', bidders:2, time:'3d left',     urgent:false },
+  ]},
+  hnb: { name:'H&B Hardware', sub:'3 items live · You were outbid!', logo:'H', bg:'linear-gradient(135deg,#7a1010,#cc2222)', color:'#cc2222', store_name:'H&B Hardware', auctions:[
+    { name:'Dewalt Impact Drill',   img:'drill2.jpg',    desc:'Professional 20V impact drill. 2-speed settings, LED work light, soft-grip handle. Case included.',  bid:'$199 BBD', bidders:9, time:'1h 48m left', urgent:true  },
+    { name:'Power Drill Kit Pro',   img:'drill4.jpg',    desc:'High-torque power drill kit. 32-piece bit set, belt clip, carry case. Max torque 65Nm.',             bid:'$249 BBD', bidders:6, time:'2d left',     urgent:false },
+    { name:'Contractor Tool Case',  img:'toolcase1.jpg', desc:'Heavy-duty rolling tool case. 27-compartment organiser, telescoping handle. Water-resistant shell.', bid:'$179 BBD', bidders:4, time:'14h left',    urgent:true  },
+  ]},
+  promotech: { name:'PromoTech', sub:'7 items live', logo:'PT', bg:'linear-gradient(135deg,#0d5555,#229999)', color:'#229999', store_name:'PromoTech', auctions:[
+    { name:'Laptop Computer',      img:'laptop1.jpg',      desc:'15.6" Full HD laptop. Intel Core i5, 8GB RAM, 512GB SSD, Windows 11. Backlit keyboard.',          bid:'$1,299 BBD', bidders:12, time:'2d 3h left',  urgent:false },
+    { name:'Premium Laptop Bag',   img:'laptop bag.jpg',   desc:'Waterproof 15.6" shoulder bag. Padded laptop compartment, USB charging port, anti-theft back.',   bid:'$89 BBD',    bidders:3,  time:'3d left',     urgent:false },
+    { name:'Colour Laser Printer', img:'printer2.jpg',     desc:'Wireless colour laser printer. 22ppm, auto-duplex, 250-sheet tray. Mobile + cloud print ready.',  bid:'$649 BBD',   bidders:5,  time:'14h left',    urgent:true  },
+    { name:'Memory Card Pack',     img:'memory2.jpg',      desc:'128GB high-speed microSD bundle. Class 10 UHS-I, 100MB/s read. Pack of 2 + SD adapter.',          bid:'$129 BBD',   bidders:7,  time:'4h left',     urgent:true  },
+    { name:'GPS Smart Watch Pro',  img:'smartwatch3.jpg',  desc:'Multi-sport GPS smartwatch. Heart rate, SpO2 monitor, 7-day battery, water-resistant 50m.',       bid:'$449 BBD',   bidders:9,  time:'1d 22h left', urgent:false },
+    { name:'Flagship Smartphone',  img:'smartphone4.jpg',  desc:'Latest Android flagship. 6.7" AMOLED 120Hz, 108MP triple camera, 5G, 256GB storage.',             bid:'$1,599 BBD', bidders:14, time:'1h 48m left', urgent:true  },
+    { name:'Smart Watch Series 2', img:'smartwatch2.jpg',  desc:'Fitness smartwatch. AMOLED always-on display, sleep tracking, 100+ workout modes, 7-day battery.',bid:'$349 BBD',   bidders:6,  time:'2d left',     urgent:false },
+  ]},
+  courtesy: { name:'Courtesy Garage', sub:'3 items live', logo:'CG', bg:'linear-gradient(135deg,#2a2a2a,#555)', color:'#555555', store_name:'Courtesy Garage', auctions:[
+    { name:'Pre-Owned SUV',          img:'vehicle1.jpg', desc:'2020 SUV. Low mileage, full service history. A/C, reverse camera, alloy wheels. Financing available.', bid:'$28,900 BBD', bidders:4, time:'2d 3h left', urgent:false },
+    { name:'Performance Tyre Set',   img:'tire1.jpg',    desc:'Set of 4 all-season performance tyres. 205/55 R16. Balanced and fitted. 2-year warranty.',             bid:'$849 BBD',    bidders:6, time:'14h left',   urgent:true  },
+    { name:'Certified Used Sedan',   img:'vehicle2.jpg', desc:'2019 sedan, certified pre-owned. 1 owner, clean title, 12-month warranty. Financing available.',       bid:'$22,500 BBD', bidders:3, time:'3d left',    urgent:false },
+  ]},
+  hilton: { name:'Hilton Barbados', sub:'1 exclusive offer live', logo:'H', bg:'linear-gradient(135deg,#103070,#2255aa)', color:'#2255aa', store_name:'Hilton', auctions:[
+    { name:'Hilton Gold Membership', img:'hotelmember1.jpg', desc:'1-year Hilton Honors Gold upgrade. Room upgrades, executive lounge access, late checkout and bonus points on every stay.', bid:'$799 BBD', bidders:8, time:'1d 22h left', urgent:false },
+  ]},
+  courts: { name:'Courts Barbados', sub:'9 items live · 5 watching', logo:'C', bg:'linear-gradient(135deg,#144499,#2266cc)', color:'#2266cc', store_name:'Courts', auctions:[
+    { name:'Smart LCD TV 55"',        img:'lcd1.jpg',       desc:'55" Full HD Smart LED TV. Built-in WiFi, Netflix & YouTube ready. Wall-mount bracket included.',  bid:'$1,899 BBD', bidders:12, time:'14h left',    urgent:true  },
+    { name:'4K LCD TV 65"',           img:'lcd2.jpg',       desc:'65" 4K UHD LCD Smart TV. HDR10, Dolby Vision, 3x HDMI. Gaming mode with 4ms response time.',     bid:'$2,999 BBD', bidders:8,  time:'2d 3h left',  urgent:false },
+    { name:'Electric Range Stove',    img:'stove2.jpg',     desc:'60cm freestanding electric range. 4-zone ceramic hob, self-clean oven, digital timer.',           bid:'$1,299 BBD', bidders:5,  time:'3d left',     urgent:false },
+    { name:'Android Smartphone',      img:'smartphone3.jpg',desc:'6.5" HD+ display, 50MP triple camera, 4GB RAM, 128GB storage. Dual SIM, 4G LTE.',                 bid:'$599 BBD',   bidders:9,  time:'4h left',     urgent:true  },
+    { name:'Luxury Gift Basket Set',  img:'giftbasket2.jpg',desc:'Premium deluxe gift basket. Premium wines, artisan cheeses, chocolates and seasonal treats.',     bid:'$229 BBD',   bidders:6,  time:'1h 48m left', urgent:true  },
+    { name:'Countertop Microwave',    img:'microwave1.jpg', desc:'900W countertop microwave. 25L capacity, 10 power levels, defrost function. Stainless finish.',    bid:'$449 BBD',   bidders:4,  time:'1d 22h left', urgent:false },
+    { name:'Food Warming Tray',       img:'warmer.jpg',     desc:'Electric buffet food warmer. 3-pan stainless steel server. Adjustable temperature. Ideal for entertaining.', bid:'$189 BBD', bidders:3, time:'2d left', urgent:false },
+    { name:'Trail Bike 26"',          img:'bike2.jpg',      desc:'26" alloy frame trail bike. 21-speed Shimano gears, front suspension fork, disc brakes.',         bid:'$699 BBD',   bidders:7,  time:'3d left',     urgent:false },
+    { name:'Power Drill Set',         img:'drill4.jpg',     desc:'High-torque drill kit. Variable speed, 32-piece bit set, battery + charger included.',             bid:'$249 BBD',   bidders:5,  time:'14h left',    urgent:true  },
+  ]},
+  first: { name:'First Citizens', sub:'2 asset listings live', logo:'FC', bg:'linear-gradient(135deg,#116622,#229944)', color:'#229944', store_name:'First Citizens', auctions:[
+    { name:'Foreclosure Property',    img:'foreclosure.jpg',    desc:'Bank-owned foreclosure property. 3-bed, 2-bath residential home. Clear title. Open inspection available. Financing pre-approval offered.', bid:'$285,000 BBD', bidders:6, time:'2d 3h left', urgent:false },
+    { name:'Repossessed Vehicle',     img:'carauction1repo.jpg',desc:'Bank-repossessed car. Full inspection report available. Clean title transfer. Financing available at preferred rates for bidders.',           bid:'$18,500 BBD',  bidders:9, time:'14h left',   urgent:true  },
+  ]},
+  rbc: { name:'RBC Bank', sub:'1 vehicle auction live', logo:'RBC', bg:'linear-gradient(135deg,#991111,#cc2222)', color:'#cc2222', store_name:'RBC Bank', auctions:[
+    { name:'Repo Vehicle Auction',    img:'carauction1repo2.jpg',desc:'RBC repossessed vehicle. Low mileage, service history on file. Clean title. Same-day financing available for qualified bidders.', bid:'$24,900 BBD', bidders:7, time:'1h 48m left', urgent:true },
+  ]},
+};
+
+let _curAuctions  = [];
+let _curStoreName = '';
+
+function openStore(key) {
+  const s = STORES[key];
+  if (!s) return;
+  _curAuctions  = s.auctions;
+  _curStoreName = s.store_name;
+  // header
+  document.getElementById('ohLogo').textContent = s.logo;
+  document.getElementById('ohLogo').style.background = s.bg;
+  document.getElementById('ohName').textContent = s.name;
+  document.getElementById('ohSub').textContent  = s.sub;
+  // colour-coded edge strip
+  document.getElementById('storeOverlay').style.setProperty('--store-color', s.color || '#C9A84C');
+  // rebuild auction cards with real product images
+  const items = document.getElementById('auctionItems');
+  items.innerHTML = '';
+  s.auctions.forEach((item, i) => {
+    const thumb = item.img
+      ? `<img src="images/products/${item.img}" alt="${item.name}">`
+      : `<span>${['📺','📱','💻','🔧','🏠','💡'][i % 6]}</span>`;
+    items.innerHTML += `
+      <div class="auction-card" onclick="openProduct(${i})">
+        <div class="ac-thumb">${thumb}</div>
+        <div class="ac-info">
+          <div class="name">${item.name}</div>
+          <div class="store">${s.store_name}</div>
+          <div class="ac-meta">
+            <div class="ac-bid">${item.bid}</div>
+            <div class="ac-bidders">· ${item.bidders} bidders</div>
+            <div class="ac-timer ${item.urgent?'urgent':'normal'}">${item.time}</div>
+          </div>
+        </div>
+        <div class="ac-right">
+          <button class="bid-now-btn" onclick="event.stopPropagation();openProduct(${i})">BID NOW</button>
+        </div>
+      </div>`;
+  });
+  // reset to auctions tab
+  document.querySelectorAll('.ot').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.getElementById('auctionItems').style.display = '';
+  document.getElementById('dealItems').style.display = 'none';
+  // open
+  document.getElementById('storeOverlay').classList.add('open');
+  document.getElementById('keypadDim').classList.add('visible');
+}
+
+function openProduct(i) {
+  const item = _curAuctions[i];
+  if (!item) return;
+  const img = document.getElementById('po-img');
+  const fb  = document.getElementById('po-emoji-fb');
+  if (item.img) {
+    img.src = `images/products/${item.img}`;
+    img.style.display = 'block';
+    fb.style.display  = 'none';
+  } else {
+    img.style.display = 'none';
+    fb.style.display  = 'block';
+  }
+  document.getElementById('po-store').textContent   = _curStoreName;
+  document.getElementById('po-name').textContent    = item.name;
+  document.getElementById('po-desc').textContent    = item.desc;
+  document.getElementById('po-bid').textContent     = item.bid;
+  document.getElementById('po-bidders').textContent = item.bidders + ' bidders';
+  const timeEl = document.getElementById('po-time');
+  timeEl.textContent  = item.time;
+  timeEl.className    = 'po-timer-lbl ' + (item.urgent ? 'urgent' : 'normal');
+  document.getElementById('po-input').value = '';
+  document.getElementById('productOverlay').classList.add('open');
+}
+
+function closeProduct() {
+  document.getElementById('productOverlay').classList.remove('open');
+}
+
+function closeOverlay() {
+  document.getElementById('storeOverlay').classList.remove('open');
+  document.getElementById('keypadDim').classList.remove('visible');
+}
+
+function switchTab(el, tab) {
+  document.querySelectorAll('.ot').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('auctionItems').style.display = tab === 'auctions' ? '' : 'none';
+  document.getElementById('dealItems').style.display    = tab === 'deals'    ? '' : 'none';
+}
+
+function openBidsPanel() {
+  document.getElementById('bidsPanel').classList.add('open');
+  document.getElementById('bidsDim').classList.add('visible');
+}
+
+function closeBidsPanel() {
+  document.getElementById('bidsPanel').classList.remove('open');
+  document.getElementById('bidsDim').classList.remove('visible');
+}
+
+let toastTimer = null;
+function triggerOutbid() {
+  if (toastTimer) { clearTimeout(toastTimer); }
+  const toast = document.getElementById('notifToast');
+  toast.classList.add('show');
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function closeAll() {
+  closeOverlay();
+  closeBidsPanel();
+  document.getElementById('notifToast').classList.remove('show');
+}
+
+// ── Merchant banner is now a fixed visual ad (RBC vehicle) ──
+
+// ── iOS button press animation ───────────────────────────
+document.querySelectorAll('.ios-btn, .img-btn').forEach(btn => {
+  const press   = () => btn.classList.add('pressed');
+  const release = () => setTimeout(() => btn.classList.remove('pressed'), 260);
+  btn.addEventListener('mousedown',  press);
+  btn.addEventListener('touchstart', press,   { passive:true });
+  btn.addEventListener('mouseup',    release);
+  btn.addEventListener('mouseleave', release);
+  btn.addEventListener('touchend',   release);
+});
+
+// ── Auto-trigger outbid on load for demo ─────────────────
+setTimeout(triggerOutbid, 2000);
+</script>
+</body>
+</html>

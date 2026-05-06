@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# BiziBid.com — Public marketing site
+# All pages are intentionally indexable
+
+Sitemap: https://www.bizibid.com/sitemap.xml
